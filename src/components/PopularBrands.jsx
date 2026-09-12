@@ -27,36 +27,43 @@ export default function PopularBrands({ vehicles = [], onSelectBrand, activeBran
                 key={b.name}
                 onClick={() => onSelectBrand(isSelected ? 'all' : b.name)}
                 style={{
-                  background: isSelected ? '#141F38' : '#0F172A',
-                  border: isSelected ? '1.5px solid #FBBF24' : '1px solid rgba(255, 255, 255, 0.06)',
-                  borderRadius: '14px',
-                  padding: '18px 12px',
+                  background: isSelected 
+                    ? 'linear-gradient(180deg, #1E293B 0%, #0F172A 100%)' 
+                    : 'linear-gradient(180deg, #131D31 0%, #0A0F1D 100%)',
+                  border: isSelected 
+                    ? '1.5px solid #FBBF24' 
+                    : '1px solid rgba(255, 255, 255, 0.08)',
+                  borderRadius: '16px',
+                  padding: '16px 12px 14px 12px',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '10px',
+                  gap: '8px',
                   cursor: 'pointer',
                   transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                   boxShadow: isSelected 
-                    ? '0 8px 24px rgba(251, 191, 36, 0.2)' 
-                    : '0 4px 14px rgba(0, 0, 0, 0.3)'
+                    ? '0 10px 25px rgba(251, 191, 36, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)' 
+                    : '0 6px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06)'
                 }}
                 onMouseEnter={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.borderColor = 'rgba(251, 191, 36, 0.45)';
-                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.borderColor = 'rgba(251, 191, 36, 0.5)';
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.6), 0 0 15px rgba(251, 191, 36, 0.15)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
                     e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06)';
                   }
                 }}
               >
                 <div style={{
-                  height: '42px',
+                  height: '52px',
+                  width: '100%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
