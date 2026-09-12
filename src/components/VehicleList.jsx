@@ -1,8 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import CarCard from './CarCard';
 import { ArrowUpDown, Sparkles, AlertCircle } from 'lucide-react';
 import { BODY_TYPES } from '../data/mockData';
 import { useLanguage } from '../i18n/LanguageContext';
+
+/* ── Skeleton placeholder card ────────────────────────────── */
+function SkeletonCard() {
+  return (
+    <div className="skeleton-card">
+      <div className="skeleton-img" />
+      <div className="skeleton-body">
+        <div className="skeleton-line short" />
+        <div className="skeleton-line medium" style={{ marginBottom: '16px' }} />
+        <div className="skeleton-line price" />
+        <div className="skeleton-line long" />
+        <div className="skeleton-line long" style={{ width: '60%' }} />
+        <div className="skeleton-line btn" />
+      </div>
+    </div>
+  );
+}
 
 export default function VehicleList({ 
   vehicles, 
@@ -20,6 +37,22 @@ export default function VehicleList({
 }) {
   const { t } = useLanguage();
   const [sortBy, setSortBy] = useState('featured');
+  const [isLoading, setIsLoading] = useState(true);
+  const [animKey, setAnimKey] = useState(0); // bump to re-trigger stagger
+  const gridRef = useRef(null);
+
+  // Show skeleton on first mount only
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 650);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Re-trigger stagger animation whenever vehicles list changes
+  useEffect(() => {
+    if (!isLoading) {
+      setAnimKey(k => k + 1);
+    }
+  }, [vehicles, sortBy, isLoading]);
 
   // Sorting logic
   const sortedVehicles = [...vehicles].sort((a, b) => {
@@ -117,22 +150,36 @@ export default function VehicleList({
           })}
         </div>
 
-        {/* Vehicle Grid */}
-        {sortedVehicles.length > 0 ? (
+        {/* Vehicle Grid — skeleton or real cards */}
+        {isLoading ? (
           <div className="car-card-grid">
-            {sortedVehicles.map(car => (
-              <CarCard
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        ) : sortedVehicles.length > 0 ? (
+          <div
+            key={animKey}
+            ref={gridRef}
+            className="car-card-grid"
+          >
+            {sortedVehicles.map((car, idx) => (
+              <div
                 key={car.id}
-                car={car}
-                currency={currency}
-                isCompared={comparedCars.some(c => c.id === car.id)}
-                onToggleCompare={onToggleCompare}
-                onViewDetails={onViewDetails}
-                isFavorite={favorites.some(f => f.id === car.id)}
-                onToggleFavorite={onToggleFavorite}
-                onRequestProforma={onRequestProforma}
-                onOpenLightbox={onOpenLightbox}
-              />
+                className="car-card-animate"
+              >
+                <CarCard
+                  car={car}
+                  currency={currency}
+                  isCompared={comparedCars.some(c => c.id === car.id)}
+                  onToggleCompare={onToggleCompare}
+                  onViewDetails={onViewDetails}
+                  isFavorite={favorites.some(f => f.id === car.id)}
+                  onToggleFavorite={onToggleFavorite}
+                  onRequestProforma={onRequestProforma}
+                  onOpenLightbox={onOpenLightbox}
+                />
+              </div>
             ))}
           </div>
         ) : (
@@ -167,3 +214,4 @@ export default function VehicleList({
     </section>
   );
 }
+

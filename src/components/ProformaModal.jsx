@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Printer, Send, FileText, CheckCircle2, ShieldCheck, DollarSign, Calendar, Car, QrCode } from 'lucide-react';
 import { WILAYAS } from '../data/mockData';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -45,6 +45,52 @@ export default function ProformaModal({
     window.print();
   };
 
+  // ── Confetti burst — brand palette, no dependencies ──────────
+  const launchConfetti = () => {
+    const COLORS = ['#FF4605', '#FBBF24', '#10B981', '#FFFFFF', '#FF8A00', '#34D399'];
+    const canvas = document.createElement('canvas');
+    canvas.id = 'confetti-canvas';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    const particles = Array.from({ length: 120 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height * 0.4 - canvas.height * 0.2,
+      w: Math.random() * 10 + 6,
+      h: Math.random() * 5 + 3,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      rotation: Math.random() * Math.PI * 2,
+      vx: (Math.random() - 0.5) * 6,
+      vy: Math.random() * 4 + 2,
+      vr: (Math.random() - 0.5) * 0.2,
+      alpha: 1
+    }));
+    let frame = 0;
+    const MAX_FRAMES = 130;
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      frame++;
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.12; // gravity
+        p.rotation += p.vr;
+        p.alpha = Math.max(0, 1 - frame / MAX_FRAMES);
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      });
+      if (frame < MAX_FRAMES) requestAnimationFrame(animate);
+      else canvas.remove();
+    };
+    requestAnimationFrame(animate);
+  };
+
   // Handle Submission & WhatsApp dispatch
   const handleConfirmAndSend = (e) => {
     if (e) e.preventDefault();
@@ -71,6 +117,7 @@ export default function ProformaModal({
     }
 
     setSubmitted(true);
+    launchConfetti();
 
     // Build WhatsApp message
     const formattedPriceDZD = priceDZD.toLocaleString(language === 'ar' ? 'ar-DZ' : 'fr-FR');

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect } from 'react';
 import { Search, Sparkles, RotateCcw, ChevronDown } from 'lucide-react';
 import { INITIAL_VEHICLES } from '../data/mockData';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -52,6 +52,27 @@ export default function HeroSearch({
   allVehicles = []
 }) {
   const { t } = useLanguage();
+  const bgRef = useRef(null);
+  const rafRef = useRef(null);
+
+  // Parallax: background scrolls at 40% of page scroll speed
+  useEffect(() => {
+    const handleScroll = () => {
+      if (rafRef.current) return;
+      rafRef.current = requestAnimationFrame(() => {
+        if (bgRef.current) {
+          const offset = window.scrollY * 0.4;
+          bgRef.current.style.transform = `translateY(${offset}px)`;
+        }
+        rafRef.current = null;
+      });
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   const handleFilterChange = (key, value) => {
     setSearchFilters(prev => ({
@@ -92,17 +113,21 @@ export default function HeroSearch({
       overflow: 'hidden',
       color: '#fff'
     }}>
-      {/* Automotive Background Visual - Deep Luxury Mood */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundImage: 'url(https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1920&q=80)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center 40%',
-        opacity: 0.22,
-        filter: 'contrast(1.2) saturate(1.1)',
-        pointerEvents: 'none'
-      }} />
+      {/* Automotive Background Visual — Deep Luxury Mood (parallax) */}
+      <div
+        ref={bgRef}
+        style={{
+          position: 'absolute',
+          inset: '-10% 0',      /* extra height so translateY doesn't reveal edge */
+          backgroundImage: 'url(https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1920&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 40%',
+          opacity: 0.22,
+          filter: 'contrast(1.2) saturate(1.1)',
+          pointerEvents: 'none',
+          willChange: 'transform'
+        }}
+      />
 
       {/* Subtle Luxury Radial Vignette */}
       <div style={{

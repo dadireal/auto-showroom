@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Header from './components/Header';
 import HeroSearch from './components/HeroSearch';
 import PopularBrands from './components/PopularBrands';
@@ -92,11 +92,29 @@ export default function App() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   // Save favorites to localStorage
-  React.useEffect(() => {
+  useEffect(() => {
     try {
       localStorage.setItem('auto_showroom_favorites', JSON.stringify(favorites));
     } catch (e) {}
   }, [favorites]);
+
+  // Section reveal: IntersectionObserver adds .revealed to .reveal-section elements
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target); // fire once
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    const sections = document.querySelectorAll('.reveal-section');
+    sections.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   // Filtered vehicles logic
   const filteredVehicles = useMemo(() => {
@@ -350,14 +368,16 @@ export default function App() {
           allVehicles={vehicles}
         />
 
-        {/* Popular Brands Showcase - Clean SVG Emblems & Dark Surface */}
-        <PopularBrands
-          vehicles={vehicles}
-          onSelectBrand={handleSelectBrand}
-          activeBrand={searchFilters.brand}
-        />
+        {/* Popular Brands — reveal on scroll */}
+        <div className="reveal-section" style={{ transitionDelay: '0ms' }}>
+          <PopularBrands
+            vehicles={vehicles}
+            onSelectBrand={handleSelectBrand}
+            activeBrand={searchFilters.brand}
+          />
+        </div>
 
-        {/* Vehicle Inventory Grid - Dark Luxury Theme */}
+        {/* Vehicle Inventory Grid */}
         <VehicleList
           vehicles={filteredVehicles}
           currency={currency}
@@ -376,17 +396,23 @@ export default function App() {
           onOpenLightbox={(car) => setSelectedLightboxCar(car)}
         />
 
-        {/* Showrooms Agréés Section - Dark Luxury Theme */}
-        <ShowroomsSection
-          vehicles={vehicles}
-          onSelectShowroom={handleSelectShowroom}
-        />
+        {/* Showrooms — reveal on scroll */}
+        <div className="reveal-section" style={{ transitionDelay: '60ms' }}>
+          <ShowroomsSection
+            vehicles={vehicles}
+            onSelectShowroom={handleSelectShowroom}
+          />
+        </div>
 
-        {/* Auto Products & Accessories */}
-        <AutoProducts />
+        {/* Auto Products — reveal on scroll */}
+        <div className="reveal-section" style={{ transitionDelay: '120ms' }}>
+          <AutoProducts />
+        </div>
 
-        {/* Why Choose Our Showroom */}
-        <WhyChooseUs totalVehicles={vehicles.length} />
+        {/* Why Choose Us — reveal on scroll */}
+        <div className="reveal-section" style={{ transitionDelay: '180ms' }}>
+          <WhyChooseUs totalVehicles={vehicles.length} />
+        </div>
       </main>
 
       {/* Comparison Drawer & Modal */}

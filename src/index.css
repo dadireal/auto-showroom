@@ -974,3 +974,221 @@ button {
 
 
 
+/* =========================================================
+   ✨ POLISH & ANIMATIONS SYSTEM
+   Skeleton loaders · Section reveals · Card stagger ·
+   Button micro-interactions · WhatsApp pulse ring
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   KEYFRAMES
+   --------------------------------------------------------- */
+
+/* Shimmer sweep for skeleton loaders */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+/* Fade + slide up for section reveals and card entrance */
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtle scale pulse for CTA hover glow */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(255, 70, 5, 0.35); }
+  50%       { box-shadow: 0 4px 28px rgba(255, 70, 5, 0.7), 0 0 40px rgba(255, 70, 5, 0.25); }
+}
+
+/* WhatsApp ring pulse — mimics an incoming call */
+@keyframes waPulseRing {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Dot loading for skeleton text lines */
+@keyframes skeletonWave {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 0.9; }
+}
+
+/* ---------------------------------------------------------
+   SKELETON CARD LOADER
+   --------------------------------------------------------- */
+.skeleton-card {
+  background: #0f172a;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  animation: skeletonWave 1.6s ease-in-out infinite;
+}
+
+.skeleton-img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(
+    90deg,
+    #1e293b 25%,
+    #293548 50%,
+    #1e293b 75%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.skeleton-body {
+  padding: 16px;
+}
+
+.skeleton-line {
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    #1e293b 25%,
+    #293548 50%,
+    #1e293b 75%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.5s infinite linear;
+  margin-bottom: 10px;
+}
+
+.skeleton-line.short  { height: 12px; width: 45%; }
+.skeleton-line.medium { height: 14px; width: 70%; }
+.skeleton-line.long   { height: 12px; width: 90%; }
+.skeleton-line.price  { height: 26px; width: 55%; margin-bottom: 14px; }
+.skeleton-line.btn    { height: 44px; width: 100%; border-radius: 8px; margin-top: 8px; }
+
+/* ---------------------------------------------------------
+   SECTION REVEAL SYSTEM
+   .reveal-section → add .revealed via IntersectionObserver
+   --------------------------------------------------------- */
+.reveal-section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-section.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------------------------------------------------------
+   STAGGERED CARD ENTRANCE
+   Applied via inline style --stagger-i on each card wrapper
+   --------------------------------------------------------- */
+.car-card-animate {
+  opacity: 0;
+  transform: translateY(32px);
+  animation: revealUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
+/* Generate stagger delays 0–11 (max 660ms total) */
+.car-card-animate:nth-child(1)  { animation-delay: 0ms; }
+.car-card-animate:nth-child(2)  { animation-delay: 60ms; }
+.car-card-animate:nth-child(3)  { animation-delay: 120ms; }
+.car-card-animate:nth-child(4)  { animation-delay: 180ms; }
+.car-card-animate:nth-child(5)  { animation-delay: 240ms; }
+.car-card-animate:nth-child(6)  { animation-delay: 300ms; }
+.car-card-animate:nth-child(7)  { animation-delay: 360ms; }
+.car-card-animate:nth-child(8)  { animation-delay: 360ms; }
+.car-card-animate:nth-child(9)  { animation-delay: 400ms; }
+.car-card-animate:nth-child(10) { animation-delay: 400ms; }
+.car-card-animate:nth-child(11) { animation-delay: 440ms; }
+.car-card-animate:nth-child(n+12) { animation-delay: 480ms; }
+
+/* Wrapper that triggers stagger children */
+.car-card-grid-animating .car-card-animate {
+  /* animation runs */
+}
+
+/* ---------------------------------------------------------
+   BUTTON MICRO-INTERACTIONS
+   --------------------------------------------------------- */
+
+/* Primary CTA glow on hover (desktop only) */
+@media (hover: hover) {
+  .btn-primary:hover {
+    animation: glowPulse 1.8s ease-in-out infinite;
+  }
+}
+
+/* WhatsApp button — pulse ring on hover */
+.btn-whatsapp {
+  position: relative;
+  overflow: visible;
+  z-index: 0;
+}
+
+.btn-whatsapp::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  border: 2px solid rgba(16, 185, 129, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (hover: hover) {
+  .btn-whatsapp:hover::before {
+    animation: waPulseRing 1s ease-out forwards;
+  }
+}
+
+/* Car card shadow bloom on hover */
+.car-card {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s ease,
+              box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------------------------------------------------------
+   CONFETTI CANVAS (positioned fixed, pointer-none)
+   --------------------------------------------------------- */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ---------------------------------------------------------
+   ACCESSIBILITY: Respect prefers-reduced-motion
+   --------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-section {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .car-card-animate {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .skeleton-img,
+  .skeleton-line {
+    animation: none !important;
+  }
+  .btn-primary:hover {
+    animation: none !important;
+  }
+  .btn-whatsapp::before {
+    animation: none !important;
+  }
+  .car-card {
+    transition: none !important;
+  }
+}
+
