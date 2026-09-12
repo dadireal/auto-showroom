@@ -40,9 +40,98 @@ export default function ProformaModal({
     : 0;
   const monthlyPaymentDZD = Math.round(monthlyPaymentM * 10000);
 
-  // Handle Print Action
+  // Handle Print Action (Generates clean isolated single-page A4 Proforma PDF)
   const handlePrint = () => {
-    window.print();
+    const printDoc = document.getElementById('proforma-document');
+    if (!printDoc) {
+      window.print();
+      return;
+    }
+
+    // Remove any previous print iframe
+    const oldIframe = document.getElementById('proforma-print-frame');
+    if (oldIframe) oldIframe.remove();
+
+    const iframe = document.createElement('iframe');
+    iframe.id = 'proforma-print-frame';
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = '0';
+    iframe.style.visibility = 'hidden';
+    document.body.appendChild(iframe);
+
+    const cleanTitle = `Facture_Proforma_${refNumber}_${vehicle.brand}_${vehicle.title}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(`
+      <!DOCTYPE html>
+      <html lang="${language === 'ar' ? 'ar' : 'fr'}" dir="${isRTL ? 'rtl' : 'ltr'}">
+      <head>
+        <meta charset="utf-8" />
+        <title>${cleanTitle}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <style>
+          @page {
+            size: A4 portrait;
+            margin: 8mm 10mm;
+          }
+          *, *::before, *::after {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+          html, body {
+            margin: 0;
+            padding: 0;
+            background: #FFFFFF !important;
+            color: #0F172A !important;
+            font-family: ${isRTL ? "'Cairo', sans-serif" : "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif"};
+            font-size: 9.5pt;
+            line-height: 1.35;
+          }
+          #proforma-document {
+            box-shadow: none !important;
+            padding: 0 !important;
+            min-width: 100% !important;
+            width: 100% !important;
+            border-radius: 0 !important;
+          }
+          table {
+            border-collapse: collapse;
+            width: 100%;
+          }
+          th, td {
+            font-size: 8.5pt;
+          }
+          .no-print {
+            display: none !important;
+          }
+        </style>
+      </head>
+      <body>
+        ${printDoc.outerHTML}
+      </body>
+      </html>
+    `);
+    doc.close();
+
+    // Allow styles and vector SVGs to fully initialize before opening print dialog
+    setTimeout(() => {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+      setTimeout(() => {
+        if (iframe && iframe.parentNode) {
+          iframe.parentNode.removeChild(iframe);
+        }
+      }, 4000);
+    }, 350);
   };
 
   // ── Confetti burst — brand palette, no dependencies ──────────

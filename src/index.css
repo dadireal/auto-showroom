@@ -555,40 +555,74 @@ html[dir="rtl"] .drawer-content {
    PRINT STYLES FOR OFFICIAL PROFORMA INVOICE
    ========================================================= */
 @media print {
-  body * {
-    visibility: hidden;
+  /* Prevent browser from printing empty website space */
+  html, body {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
   }
-  
-  #proforma-document, #proforma-document * {
-    visibility: visible;
+
+  /* Completely eliminate all non-proforma website elements from print stream */
+  #root > *:not(.modal-overlay),
+  .no-print,
+  .site-header,
+  .site-footer,
+  #confetti-canvas,
+  .hero-container,
+  .vehicle-grid-container {
+    display: none !important;
   }
-  
+
+  /* Unclip modal from viewport so it prints seamlessly on paper */
+  .modal-overlay {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    inset: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  .modal-content {
+    background: #FFFFFF !important;
+    border: none !important;
+    box-shadow: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+  }
+
   #proforma-document {
-    position: absolute;
-    left: 0;
-    top: 0;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 20px !important;
+    padding: 0 !important;
     background: #FFFFFF !important;
     color: #0F172A !important;
     box-shadow: none !important;
     border: none !important;
-    font-size: 11pt !important;
+    font-size: 9.5pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  .no-print {
-    display: none !important;
-  }
-
-  .print-only {
-    display: block !important;
+  #proforma-document table {
+    page-break-inside: avoid;
   }
 
   @page {
-    size: A4;
-    margin: 12mm;
+    size: A4 portrait;
+    margin: 8mm 10mm;
   }
 }
 
