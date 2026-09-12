@@ -287,92 +287,52 @@ export default function SiteIntro({ onFinish }) {
 
       {/* 4. The Perfect Supercar (Pure Transparent Cut-Out, Zero Borders) */}
       <div
+        className="intro-car-container"
         style={{
-          position: 'absolute',
-          bottom: '16vh',
           // Movement trajectory:
-          // 'standby' / 'ignited' -> poised on left side: left 3%
-          // 'speeding' -> rockets all the way off the right side: 125vw
-          left: animStage === 'standby' || animStage === 'ignited' ? '3%' : '125vw',
+          // 'standby' / 'ignited' -> positioned on left
+          // 'speeding' -> rockets all the way off the right side
+          left: animStage === 'standby' || animStage === 'ignited' ? undefined : '140vw',
           transition: animStage === 'speeding' ? 'left 1.55s cubic-bezier(0.38, 0.05, 0.15, 1)' : 'left 0.2s ease',
           zIndex: 25,
           pointerEvents: 'none',
           animation: animStage === 'standby' ? 'crankVibration 0.15s ease-in-out infinite' : animStage === 'ignited' ? 'igniteBuck 0.25s ease-out' : 'none'
         }}
       >
-        <div style={{ position: 'relative', width: 'clamp(440px, 48vw, 660px)' }}>
+        <div className="intro-car-inner">
           {/* Natural Xenon Road Illumination (Smooth gradient with zero artificial borders) */}
-          <div style={{
-            position: 'absolute',
-            left: '85%',
-            top: '38%',
-            width: 'clamp(350px, 45vw, 650px)',
-            height: '160px',
-            background: 'radial-gradient(ellipse at 0% 50%, rgba(255, 255, 255, 0.75) 0%, rgba(186, 230, 253, 0.35) 25%, rgba(56, 189, 248, 0.1) 50%, transparent 75%)',
-            filter: 'blur(12px)',
-            opacity: animStage === 'standby' ? 0.35 : 0.9,
-            transition: 'opacity 0.25s ease',
-            pointerEvents: 'none',
-            zIndex: 10
-          }} />
+          <div
+            className="intro-headlight-beam"
+            style={{
+              opacity: animStage === 'standby' ? 0.35 : 0.9,
+              transition: 'opacity 0.25s ease',
+              pointerEvents: 'none',
+              zIndex: 10
+            }}
+          />
 
           {/* Headlight Crystal Flare Glow */}
-          <div style={{
-            position: 'absolute',
-            left: '92%',
-            top: '48%',
-            width: '28px',
-            height: '28px',
-            background: 'radial-gradient(circle, #FFFFFF 0%, rgba(56, 189, 248, 0.8) 50%, transparent 80%)',
-            filter: 'blur(3px)',
-            opacity: animStage === 'standby' ? 0.4 : 1,
-            pointerEvents: 'none',
-            zIndex: 15
-          }} />
+          <div
+            className="intro-headlight-flare"
+            style={{
+              opacity: animStage === 'standby' ? 0.4 : 1,
+              pointerEvents: 'none',
+              zIndex: 15
+            }}
+          />
 
           {/* Exhaust Flame Burst (Flickers on Ignition & Launch) */}
           {(animStage === 'ignited' || animStage === 'speeding') && (
-            <div style={{
-              position: 'absolute',
-              left: '-35px',
-              bottom: '22%',
-              width: '55px',
-              height: '20px',
-              background: 'radial-gradient(ellipse at right, #FFFFFF 0%, #FBBF24 30%, #FF4605 70%, transparent 95%)',
-              filter: 'blur(1.5px) drop-shadow(0 0 10px #FF4605)',
-              clipPath: 'polygon(100% 25%, 0% 50%, 100% 75%)',
-              animation: 'flameFlicker 0.08s infinite alternate',
-              zIndex: 8
-            }} />
+            <div className="intro-exhaust-flame" />
           )}
 
           {/* Tire Launch Smoke Particles */}
           {(animStage === 'ignited' || animStage === 'speeding') && (
-            <div style={{
-              position: 'absolute',
-              left: '80px',
-              bottom: '6%',
-              width: '100px',
-              height: '40px',
-              background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.45) 0%, rgba(255, 70, 5, 0.2) 45%, transparent 75%)',
-              filter: 'blur(10px)',
-              animation: 'smokePuff 0.6s ease-out forwards',
-              zIndex: 6
-            }} />
+            <div className="intro-launch-smoke" />
           )}
 
           {/* Ground Contact Shadow (Directly beneath tires on asphalt) */}
-          <div style={{
-            position: 'absolute',
-            bottom: '-4px',
-            left: '6%',
-            right: '4%',
-            height: '14px',
-            background: 'radial-gradient(ellipse at center, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 75%)',
-            filter: 'blur(4px)',
-            pointerEvents: 'none',
-            zIndex: 5
-          }} />
+          <div className="intro-contact-shadow" />
 
           {/* The High-End Exotic Hypercar (True Transparent PNG - No Rectangular Border!) */}
           <img
@@ -393,51 +353,20 @@ export default function SiteIntro({ onFinish }) {
 
       {/* 5. Start Engine Button (Requires user gesture for browser audio) */}
       {!hasStarted && (
-        <div style={{
-          position: 'absolute',
-          bottom: '22%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 60,
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '12px'
-        }}>
+        <div className="intro-start-console">
           <button
             onClick={(e) => {
               e.stopPropagation();
               startIntroSequence();
             }}
-            style={{
-              height: '56px',
-              padding: '0 32px',
-              borderRadius: '9999px',
-              background: 'linear-gradient(135deg, #FF4605 0%, #FF7847 100%)',
-              border: '2px solid rgba(255, 255, 255, 0.5)',
-              color: '#FFFFFF',
-              fontSize: '1.05rem',
-              fontWeight: 800,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '12px',
-              boxShadow: '0 0 40px rgba(255, 70, 5, 0.75), 0 10px 30px rgba(0, 0, 0, 0.8)',
-              cursor: 'pointer',
-              animation: 'pulseGlow 1.4s infinite',
-              letterSpacing: '0.06em'
-            }}
+            className="intro-start-btn"
           >
             <Play size={20} fill="#FFFFFF" />
             <span>START ENGINE V8</span>
           </button>
-          <span style={{
-            fontSize: '0.85rem',
-            color: 'rgba(255, 255, 255, 0.75)',
-            letterSpacing: '0.04em',
-            textShadow: '0 2px 8px rgba(0,0,0,0.8)'
-          }}>
-            Cliquez ou appuyez sur [ESPACE] pour démarrer avec le son du moteur
+          <span className="intro-instruction-text">
+            <span className="desktop-hint">Cliquez ou appuyez sur [ESPACE] pour démarrer avec le son</span>
+            <span className="mobile-hint">Appuyez pour démarrer avec le son du moteur</span>
           </span>
         </div>
       )}
@@ -448,6 +377,7 @@ export default function SiteIntro({ onFinish }) {
           position: 'relative',
           zIndex: 50,
           textAlign: 'center',
+          padding: '0 20px',
           animation: 'shockwaveIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards'
         }}>
           {/* Glowing Radial Halo */}
@@ -456,8 +386,8 @@ export default function SiteIntro({ onFinish }) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '500px',
-            height: '500px',
+            width: 'min(500px, 90vw)',
+            height: 'min(500px, 90vw)',
             background: 'radial-gradient(circle, rgba(255, 70, 5, 0.3) 0%, rgba(251, 191, 36, 0.12) 45%, transparent 75%)',
             pointerEvents: 'none',
             filter: 'blur(35px)'
@@ -471,11 +401,11 @@ export default function SiteIntro({ onFinish }) {
             background: 'rgba(255, 70, 5, 0.16)',
             border: '1px solid rgba(255, 70, 5, 0.45)',
             borderRadius: '9999px',
-            padding: '6px 20px',
-            fontSize: '0.8rem',
+            padding: '6px 18px',
+            fontSize: 'clamp(0.72rem, 2vw, 0.82rem)',
             fontWeight: 800,
             textTransform: 'uppercase',
-            letterSpacing: '0.18em',
+            letterSpacing: '0.16em',
             color: '#FF7847',
             marginBottom: '16px'
           }}>
@@ -484,25 +414,26 @@ export default function SiteIntro({ onFinish }) {
 
           {/* Massive Brand Heading */}
           <h1 style={{
-            fontSize: 'clamp(2.6rem, 6.5vw, 4.8rem)',
+            fontSize: 'clamp(2rem, 7vw, 4.8rem)',
             fontWeight: 900,
-            letterSpacing: '-0.03em',
+            letterSpacing: '-0.02em',
+            lineHeight: 1.08,
             margin: 0,
-            lineHeight: 1.1,
-            background: 'linear-gradient(135deg, #FFFFFF 20%, #F1F5F9 50%, #94A3B8 80%)',
+            background: 'linear-gradient(135deg, #FFFFFF 20%, #FBBF24 60%, #FF4605 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            textShadow: '0 0 50px rgba(255, 70, 5, 0.35)'
+            textShadow: '0 0 45px rgba(255, 70, 5, 0.4)'
           }}>
-            SHOWROOM AUTO
+            DZ SHOWROOM
           </h1>
 
+          {/* Tagline */}
           <p style={{
             color: '#FBBF24',
-            fontSize: '1.05rem',
+            fontSize: 'clamp(0.85rem, 2.5vw, 1.05rem)',
             fontWeight: 700,
             marginTop: '14px',
-            letterSpacing: '0.05em'
+            letterSpacing: '0.04em'
           }}>
             Algérie · Véhicules 00 km & Occasions Certifiées
           </p>
@@ -510,69 +441,227 @@ export default function SiteIntro({ onFinish }) {
       )}
 
       {/* 7. Top Right Controls (Sound & Skip) */}
-      <div style={{
-        position: 'absolute',
-        top: '24px',
-        right: '24px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        zIndex: 100
-      }}>
+      <div className="intro-top-controls">
         {/* Sound Toggle Button */}
         <button
           onClick={(e) => { e.stopPropagation(); toggleMute(); }}
+          className="intro-top-btn"
           style={{
-            height: '38px',
-            padding: '0 14px',
-            borderRadius: '10px',
-            background: 'rgba(15, 23, 42, 0.85)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
             color: isMuted ? '#94A3B8' : '#FBBF24',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.5)'
           }}
           title={isMuted ? 'Activer le son du moteur' : 'Couper le son'}
         >
-          {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+          {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
           <span>{isMuted ? 'Muted' : 'V8 Engine'}</span>
         </button>
 
         {/* Skip Intro Button */}
         <button
           onClick={(e) => { e.stopPropagation(); skipIntro(); }}
-          style={{
-            height: '38px',
-            padding: '0 16px',
-            borderRadius: '10px',
-            background: 'rgba(255, 70, 5, 0.2)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 70, 5, 0.45)',
-            color: '#FFFFFF',
-            fontSize: '0.8rem',
-            fontWeight: 800,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-            boxShadow: '0 4px 15px rgba(255, 70, 5, 0.25)'
-          }}
+          className="intro-top-btn intro-skip-btn"
         >
-          <span>Passer [ESC]</span>
-          <FastForward size={14} />
+          <span className="desktop-hint">Passer [ESC]</span>
+          <span className="mobile-hint">Passer</span>
+          <FastForward size={13} />
         </button>
       </div>
 
-      {/* Animation Keyframes */}
+      {/* Animation Keyframes & Responsive Design Rules */}
       <style>{`
+        /* --- Base Desktop Styles --- */
+        .intro-car-container {
+          position: absolute;
+          bottom: 15vh;
+          left: 4%;
+        }
+        .intro-car-inner {
+          position: relative;
+          width: clamp(480px, 46vw, 720px);
+        }
+
+        .intro-headlight-beam {
+          position: absolute;
+          left: 85%;
+          top: 38%;
+          width: clamp(320px, 42vw, 650px);
+          height: 160px;
+          background: radial-gradient(ellipse at 0% 50%, rgba(255, 255, 255, 0.75) 0%, rgba(186, 230, 253, 0.35) 25%, rgba(56, 189, 248, 0.1) 50%, transparent 75%);
+          filter: blur(12px);
+        }
+        .intro-headlight-flare {
+          position: absolute;
+          left: 92%;
+          top: 48%;
+          width: 28px;
+          height: 28px;
+          background: radial-gradient(circle, #FFFFFF 0%, rgba(56, 189, 248, 0.8) 50%, transparent 80%);
+          filter: blur(3px);
+        }
+        .intro-exhaust-flame {
+          position: absolute;
+          left: -35px;
+          bottom: 22%;
+          width: 55px;
+          height: 20px;
+          background: radial-gradient(ellipse at right, #FFFFFF 0%, #FBBF24 30%, #FF4605 70%, transparent 95%);
+          filter: blur(1.5px) drop-shadow(0 0 10px #FF4605);
+          clip-path: polygon(100% 25%, 0% 50%, 100% 75%);
+          animation: flameFlicker 0.08s infinite alternate;
+          z-index: 8;
+        }
+        .intro-launch-smoke {
+          position: absolute;
+          left: 80px;
+          bottom: 6%;
+          width: 100px;
+          height: 40px;
+          background: radial-gradient(ellipse, rgba(255, 255, 255, 0.45) 0%, rgba(255, 70, 5, 0.2) 45%, transparent 75%);
+          filter: blur(10px);
+          animation: smokePuff 0.6s ease-out forwards;
+          z-index: 6;
+        }
+        .intro-contact-shadow {
+          position: absolute;
+          bottom: -4px;
+          left: 6%;
+          right: 4%;
+          height: 14px;
+          background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 75%);
+          filter: blur(4px);
+          pointer-events: none;
+          z-index: 5;
+        }
+
+        .intro-start-console {
+          position: absolute;
+          bottom: 25vh;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 60;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          width: 90%;
+          max-width: 440px;
+        }
+        .intro-start-btn {
+          height: 56px;
+          padding: 0 32px;
+          border-radius: 9999px;
+          background: linear-gradient(135deg, #FF4605 0%, #FF7847 100%);
+          border: 2px solid rgba(255, 255, 255, 0.5);
+          color: #FFFFFF;
+          font-size: 1.05rem;
+          font-weight: 800;
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          box-shadow: 0 0 40px rgba(255, 70, 5, 0.75), 0 10px 30px rgba(0, 0, 0, 0.8);
+          cursor: pointer;
+          animation: pulseGlow 1.4s infinite;
+          letter-spacing: 0.06em;
+        }
+        .intro-instruction-text {
+          font-size: 0.85rem;
+          color: rgba(255, 255, 255, 0.75);
+          letter-spacing: 0.04em;
+          text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        .intro-top-controls {
+          position: absolute;
+          top: 24px;
+          right: 24px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          z-index: 100;
+        }
+        .intro-top-btn {
+          height: 38px;
+          padding: 0 14px;
+          border-radius: 10px;
+          background: rgba(15, 23, 42, 0.85);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          font-size: 0.8rem;
+          font-weight: 700;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          cursor: pointer;
+          transition: all 0.2s;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        .intro-skip-btn {
+          padding: 0 16px;
+          background: rgba(255, 70, 5, 0.2);
+          border: 1px solid rgba(255, 70, 5, 0.45);
+          color: #FFFFFF;
+          font-weight: 800;
+          box-shadow: 0 4px 15px rgba(255, 70, 5, 0.25);
+        }
+
+        .mobile-hint { display: none; }
+        .desktop-hint { display: inline; }
+
+        /* --- Tablet & Medium Screens (641px - 1024px) --- */
+        @media (max-width: 1024px) {
+          .intro-car-inner {
+            width: clamp(380px, 58vw, 560px);
+          }
+          .intro-start-console {
+            bottom: 30vh;
+          }
+        }
+
+        /* --- Mobile Portrait & Small Screens (<= 640px) --- */
+        @media (max-width: 640px) {
+          .mobile-hint { display: inline; }
+          .desktop-hint { display: none; }
+
+          .intro-car-container {
+            bottom: 12vh;
+            left: 6%;
+          }
+          .intro-car-inner {
+            width: clamp(270px, 86vw, 360px);
+          }
+          .intro-headlight-beam {
+            width: clamp(160px, 45vw, 260px);
+            height: 90px;
+          }
+          .intro-start-console {
+            bottom: clamp(38vh, 44%, 50vh);
+            gap: 10px;
+          }
+          .intro-start-btn {
+            height: 48px;
+            padding: 0 22px;
+            font-size: 0.9rem;
+            gap: 10px;
+          }
+          .intro-instruction-text {
+            font-size: 0.78rem;
+          }
+          .intro-top-controls {
+            top: 14px;
+            right: 12px;
+            gap: 6px;
+          }
+          .intro-top-btn {
+            height: 32px;
+            padding: 0 9px;
+            font-size: 0.72rem;
+          }
+          .intro-skip-btn {
+            padding: 0 10px;
+          }
+        }
+
+        /* --- Keyframe Animations --- */
         @keyframes roadRush {
           0% { background-position: 0 0; }
           100% { background-position: -300px 0; }
