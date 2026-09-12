@@ -16,7 +16,7 @@ class RealEngineAudioPlayer {
 
   init() {
     try {
-      this.startAudio = new Audio('/sounds/sfx_engine_start.mp3');
+      this.startAudio = new Audio('/sounds/real_engine_start.mp3');
       this.startAudio.volume = 0.95;
       this.speedAudio = new Audio('/sounds/sfx_sports_car_speeding.mp3');
       this.speedAudio.volume = 0.95;
@@ -29,7 +29,7 @@ class RealEngineAudioPlayer {
     if (this.isMuted) return;
     if (!this.startAudio) this.init();
 
-    // 1. Play real engine starter cranking and firing up
+    // 1. Play real recorded engine starter cranking & ignition catch
     try {
       this.startAudio.currentTime = 0;
       this.startAudio.play().catch(e => console.log('Autoplay deferred:', e));
@@ -44,7 +44,7 @@ class RealEngineAudioPlayer {
           this.speedAudio.play().catch(e => console.log(e));
         }
       } catch (e) {}
-    }, 1150);
+    }, 1200);
   }
 
   setMuted(muted) {
@@ -281,17 +281,16 @@ export default function SiteIntro({ onFinish }) {
         }}
       >
         <div style={{ position: 'relative', width: 'clamp(440px, 48vw, 660px)' }}>
-          {/* Volumetric Xenon Headlight Beam Projection */}
+          {/* Natural Xenon Road Illumination (Smooth gradient with zero artificial borders) */}
           <div style={{
             position: 'absolute',
-            left: '94%',
-            top: '46%',
-            width: '420px',
-            height: '110px',
-            background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(147, 197, 253, 0.5) 25%, rgba(56, 189, 248, 0.1) 65%, transparent 100%)',
-            clipPath: 'polygon(0 35%, 100% 0, 100% 100%, 0 65%)',
-            filter: 'blur(4px)',
-            opacity: animStage === 'standby' ? 0.35 : 0.95,
+            left: '85%',
+            top: '38%',
+            width: 'clamp(350px, 45vw, 650px)',
+            height: '160px',
+            background: 'radial-gradient(ellipse at 0% 50%, rgba(255, 255, 255, 0.75) 0%, rgba(186, 230, 253, 0.35) 25%, rgba(56, 189, 248, 0.1) 50%, transparent 75%)',
+            filter: 'blur(12px)',
+            opacity: animStage === 'standby' ? 0.35 : 0.9,
             transition: 'opacity 0.25s ease',
             pointerEvents: 'none',
             zIndex: 10
@@ -302,10 +301,10 @@ export default function SiteIntro({ onFinish }) {
             position: 'absolute',
             left: '92%',
             top: '48%',
-            width: '35px',
-            height: '35px',
-            background: 'radial-gradient(circle, #FFFFFF 0%, #38BDF8 60%, transparent 80%)',
-            filter: 'blur(4px)',
+            width: '28px',
+            height: '28px',
+            background: 'radial-gradient(circle, #FFFFFF 0%, rgba(56, 189, 248, 0.8) 50%, transparent 80%)',
+            filter: 'blur(3px)',
             opacity: animStage === 'standby' ? 0.4 : 1,
             pointerEvents: 'none',
             zIndex: 15
@@ -342,16 +341,17 @@ export default function SiteIntro({ onFinish }) {
             }} />
           )}
 
-          {/* Ground Contact Shadow / Underglow (Beneath Wheels) */}
+          {/* Ground Contact Shadow (Directly beneath tires on asphalt) */}
           <div style={{
             position: 'absolute',
-            bottom: '-10px',
-            left: '8%',
-            right: '8%',
-            height: '26px',
-            background: 'radial-gradient(ellipse at center, rgba(255, 70, 5, 0.45) 0%, rgba(255, 107, 0, 0.18) 50%, transparent 75%)',
-            filter: 'blur(8px)',
-            pointerEvents: 'none'
+            bottom: '-4px',
+            left: '6%',
+            right: '4%',
+            height: '14px',
+            background: 'radial-gradient(ellipse at center, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 75%)',
+            filter: 'blur(4px)',
+            pointerEvents: 'none',
+            zIndex: 5
           }} />
 
           {/* The High-End Exotic Hypercar (True Transparent PNG - No Rectangular Border!) */}
