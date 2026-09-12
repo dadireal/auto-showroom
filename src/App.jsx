@@ -19,6 +19,7 @@ import AdminDashboard from './components/AdminDashboard';
 import FavoritesDrawer from './components/FavoritesDrawer';
 import ProformaModal from './components/ProformaModal';
 import ImageLightboxModal from './components/ImageLightboxModal';
+import SiteIntro from './components/SiteIntro';
 import Footer from './components/Footer';
 import { INITIAL_VEHICLES, POPULAR_BRANDS, INITIAL_ORDERS } from './data/mockData';
 
@@ -110,6 +111,15 @@ export default function App() {
   const [isLoanCalculatorOpen, setIsLoanCalculatorOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+
+  // Cinematic Sports Car Speeding Intro (Plays on first visit per session, or when replayed)
+  const [showIntro, setShowIntro] = useState(() => {
+    try {
+      return sessionStorage.getItem('auto_showroom_intro_seen') !== 'true';
+    } catch (e) {
+      return true;
+    }
+  });
 
   // Save vehicles to localStorage whenever catalog changes
   useEffect(() => {
@@ -390,6 +400,7 @@ export default function App() {
         onLogout={handleLogout}
         favoritesCount={favorites.length}
         onOpenFavorites={() => setIsFavoritesOpen(true)}
+        onReplayIntro={() => setShowIntro(true)}
       />
 
       <main style={{ flexGrow: 1 }}>
@@ -548,7 +559,20 @@ export default function App() {
       <Footer
         onScrollToSection={scrollToSection}
         onSelectWilaya={(w) => setSearchFilters(prev => ({ ...prev, wilaya: w }))}
+        onReplayIntro={() => setShowIntro(true)}
       />
+
+      {/* Cinematic Sports Car Speeding Intro with Engine Sound */}
+      {showIntro && (
+        <SiteIntro
+          onFinish={() => {
+            setShowIntro(false);
+            try {
+              sessionStorage.setItem('auto_showroom_intro_seen', 'true');
+            } catch (e) {}
+          }}
+        />
+      )}
     </div>
   );
 }

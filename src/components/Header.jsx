@@ -22,7 +22,8 @@ import {
   LayoutDashboard,
   LogOut,
   Globe,
-  Heart
+  Heart,
+  Play
 } from 'lucide-react';
 import Logo from './Logo';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -46,7 +47,8 @@ export default function Header({
   pendingOrdersCount = 0,
   onLogout,
   favoritesCount = 0,
-  onOpenFavorites
+  onOpenFavorites,
+  onReplayIntro
 }) {
   const { language, setLanguage, t, isRTL } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -243,6 +245,41 @@ export default function Header({
                   }} 
                 />
               </div>
+
+              {/* Replay Cinematic Intro button */}
+              {onReplayIntro && (
+                <button
+                  onClick={onReplayIntro}
+                  style={{
+                    height: '28px',
+                    background: 'rgba(255, 70, 5, 0.08)',
+                    border: '1px solid rgba(255, 70, 5, 0.28)',
+                    borderRadius: '8px',
+                    padding: '0 8px',
+                    color: '#FF7847',
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    boxSizing: 'border-box'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = 'rgba(255, 70, 5, 0.2)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 70, 5, 0.6)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = 'rgba(255, 70, 5, 0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 70, 5, 0.28)';
+                  }}
+                  title={language === 'ar' ? 'إعادة تشغيل العرض الرياضي' : language === 'en' ? 'Replay Supercar Intro' : 'Rejouer l\'intro sportive'}
+                >
+                  <Play size={10} fill="#FF7847" />
+                  <span className="desktop-text">Intro</span>
+                </button>
+              )}
 
               {isAdminLoggedIn ? (
                 <div className="top-bar-admin" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
@@ -798,6 +835,17 @@ export default function Header({
               <Heart size={16} color="#EF4444" fill={favoritesCount > 0 ? '#EF4444' : 'none'} />
               <span>{t('garage.fullTitle')} ({favoritesCount})</span>
             </button>
+
+            {onReplayIntro && (
+              <button 
+                onClick={() => { onReplayIntro(); setMobileMenuOpen(false); }} 
+                className="nav-link" 
+                style={{ background: 'none', justifyContent: 'flex-start', display: 'flex', alignItems: 'center', gap: '8px', color: '#FF7847' }}
+              >
+                <Play size={15} fill="#FF7847" />
+                <span>{language === 'ar' ? '🏎️ إعادة العرض الرياضي' : language === 'en' ? '🏎️ Replay Supercar Intro' : '🏎️ Rejouer l\'intro sportive'}</span>
+              </button>
+            )}
 
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {isAdminLoggedIn && (

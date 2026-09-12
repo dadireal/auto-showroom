@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Send, CheckCircle, ShieldCheck } from 'lucide-reac
 import Logo from './Logo';
 import { useLanguage } from '../i18n/LanguageContext';
 
-export default function Footer({ onScrollToSection, onSelectWilaya }) {
+export default function Footer({ onScrollToSection, onSelectWilaya, onReplayIntro }) {
   const { t, language } = useLanguage();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -55,6 +55,18 @@ export default function Footer({ onScrollToSection, onSelectWilaya }) {
               <li><button onClick={() => onScrollToSection('showrooms')} style={{ background: 'none', color: '#94a3b8', fontSize: '0.88rem', padding: 0 }} onMouseEnter={e => e.target.style.color='#ff4605'} onMouseLeave={e => e.target.style.color='#94a3b8'}>{t('nav.showrooms')}</button></li>
               <li><button onClick={() => onScrollToSection('products')} style={{ background: 'none', color: '#94a3b8', fontSize: '0.88rem', padding: 0 }} onMouseEnter={e => e.target.style.color='#ff4605'} onMouseLeave={e => e.target.style.color='#94a3b8'}>{t('nav.accessories')}</button></li>
               <li><button onClick={() => onScrollToSection('why-us')} style={{ background: 'none', color: '#94a3b8', fontSize: '0.88rem', padding: 0 }} onMouseEnter={e => e.target.style.color='#ff4605'} onMouseLeave={e => e.target.style.color='#94a3b8'}>{t('nav.pledge')}</button></li>
+              {onReplayIntro && (
+                <li>
+                  <button 
+                    onClick={onReplayIntro} 
+                    style={{ background: 'none', color: '#FF7847', fontSize: '0.88rem', padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}
+                    onMouseEnter={e => e.currentTarget.style.color='#FFA07A'}
+                    onMouseLeave={e => e.currentTarget.style.color='#FF7847'}
+                  >
+                    <span>🏎️ {language === 'ar' ? 'إعادة العرض الرياضي' : language === 'en' ? 'Replay Supercar Intro' : 'Rejouer l\'intro sportive'}</span>
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 
