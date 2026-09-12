@@ -576,21 +576,23 @@ export default function Header({
               <span>{t('nav.login')}</span>
             </button>
 
-            {/* High-Visibility CTA: + Ajouter un Véhicule / Annonce */}
-            <button 
-              onClick={onOpenAddVehicle}
-              className="btn-primary header-add-btn"
-              style={{ 
-                padding: '9px 16px', 
-                fontSize: '0.84rem', 
-                fontWeight: 800,
-                background: 'linear-gradient(135deg, #FF4605 0%, #FF6B00 100%)',
-                boxShadow: '0 4px 16px rgba(255, 70, 5, 0.35)'
-              }}
-            >
-              <PlusCircle size={15} />
-              <span className="header-add-btn-text">{t('nav.addVehicle')}</span>
-            </button>
+            {/* High-Visibility CTA: + Ajouter un Véhicule (Admin / Concessionnaire Only) */}
+            {isAdminLoggedIn && (
+              <button 
+                onClick={onOpenAddVehicle}
+                className="btn-primary header-add-btn"
+                style={{ 
+                  padding: '9px 16px', 
+                  fontSize: '0.84rem', 
+                  fontWeight: 800,
+                  background: 'linear-gradient(135deg, #FF4605 0%, #FF6B00 100%)',
+                  boxShadow: '0 4px 16px rgba(255, 70, 5, 0.35)'
+                }}
+              >
+                <PlusCircle size={15} />
+                <span className="header-add-btn-text">{t('nav.addVehicle')}</span>
+              </button>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button
@@ -704,13 +706,15 @@ export default function Header({
             </button>
 
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <button 
-                onClick={() => { onOpenAddVehicle(); setMobileMenuOpen(false); }} 
-                className="btn-primary" 
-                style={{ width: '100%' }}
-              >
-                <PlusCircle size={16} /> {t('nav.addVehicle')}
-              </button>
+              {isAdminLoggedIn && (
+                <button 
+                  onClick={() => { onOpenAddVehicle(); setMobileMenuOpen(false); }} 
+                  className="btn-primary" 
+                  style={{ width: '100%' }}
+                >
+                  <PlusCircle size={16} /> {t('nav.addVehicle')}
+                </button>
+              )}
               <button 
                 onClick={() => { onOpenLogin(); setMobileMenuOpen(false); }} 
                 className="btn-outline" 

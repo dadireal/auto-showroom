@@ -26,8 +26,19 @@ export default function App() {
   // Currency: 'M' (Millions de Centimes), 'DZD' (Dinars), 'EUR' (Euros)
   const [currency, setCurrency] = useState('M');
 
-  // Vehicles dataset
-  const [vehicles, setVehicles] = useState(INITIAL_VEHICLES);
+  // Vehicles dataset (persisted to localStorage so added/edited cars never disappear on refresh)
+  const [vehicles, setVehicles] = useState(() => {
+    try {
+      const saved = localStorage.getItem('auto_showroom_vehicles');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn('Failed to load vehicles from localStorage', e);
+    }
+    return INITIAL_VEHICLES;
+  });
 
   // Search and filter criteria
   const [searchFilters, setSearchFilters] = useState({
@@ -73,8 +84,17 @@ export default function App() {
   });
   const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
 
-  // Orders & Customer inquiries dataset
-  const [orders, setOrders] = useState(INITIAL_ORDERS);
+  // Orders & Customer inquiries dataset (persisted to localStorage)
+  const [orders, setOrders] = useState(() => {
+    try {
+      const saved = localStorage.getItem('auto_showroom_orders');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return INITIAL_ORDERS;
+  });
 
   // Admin authentication and view state
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
@@ -90,6 +110,22 @@ export default function App() {
   const [isLoanCalculatorOpen, setIsLoanCalculatorOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+
+  // Save vehicles to localStorage whenever catalog changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('auto_showroom_vehicles', JSON.stringify(vehicles));
+    } catch (e) {
+      console.warn('Failed to save vehicles to localStorage', e);
+    }
+  }, [vehicles]);
+
+  // Save orders to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('auto_showroom_orders', JSON.stringify(orders));
+    } catch (e) {}
+  }, [orders]);
 
   // Save favorites to localStorage
   useEffect(() => {
