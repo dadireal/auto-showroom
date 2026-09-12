@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { 
   LayoutDashboard, 
   Car, 
@@ -24,7 +24,9 @@ import {
   ShieldCheck, 
   Eye,
   SlidersHorizontal,
-  ChevronDown
+  ChevronDown,
+  UploadCloud,
+  Check
 } from 'lucide-react';
 import { POPULAR_BRANDS, SHOWROOMS, WILAYAS, BODY_TYPES, ORDER_STATUSES } from '../data/mockData';
 import Logo from './Logo';
@@ -90,6 +92,97 @@ export default function AdminDashboard({
   const [vehicleFormData, setVehicleFormData] = useState(initialVehicleForm);
   const [newFeatureInput, setNewFeatureInput] = useState('');
   const [customImageUrl, setCustomImageUrl] = useState('');
+  const fileInputRef = useRef(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [isProcessingImages, setIsProcessingImages] = useState(false);
+
+  // Compress and resize large camera photos for high-performance in-browser handling
+  const compressImage = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDimension = 1600;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+              height = Math.round((height * maxDimension) / width);
+              width = maxDimension;
+            } else {
+              width = Math.round((width * maxDimension) / height);
+              height = maxDimension;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.85));
+        };
+        img.onerror = () => resolve(e.target.result);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const processFiles = async (filesList) => {
+    const files = Array.from(filesList).filter(f => f.type.startsWith('image/'));
+    if (!files.length) return;
+
+    setIsProcessingImages(true);
+    const compressedList = [];
+    for (const file of files) {
+      const dataUrl = await compressImage(file);
+      if (dataUrl) compressedList.push(dataUrl);
+    }
+
+    if (compressedList.length > 0) {
+      setVehicleFormData(prev => {
+        const current = (prev.images || []).filter(img => img !== '/cars/bmw_m4_competition.jpg');
+        return {
+          ...prev,
+          images: [...current, ...compressedList]
+        };
+      });
+    }
+    setIsProcessingImages(false);
+  };
+
+  const handleDeviceFileUpload = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      processFiles(e.target.files);
+      e.target.value = '';
+    }
+  };
+
+  const handleRemoveImage = (indexToRemove) => {
+    setVehicleFormData(prev => {
+      const updated = (prev.images || []).filter((_, idx) => idx !== indexToRemove);
+      return {
+        ...prev,
+        images: updated.length > 0 ? updated : ['/cars/bmw_m4_competition.jpg']
+      };
+    });
+  };
+
+  const handleSetMainImage = (indexToMain) => {
+    setVehicleFormData(prev => {
+      const current = prev.images || [];
+      const selected = current[indexToMain];
+      const others = current.filter((_, idx) => idx !== indexToMain);
+      return {
+        ...prev,
+        images: [selected, ...others]
+      };
+    });
+  };
 
   // Manual Order Form State
   const initialOrderForm = {
@@ -1653,66 +1746,261 @@ export default function AdminDashboard({
                 padding: '18px',
                 marginBottom: '20px'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', color: '#FFFFFF', fontWeight: 700 }}>
-                  <ImageIcon size={18} color="#FF6B00" />
-                  <span>Gestion des Photos Réelles du Véhicule</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#FFFFFF', fontWeight: 700 }}>
+                    <ImageIcon size={18} color="#FF6B00" />
+                    <span>Gestion des Photos Réelles du Véhicule</span>
+                  </div>
+                  <span style={{ fontSize: '0.78rem', color: '#FBBF24', fontWeight: 600 }}>
+                    {(vehicleFormData.images || []).length} photo{(vehicleFormData.images || []).length > 1 ? 's' : ''}
+                  </span>
                 </div>
 
                 <p style={{ fontSize: '0.82rem', color: '#94A3B8', marginBottom: '14px' }}>
-                  Sélectionnez parmi nos visuels locaux certifiés en haute résolution ou saisissez une URL directe d'image.
+                  Importez des photos réelles depuis votre ordinateur (PC/Laptop) ou smartphone, ou utilisez nos visuels certifiés.
                 </p>
 
-                {/* Preset selector */}
-                <div style={{ marginBottom: '14px' }}>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#CBD5E1', marginBottom: '6px' }}>
-                    Modèles disponibles certifiés en local :
+                {/* 1. DEVICE UPLOAD DROPZONE */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  multiple
+                  style={{ display: 'none' }}
+                  onChange={handleDeviceFileUpload}
+                />
+                
+                <div
+                  onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragOver(true); }}
+                  onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragOver(false); }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsDragOver(false);
+                    if (e.dataTransfer && e.dataTransfer.files) {
+                      processFiles(e.dataTransfer.files);
+                    }
+                  }}
+                  onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                  style={{
+                    border: isDragOver ? '2px dashed #FF6B00' : '2px dashed rgba(255, 107, 0, 0.4)',
+                    background: isDragOver ? 'rgba(255, 107, 0, 0.1)' : 'rgba(15, 23, 42, 0.65)',
+                    borderRadius: '10px',
+                    padding: '22px 16px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    marginBottom: '16px'
+                  }}
+                >
+                  <div style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    background: 'rgba(255, 107, 0, 0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 10px auto'
+                  }}>
+                    <UploadCloud size={22} color="#FF6B00" />
                   </div>
-                  <select
-                    onChange={(e) => {
-                      if (e.target.value) {
-                        setVehicleFormData(prev => ({ ...prev, images: [e.target.value] }));
-                      }
-                    }}
-                    style={{ width: '100%', padding: '10px', background: '#080C14', border: '1px solid rgba(255, 255, 255, 0.15)', borderRadius: '8px', color: '#FFF', fontSize: '0.85rem' }}
-                  >
-                    <option value="">-- Choisir une photo certifiée locale --</option>
-                    {PRESET_CAR_IMAGES.map(p => (
-                      <option key={p.url} value={p.url}>{p.label}</option>
-                    ))}
-                  </select>
+                  
+                  <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#FFFFFF', marginBottom: '4px' }}>
+                    {isProcessingImages ? 'Optimisation et chargement des photos...' : 'Importer des photos depuis votre appareil'}
+                  </div>
+                  
+                  <div style={{ fontSize: '0.78rem', color: '#94A3B8', marginBottom: '12px' }}>
+                    Glissez-déposez vos photos ici ou <span style={{ color: '#FF6B00', textDecoration: 'underline', fontWeight: 600 }}>cliquez pour parcourir</span>
+                  </div>
+
+                  <div style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    background: '#FF6B00',
+                    color: '#FFF',
+                    padding: '8px 18px',
+                    borderRadius: '8px',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    boxShadow: '0 4px 12px rgba(255, 107, 0, 0.3)'
+                  }}>
+                    <UploadCloud size={16} />
+                    <span>Parcourir mon appareil (PC, Laptop, Mobile)</span>
+                  </div>
                 </div>
 
-                {/* Custom URL Input */}
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '14px' }}>
-                  <input
-                    type="url"
-                    placeholder="Ou collez une URL directe d'image (https://...)"
-                    value={customImageUrl}
-                    onChange={(e) => setCustomImageUrl(e.target.value)}
-                    style={{ flex: 1, padding: '9px 12px', background: '#080C14', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#FFF', fontSize: '0.85rem' }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (customImageUrl.trim()) {
-                        setVehicleFormData(prev => ({ ...prev, images: [customImageUrl.trim()] }));
-                        setCustomImageUrl('');
-                      }
-                    }}
-                    style={{ background: '#FF6B00', border: 'none', color: '#fff', padding: '0 16px', borderRadius: '8px', fontWeight: 700, fontSize: '0.84rem', cursor: 'pointer' }}
-                  >
-                    Appliquer
-                  </button>
-                </div>
+                {/* 2. ATTACHED PHOTOS GALLERY (PREVIEWS & COVER MANAGEMENT) */}
+                {vehicleFormData.images && vehicleFormData.images.length > 0 && (
+                  <div style={{ marginBottom: '16px' }}>
+                    <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#CBD5E1', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
+                      <span>Galerie photos actuelle :</span>
+                      <span style={{ fontSize: '0.72rem', color: '#94A3B8' }}>La 1ère photo sera l'affiche principale</span>
+                    </div>
 
-                {/* Preview */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <span style={{ fontSize: '0.78rem', color: '#94A3B8' }}>Aperçu actuel :</span>
-                  <img
-                    src={vehicleFormData.images[0] || '/cars/bmw_m4_competition.jpg'}
-                    alt="Aperçu"
-                    style={{ width: '120px', height: '70px', objectFit: 'cover', borderRadius: '8px', border: '1.5px solid #FF6B00' }}
-                  />
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+                      gap: '10px'
+                    }}>
+                      {vehicleFormData.images.map((imgUrl, idx) => {
+                        const isMain = idx === 0;
+                        return (
+                          <div
+                            key={idx}
+                            style={{
+                              position: 'relative',
+                              borderRadius: '8px',
+                              overflow: 'hidden',
+                              border: isMain ? '2px solid #FF6B00' : '1px solid rgba(255, 255, 255, 0.12)',
+                              background: '#0B111E',
+                              aspectRatio: '16/10'
+                            }}
+                          >
+                            <img
+                              src={imgUrl}
+                              alt={`Photo ${idx + 1}`}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                            />
+
+                            {/* Main Cover Badge */}
+                            {isMain ? (
+                              <div style={{
+                                position: 'absolute',
+                                top: '4px',
+                                left: '4px',
+                                background: '#FF6B00',
+                                color: '#FFF',
+                                fontSize: '0.62rem',
+                                fontWeight: 800,
+                                padding: '2px 6px',
+                                borderRadius: '4px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '3px',
+                                boxShadow: '0 2px 6px rgba(0,0,0,0.5)'
+                              }}>
+                                <Check size={10} />
+                                Couverture
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSetMainImage(idx);
+                                }}
+                                title="Définir comme photo principale"
+                                style={{
+                                  position: 'absolute',
+                                  top: '4px',
+                                  left: '4px',
+                                  background: 'rgba(0, 0, 0, 0.75)',
+                                  color: '#FDE047',
+                                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                                  fontSize: '0.62rem',
+                                  fontWeight: 700,
+                                  padding: '2px 6px',
+                                  borderRadius: '4px',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                ★ Définir Principale
+                              </button>
+                            )}
+
+                            {/* Delete Button */}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveImage(idx);
+                              }}
+                              title="Supprimer cette photo"
+                              style={{
+                                position: 'absolute',
+                                top: '4px',
+                                right: '4px',
+                                background: 'rgba(239, 68, 68, 0.9)',
+                                border: 'none',
+                                color: '#FFF',
+                                width: '22px',
+                                height: '22px',
+                                borderRadius: '4px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 6px rgba(0,0,0,0.5)'
+                              }}
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. SECONDARY OPTIONS: PRESETS & DIRECT URL */}
+                <div style={{
+                  paddingTop: '12px',
+                  borderTop: '1px solid rgba(255, 255, 255, 0.06)'
+                }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748B', marginBottom: '8px' }}>
+                    Ou choisir parmi les visuels certifiés / URL :
+                  </div>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {/* Preset selector */}
+                    <div style={{ flex: '1 1 200px' }}>
+                      <select
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            setVehicleFormData(prev => ({
+                              ...prev,
+                              images: [...(prev.images || []).filter(img => img !== '/cars/bmw_m4_competition.jpg'), e.target.value]
+                            }));
+                            e.target.value = '';
+                          }
+                        }}
+                        style={{ width: '100%', padding: '8px 10px', background: '#080C14', border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '8px', color: '#CBD5E1', fontSize: '0.8rem' }}
+                      >
+                        <option value="">+ Ajouter un visuel local certifié</option>
+                        {PRESET_CAR_IMAGES.map(p => (
+                          <option key={p.url} value={p.url}>{p.label}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Custom URL Input */}
+                    <div style={{ flex: '1 1 240px', display: 'flex', gap: '6px' }}>
+                      <input
+                        type="url"
+                        placeholder="Coller une URL directe (https://...)"
+                        value={customImageUrl}
+                        onChange={(e) => setCustomImageUrl(e.target.value)}
+                        style={{ flex: 1, padding: '7px 10px', background: '#080C14', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#FFF', fontSize: '0.8rem' }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (customImageUrl.trim()) {
+                            setVehicleFormData(prev => ({
+                              ...prev,
+                              images: [...(prev.images || []).filter(img => img !== '/cars/bmw_m4_competition.jpg'), customImageUrl.trim()]
+                            }));
+                            setCustomImageUrl('');
+                          }
+                        }}
+                        style={{ background: '#334155', border: 'none', color: '#fff', padding: '0 12px', borderRadius: '8px', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                      >
+                        Ajouter
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
