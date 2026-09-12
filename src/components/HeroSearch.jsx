@@ -284,7 +284,7 @@ export default function HeroSearch({
           <div className="concierge-grid">
             {/* Filter 1: Marque */}
             <div style={{ position: 'relative' }}>
-              <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94A3B8', marginBottom: '4px', paddingLeft: '4px' }}>
+              <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94A3B8', marginBottom: '4px', paddingInlineStart: '4px' }}>
                 {t('hero.brand')}
               </div>
               <div style={{ position: 'relative' }}>
@@ -296,36 +296,39 @@ export default function HeroSearch({
                   }}
                   style={{
                     width: '100%',
+                    height: '44px',
                     background: 'rgba(9, 13, 22, 0.85)',
                     color: '#FFFFFF',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '10px',
-                    padding: '11px 32px 11px 14px',
+                    padding: '0 14px',
+                    paddingInlineEnd: '34px',
                     fontSize: '0.88rem',
                     fontWeight: 600,
                     outline: 'none',
                     cursor: 'pointer',
                     appearance: 'none',
-                    WebkitAppearance: 'none'
+                    WebkitAppearance: 'none',
+                    boxSizing: 'border-box'
                   }}
                 >
                   <option value="all">{t('hero.allBrands')}</option>
                   {brands.map(b => {
                     const count = allVehicles && allVehicles.length > 0
-                      ? allVehicles.filter(v => v.brand.toLowerCase() === b.name.toLowerCase()).length
+                       ? allVehicles.filter(v => v.brand.toLowerCase() === b.name.toLowerCase()).length
                       : (b.count || 0);
                     return (
                       <option key={b.name} value={b.name}>{b.name} ({count})</option>
                     );
                   })}
                 </select>
-                <ChevronDown size={15} color="#64748B" style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                <ChevronDown size={15} color="#64748B" style={{ position: 'absolute', insetInlineEnd: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
               </div>
             </div>
 
             {/* Filter 2: Modèle */}
             <div style={{ position: 'relative' }}>
-              <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94A3B8', marginBottom: '4px', paddingLeft: '4px' }}>
+              <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94A3B8', marginBottom: '4px', paddingInlineStart: '4px' }}>
                 {t('hero.model')}
               </div>
               <div style={{ position: 'relative' }}>
@@ -334,17 +337,20 @@ export default function HeroSearch({
                   onChange={(e) => handleFilterChange('model', e.target.value)}
                   style={{
                     width: '100%',
+                    height: '44px',
                     background: 'rgba(9, 13, 22, 0.85)',
                     color: '#FFFFFF',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '10px',
-                    padding: '11px 32px 11px 14px',
+                    padding: '0 14px',
+                    paddingInlineEnd: '34px',
                     fontSize: '0.88rem',
                     fontWeight: 600,
                     outline: 'none',
                     cursor: 'pointer',
                     appearance: 'none',
-                    WebkitAppearance: 'none'
+                    WebkitAppearance: 'none',
+                    boxSizing: 'border-box'
                   }}
                 >
                   <option value="all">{t('hero.allModels')}</option>
@@ -352,13 +358,13 @@ export default function HeroSearch({
                     <option key={m} value={m}>{m}</option>
                   ))}
                 </select>
-                <ChevronDown size={15} color="#64748B" style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                <ChevronDown size={15} color="#64748B" style={{ position: 'absolute', insetInlineEnd: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
               </div>
             </div>
 
             {/* Filter 3: Budget (en Millions Centimes) */}
             <div style={{ position: 'relative' }}>
-              <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94A3B8', marginBottom: '4px', paddingLeft: '4px' }}>
+              <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94A3B8', marginBottom: '4px', paddingInlineStart: '4px' }}>
                 {t('hero.budget')}
               </div>
               <div style={{ position: 'relative' }}>
@@ -367,17 +373,20 @@ export default function HeroSearch({
                   onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
                   style={{
                     width: '100%',
+                    height: '44px',
                     background: 'rgba(9, 13, 22, 0.85)',
                     color: '#FFFFFF',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '10px',
-                    padding: '11px 32px 11px 14px',
+                    padding: '0 14px',
+                    paddingInlineEnd: '34px',
                     fontSize: '0.88rem',
                     fontWeight: 600,
                     outline: 'none',
                     cursor: 'pointer',
                     appearance: 'none',
-                    WebkitAppearance: 'none'
+                    WebkitAppearance: 'none',
+                    boxSizing: 'border-box'
                   }}
                 >
                   <option value="any">{t('hero.anyBudget')}</option>
@@ -387,25 +396,30 @@ export default function HeroSearch({
                   <option value="1500">≤ 1 500 Millions</option>
                   <option value="10000">&gt; 1 500 Millions (Prestige)</option>
                 </select>
-                <ChevronDown size={15} color="#64748B" style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                <ChevronDown size={15} color="#64748B" style={{ position: 'absolute', insetInlineEnd: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
               </div>
             </div>
 
-            {/* High-Contrast Orange Search Button */}
-            <div style={{ paddingTop: '20px' }}>
+            {/* High-Contrast Orange Search Button — Perfectly Baseline Aligned */}
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
               <button
                 onClick={onSearch}
                 className="btn-primary"
                 style={{
                   width: '100%',
-                  padding: '12px 18px',
-                  height: '46px',
+                  padding: '0 18px',
+                  height: '44px',
                   fontSize: '0.92rem',
                   fontWeight: 800,
                   background: 'linear-gradient(135deg, #FF4605 0%, #FF6B00 100%)',
                   borderRadius: '10px',
                   boxShadow: '0 4px 20px rgba(255, 70, 5, 0.45)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxSizing: 'border-box'
                 }}
               >
                 <Search size={17} />

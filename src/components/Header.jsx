@@ -112,16 +112,22 @@ export default function Header({
       >
         {/* Top Minimal Info Bar — collapses on scroll */}
         <div style={{
-          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
           fontSize: '0.78rem',
           color: '#94A3B8',
-          overflow: 'hidden',
-          maxHeight: isScrolled ? '0px' : '40px',
+          maxHeight: isScrolled ? '0px' : '52px',
           opacity: isScrolled ? 0 : 1,
-          transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease',
+          transition: 'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, padding 0.3s ease',
           padding: isScrolled ? '0' : '6px 0',
+          overflow: 'hidden',
+          boxSizing: 'border-box'
         }}>
-          <div className="container-wide top-info-bar-wrap" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="container-wide top-info-bar-wrap" style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            minHeight: '28px'
+          }}>
             <div className="top-info-bar-left" style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#CBD5E1' }}>
                 <ShieldCheck size={13} color="#10B981" />
@@ -134,112 +140,187 @@ export default function Header({
             </div>
 
             {/* Language Selector, Currency Selector & Dealer Portal */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              {/* Language Selector */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <Globe size={13} color="#FF6B00" />
-                <div style={{ position: 'relative' }}>
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      color: '#FFFFFF',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      borderRadius: '6px',
-                      padding: '2px 20px 2px 8px',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      outline: 'none',
-                      appearance: 'none',
-                      WebkitAppearance: 'none'
-                    }}
-                  >
-                    <option value="fr" style={{ background: '#0F172A', color: '#fff' }}>🇫🇷 FR</option>
-                    <option value="en" style={{ background: '#0F172A', color: '#fff' }}>🇬🇧 EN</option>
-                    <option value="ar" style={{ background: '#0F172A', color: '#fff' }}>🇩🇿 عربي</option>
-                  </select>
-                  <ChevronDown size={11} color="#94A3B8" style={{ position: 'absolute', right: '6px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {/* Luxury Language Pill */}
+              <div style={{
+                position: 'relative',
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: '28px',
+                background: 'rgba(255, 255, 255, 0.04)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '8px',
+                padding: '0 8px',
+                gap: '5px',
+                boxSizing: 'border-box'
+              }}>
+                <Globe size={13} color="#FF6B00" style={{ flexShrink: 0 }} />
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  style={{
+                    background: 'transparent',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    padding: 0,
+                    paddingInlineEnd: '14px',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    outline: 'none',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    lineHeight: '26px',
+                    height: '100%'
+                  }}
+                >
+                  <option value="fr" style={{ background: '#0F172A', color: '#fff' }}>🇫🇷 FR</option>
+                  <option value="en" style={{ background: '#0F172A', color: '#fff' }}>🇬🇧 EN</option>
+                  <option value="ar" style={{ background: '#0F172A', color: '#fff' }}>🇩🇿 عربي</option>
+                </select>
+                <ChevronDown 
+                  size={11} 
+                  color="#94A3B8" 
+                  style={{ 
+                    position: 'absolute', 
+                    insetInlineEnd: '6px', 
+                    top: '50%', 
+                    transform: 'translateY(-50%)', 
+                    pointerEvents: 'none' 
+                  }} 
+                />
               </div>
 
-              {/* Currency Selector */}
-              <div className="top-bar-currency" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <Coins size={13} color="#FBBF24" />
-                <span className="desktop-text" style={{ fontWeight: 600, color: '#94A3B8', fontSize: '0.75rem' }}>{t('topBar.currency')}</span>
-                <div style={{ position: 'relative' }}>
-                  <select
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      color: '#FFFFFF',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      borderRadius: '6px',
-                      padding: '2px 20px 2px 8px',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      outline: 'none',
-                      appearance: 'none',
-                      WebkitAppearance: 'none'
-                    }}
-                  >
-                    <option value="M" style={{ background: '#0F172A', color: '#fff' }}>Millions (M)</option>
-                    <option value="DZD" style={{ background: '#0F172A', color: '#fff' }}>DZD</option>
-                    <option value="EUR" style={{ background: '#0F172A', color: '#fff' }}>EUR (€)</option>
-                  </select>
-                  <ChevronDown size={11} color="#94A3B8" style={{ position: 'absolute', right: '6px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                </div>
+              {/* Luxury Currency Pill */}
+              <div className="top-bar-currency" style={{
+                position: 'relative',
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: '28px',
+                background: 'rgba(255, 255, 255, 0.04)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '8px',
+                padding: '0 8px',
+                gap: '5px',
+                boxSizing: 'border-box'
+              }}>
+                <Coins size={13} color="#FBBF24" style={{ flexShrink: 0 }} />
+                <span className="desktop-text" style={{ fontWeight: 600, color: '#94A3B8', fontSize: '0.74rem' }}>
+                  {t('topBar.currency')}
+                </span>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  style={{
+                    background: 'transparent',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    padding: 0,
+                    paddingInlineEnd: '14px',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    outline: 'none',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    lineHeight: '26px',
+                    height: '100%'
+                  }}
+                >
+                  <option value="M" style={{ background: '#0F172A', color: '#fff' }}>Millions (M)</option>
+                  <option value="DZD" style={{ background: '#0F172A', color: '#fff' }}>DZD</option>
+                  <option value="EUR" style={{ background: '#0F172A', color: '#fff' }}>EUR (€)</option>
+                </select>
+                <ChevronDown 
+                  size={11} 
+                  color="#94A3B8" 
+                  style={{ 
+                    position: 'absolute', 
+                    insetInlineEnd: '6px', 
+                    top: '50%', 
+                    transform: 'translateY(-50%)', 
+                    pointerEvents: 'none' 
+                  }} 
+                />
               </div>
 
               {isAdminLoggedIn ? (
-                <div className="top-bar-admin" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="top-bar-admin" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                   <button
                     onClick={onOpenDashboard}
                     style={{
-                      background: 'linear-gradient(135deg, rgba(255, 107, 0, 0.22) 0%, rgba(251, 191, 36, 0.22) 100%)',
-                      border: '1px solid rgba(255, 107, 0, 0.5)',
-                      color: '#FF6B00',
+                      height: '28px',
+                      background: 'linear-gradient(135deg, rgba(255, 107, 0, 0.18) 0%, rgba(251, 191, 36, 0.14) 100%)',
+                      border: '1px solid rgba(255, 107, 0, 0.45)',
+                      color: '#FF7847',
                       fontSize: '0.75rem',
-                      display: 'flex',
+                      display: 'inline-flex',
                       alignItems: 'center',
                       gap: '6px',
                       fontWeight: 700,
-                      padding: '3px 10px',
-                      borderRadius: '6px',
+                      padding: '0 10px',
+                      borderRadius: '8px',
                       cursor: 'pointer',
-                      transition: 'all 0.2s'
+                      transition: 'all 0.2s',
+                      boxShadow: '0 2px 8px rgba(255, 107, 0, 0.15)',
+                      boxSizing: 'border-box'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = 'rgba(255, 107, 0, 0.7)';
+                      e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255, 107, 0, 0.28) 0%, rgba(251, 191, 36, 0.22) 100%)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = 'rgba(255, 107, 0, 0.45)';
+                      e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255, 107, 0, 0.18) 0%, rgba(251, 191, 36, 0.14) 100%)';
                     }}
                   >
                     <LayoutDashboard size={13} />
                     <span className="desktop-text">{t('topBar.adminDashboard')}</span>
                     {pendingOrdersCount > 0 && (
                       <span style={{
-                        background: '#FF6B00',
+                        background: '#FF4605',
                         color: '#FFFFFF',
-                        borderRadius: '10px',
-                        padding: '1px 6px',
+                        borderRadius: '9999px',
+                        padding: '0 6px',
+                        height: '18px',
+                        minWidth: '18px',
                         fontSize: '0.68rem',
-                        fontWeight: 800
+                        fontWeight: 800,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 0 8px rgba(255, 70, 5, 0.6)'
                       }}>
                         {pendingOrdersCount}
                       </span>
                     )}
                   </button>
+
                   <button
                     onClick={onLogout}
                     style={{
-                      background: 'none',
-                      border: 'none',
+                      width: '28px',
+                      height: '28px',
+                      background: 'rgba(255, 255, 255, 0.04)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '8px',
                       color: '#94A3B8',
-                      fontSize: '0.75rem',
                       cursor: 'pointer',
-                      padding: '2px 4px',
-                      display: 'flex',
+                      display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '3px'
+                      justifyContent: 'center',
+                      transition: 'all 0.2s',
+                      boxSizing: 'border-box'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = '#EF4444';
+                      e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                      e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = '#94A3B8';
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
                     }}
                     title={t('topBar.logout')}
                   >
@@ -251,20 +332,33 @@ export default function Header({
                   onClick={onOpenLogin}
                   className="top-bar-dealer"
                   style={{
-                    background: 'none',
-                    color: '#94A3B8',
+                    height: '28px',
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '8px',
+                    padding: '0 10px',
+                    color: '#CBD5E1',
                     fontSize: '0.75rem',
-                    display: 'flex',
+                    display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '5px',
+                    gap: '6px',
                     fontWeight: 600,
                     cursor: 'pointer',
-                    transition: 'color 0.2s'
+                    transition: 'all 0.2s',
+                    boxSizing: 'border-box'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = '#94A3B8'}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#FFFFFF';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '#CBD5E1';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+                  }}
                 >
-                  <User size={12} />
+                  <User size={12} color="#FF6B00" />
                   <span>{t('topBar.dealerPortal')}</span>
                 </button>
               )}

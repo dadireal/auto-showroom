@@ -216,56 +216,58 @@ export default function CarCard({
         {car.images.length > 1 && (
           <>
             <button 
-              onClick={prevImage}
+              onClick={isRTL ? nextImage : prevImage}
               style={{
                 position: 'absolute',
-                left: '4px',
+                insetInlineStart: '6px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                background: 'rgba(0, 0, 0, 0.55)',
-                backdropFilter: 'blur(4px)',
+                background: 'rgba(9, 13, 22, 0.65)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
                 color: '#fff',
-                width: '36px',
-                height: '36px',
-                minWidth: '44px',
-                minHeight: '44px',
+                width: '34px',
+                height: '34px',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 zIndex: 6,
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                padding: '4px'
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+                padding: 0
               }}
               aria-label="Précédent"
             >
-              <ChevronLeft size={17} />
+              {isRTL ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
             </button>
             <button 
-              onClick={nextImage}
+              onClick={isRTL ? prevImage : nextImage}
               style={{
                 position: 'absolute',
-                right: '4px',
+                insetInlineEnd: '6px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                background: 'rgba(0, 0, 0, 0.55)',
-                backdropFilter: 'blur(4px)',
+                background: 'rgba(9, 13, 22, 0.65)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
                 color: '#fff',
-                width: '36px',
-                height: '36px',
-                minWidth: '44px',
-                minHeight: '44px',
+                width: '34px',
+                height: '34px',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 zIndex: 6,
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                padding: '4px'
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+                padding: 0
               }}
               aria-label="Suivant"
             >
-              <ChevronRight size={17} />
+              {isRTL ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
             </button>
 
             {/* Indicator Dots */}
