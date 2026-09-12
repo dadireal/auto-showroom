@@ -633,9 +633,15 @@ html[dir="rtl"] .drawer-content {
 }
 
 .popular-brands-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
+}
+
+.popular-brands-grid > button {
+  width: 120px;
+  flex-shrink: 0;
 }
 
 .products-grid {
@@ -896,8 +902,13 @@ button {
     width: 100%;
   }
   .popular-brands-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
     gap: 8px !important;
+    justify-content: center !important;
+  }
+  .popular-brands-grid > button {
+    width: calc(33.333% - 6px) !important;
+    min-width: 90px !important;
+    padding: 14px 8px !important;
   }
   .car-card { border-radius: 10px !important; }
   .why-us-stats-grid {
