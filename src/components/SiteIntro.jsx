@@ -2,223 +2,68 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX, FastForward, Play } from 'lucide-react';
 
 /**
- * Enhanced Web Audio Engine Starter Synthesizer (Fallback & Dynamic Audio)
- * Accurately models starter motor cranking compression strokes (chug-chug-chug),
- * ignition combustion explosion, violent V8 throttle flare, and Doppler stereo flyby.
+ * Real Car Engine Audio Controller
+ * Uses authentic recordings of actual sports car engine ignition and acceleration:
+ * - sfx_engine_start.mp3: Real starter motor crank + ignition catch!
+ * - sfx_sports_car_speeding.mp3: Real high-performance sports car screaming acceleration & flyby!
  */
-class EngineStarterSound {
+class RealEngineAudioPlayer {
   constructor() {
-    this.ctx = null;
-    this.panner = null;
-    this.masterGain = null;
-    this.audioElement = null;
+    this.startAudio = null;
+    this.speedAudio = null;
+    this.isMuted = false;
   }
 
   init() {
     try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return false;
-      this.ctx = new AudioCtx();
-      this.masterGain = this.ctx.createGain();
-      this.masterGain.gain.setValueAtTime(0.85, this.ctx.currentTime);
-
-      if (this.ctx.createStereoPanner) {
-        this.panner = this.ctx.createStereoPanner();
-        this.panner.pan.setValueAtTime(-0.85, this.ctx.currentTime);
-        this.masterGain.connect(this.panner);
-        this.panner.connect(this.ctx.destination);
-      } else {
-        this.masterGain.connect(this.ctx.destination);
-      }
-      return true;
+      this.startAudio = new Audio('/sounds/sfx_engine_start.mp3');
+      this.startAudio.volume = 0.95;
+      this.speedAudio = new Audio('/sounds/sfx_sports_car_speeding.mp3');
+      this.speedAudio.volume = 0.95;
     } catch (e) {
-      console.warn('Web Audio initialization error:', e);
-      return false;
+      console.warn('Audio init error:', e);
     }
   }
 
-  playRealEngineStart(onComplete) {
-    // 1. Try playing high-fidelity rendered engine start sound file first
+  play() {
+    if (this.isMuted) return;
+    if (!this.startAudio) this.init();
+
+    // 1. Play real engine starter cranking and firing up
     try {
-      if (!this.audioElement) {
-        this.audioElement = new Audio('/sounds/engine_start.wav');
-        this.audioElement.volume = 0.9;
-      }
-      const playPromise = this.audioElement.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          if (onComplete) {
-            this.audioElement.onended = onComplete;
-          }
-        }).catch((err) => {
-          console.log('Audio autoplay prevented, falling back to Web Audio synthesis:', err);
-          this.synthesizeEngineStart();
-        });
-        return;
-      }
-    } catch (e) {
-      console.log('Falling back to synthesis:', e);
-    }
+      this.startAudio.currentTime = 0;
+      this.startAudio.play().catch(e => console.log('Autoplay deferred:', e));
+    } catch (e) {}
 
-    // 2. Fallback to full real-time Web Audio API synthesis
-    this.synthesizeEngineStart();
-  }
-
-  synthesizeEngineStart() {
-    if (!this.ctx) {
-      if (!this.init()) return;
-    }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
-    }
-
-    const t = this.ctx.currentTime;
-    const duration = 3.6;
-    const endT = t + duration;
-
-    // Pan across stereo stage
-    if (this.panner) {
-      this.panner.pan.setValueAtTime(-0.85, t);
-      this.panner.pan.setValueAtTime(-0.85, t + 1.2);
-      this.panner.pan.linearRampToValueAtTime(0, t + 2.1);
-      this.panner.pan.linearRampToValueAtTime(1.0, endT);
-    }
-
-    // A. Starter Motor Whine & 5 Compression Cranks (t=0.15s to 1.1s)
-    const starterOsc = this.ctx.createOscillator();
-    const starterGain = this.ctx.createGain();
-    starterOsc.type = 'sine';
-    starterOsc.frequency.setValueAtTime(520, t + 0.15);
-    starterOsc.frequency.exponentialRampToValueAtTime(460, t + 0.95);
-
-    starterGain.gain.setValueAtTime(0.01, t);
-    starterGain.gain.linearRampToValueAtTime(0.18, t + 0.25);
-    starterGain.gain.linearRampToValueAtTime(0.22, t + 0.95);
-    starterGain.gain.exponentialRampToValueAtTime(0.001, t + 1.15);
-
-    starterOsc.connect(starterGain);
-    starterGain.connect(this.masterGain);
-    starterOsc.start(t + 0.15);
-    starterOsc.stop(t + 1.15);
-
-    // Compression Crank Thumps (chug-chug-chug at 6Hz)
-    const crankTimes = [0.22, 0.38, 0.54, 0.70, 0.88];
-    crankTimes.forEach(ct => {
-      const crankOsc = this.ctx.createOscillator();
-      const crankGain = this.ctx.createGain();
-      crankOsc.type = 'triangle';
-      crankOsc.frequency.setValueAtTime(80, t + ct);
-      crankOsc.frequency.exponentialRampToValueAtTime(45, t + ct + 0.12);
-
-      crankGain.gain.setValueAtTime(0.5, t + ct);
-      crankGain.exponentialRampToValueAtTime(0.001, t + ct + 0.12);
-
-      crankOsc.connect(crankGain);
-      crankGain.connect(this.masterGain);
-      crankOsc.start(t + ct);
-      crankOsc.stop(t + ct + 0.13);
-    });
-
-    // B. Ignition Explosive Combustion Pop (t=1.05s)
-    const popOsc = this.ctx.createOscillator();
-    const popGain = this.ctx.createGain();
-    popOsc.type = 'sawtooth';
-    popOsc.frequency.setValueAtTime(110, t + 1.05);
-    popOsc.frequency.exponentialRampToValueAtTime(45, t + 1.35);
-
-    popGain.gain.setValueAtTime(0.7, t + 1.05);
-    popGain.gain.exponentialRampToValueAtTime(0.001, t + 1.35);
-
-    popOsc.connect(popGain);
-    popGain.connect(this.masterGain);
-    popOsc.start(t + 1.05);
-    popOsc.stop(t + 1.35);
-
-    // C. V8 Supercar Throttle Flare & Roar (t=1.1s to endT)
-    const v8Osc1 = this.ctx.createOscillator();
-    const v8Osc2 = this.ctx.createOscillator();
-    const v8Sub = this.ctx.createOscillator();
-    const v8Gain = this.ctx.createGain();
-
-    v8Osc1.type = 'sawtooth';
-    v8Osc2.type = 'triangle';
-    v8Sub.type = 'sine';
-
-    // Aggressive V8 RPM rev flare:
-    // 1.1s: Catches at 95Hz
-    // 1.8s: Rev flares to 380Hz (initial rev blip)
-    // 2.2s: Gear shifts down to 260Hz
-    // 3.4s: Screams to 450Hz redline
-    v8Osc1.frequency.setValueAtTime(95, t + 1.1);
-    v8Osc2.frequency.setValueAtTime(190, t + 1.1);
-    v8Sub.frequency.setValueAtTime(47.5, t + 1.1);
-
-    v8Osc1.frequency.exponentialRampToValueAtTime(380, t + 1.85);
-    v8Osc2.frequency.exponentialRampToValueAtTime(760, t + 1.85);
-    v8Sub.frequency.exponentialRampToValueAtTime(190, t + 1.85);
-
-    v8Osc1.frequency.setValueAtTime(260, t + 2.2);
-    v8Osc2.frequency.setValueAtTime(520, t + 2.2);
-    v8Sub.frequency.setValueAtTime(130, t + 2.2);
-
-    v8Osc1.frequency.exponentialRampToValueAtTime(450, endT);
-    v8Osc2.frequency.exponentialRampToValueAtTime(900, endT);
-    v8Sub.frequency.exponentialRampToValueAtTime(225, endT);
-
-    // Waveshaper distortion for throaty exhaust growl
-    const dist = this.ctx.createWaveShaper();
-    const curve = new Float32Array(256);
-    for (let i = 0; i < 256; i++) {
-      const x = (i * 2) / 256 - 1;
-      curve[i] = Math.tanh(x * 2.5);
-    }
-    dist.curve = curve;
-
-    const filter = this.ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(500, t + 1.1);
-    filter.frequency.exponentialRampToValueAtTime(2200, t + 2.2);
-    filter.frequency.exponentialRampToValueAtTime(1600, endT);
-
-    v8Gain.gain.setValueAtTime(0.01, t + 1.1);
-    v8Gain.gain.linearRampToValueAtTime(0.7, t + 1.35);
-    v8Gain.gain.linearRampToValueAtTime(0.85, t + 2.4);
-    v8Gain.gain.exponentialRampToValueAtTime(0.001, endT);
-
-    v8Osc1.connect(dist);
-    v8Osc2.connect(dist);
-    v8Sub.connect(filter);
-    dist.connect(filter);
-    filter.connect(v8Gain);
-    v8Gain.connect(this.masterGain);
-
-    v8Osc1.start(t + 1.1);
-    v8Osc2.start(t + 1.1);
-    v8Sub.start(t + 1.1);
-    v8Osc1.stop(endT);
-    v8Osc2.stop(endT);
-    v8Sub.stop(endT);
+    // 2. Play real sports car roaring acceleration as car rockets across
+    setTimeout(() => {
+      if (this.isMuted) return;
+      try {
+        if (this.speedAudio) {
+          this.speedAudio.currentTime = 0;
+          this.speedAudio.play().catch(e => console.log(e));
+        }
+      } catch (e) {}
+    }, 1150);
   }
 
   setMuted(muted) {
-    if (this.audioElement) {
-      this.audioElement.muted = muted;
-    }
-    if (this.masterGain && this.ctx) {
-      this.masterGain.gain.setValueAtTime(muted ? 0 : 0.85, this.ctx.currentTime);
-    }
+    this.isMuted = muted;
+    if (this.startAudio) this.startAudio.muted = muted;
+    if (this.speedAudio) this.speedAudio.muted = muted;
   }
 
   destroy() {
-    if (this.audioElement) {
+    if (this.startAudio) {
       try {
-        this.audioElement.pause();
-        this.audioElement.currentTime = 0;
+        this.startAudio.pause();
+        this.startAudio.currentTime = 0;
       } catch (e) {}
     }
-    if (this.ctx && this.ctx.state !== 'closed') {
+    if (this.speedAudio) {
       try {
-        this.ctx.close();
+        this.speedAudio.pause();
+        this.speedAudio.currentTime = 0;
       } catch (e) {}
     }
   }
@@ -226,53 +71,53 @@ class EngineStarterSound {
 
 export default function SiteIntro({ onFinish }) {
   // Animation Stages:
-  // 'standby' -> stationary car on left, starter cranking chug-chug
-  // 'ignited' -> combustion catch, headlight xenon flash, exhaust flame burst
-  // 'speeding' -> hypercar tearing across the screen from left to right with laser trails
-  // 'shockwave' -> brand sonic boom reveal
+  // 'standby' -> car stationary on left, starter cranking vibration
+  // 'ignited' -> real engine catches, headlights brighten, exhaust flame bursts
+  // 'speeding' -> supercar rockets across screen from left to right with speed trails
+  // 'shockwave' -> brand sonic reveal
   // 'dissolve' -> smooth fade into showroom
   const [animStage, setAnimStage] = useState('standby');
   const [isMuted, setIsMuted] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
-  const soundEngineRef = useRef(null);
+  const audioPlayerRef = useRef(null);
 
   const startIntroSequence = () => {
     if (hasStarted) return;
     setHasStarted(true);
 
-    if (!soundEngineRef.current) {
-      soundEngineRef.current = new EngineStarterSound();
+    if (!audioPlayerRef.current) {
+      audioPlayerRef.current = new RealEngineAudioPlayer();
+      audioPlayerRef.current.init();
     }
 
     if (!isMuted) {
-      soundEngineRef.current.playRealEngineStart();
+      audioPlayerRef.current.play();
     }
 
-    // Timeline:
-    // 0.0s: 'standby' (car shakes with starter motor compression cranking)
+    // Stage 0: Standby & Cranking (0.0s)
     setAnimStage('standby');
 
-    // 1.1s: 'ignited' (combustion explosion, headlight flash, exhaust flame)
+    // Stage 1: Engine Catch & Ignition (1.1s)
     setTimeout(() => {
       setAnimStage('ignited');
     }, 1100);
 
-    // 1.4s: 'speeding' (hypercar launches and speeds across screen to right)
+    // Stage 2: Speeding Launch Across Screen (1.35s)
     setTimeout(() => {
       setAnimStage('speeding');
-    }, 1400);
+    }, 1350);
 
-    // 2.9s: 'shockwave' (brand sonic reveal)
+    // Stage 3: Sonic Shockwave Brand Reveal (2.9s)
     setTimeout(() => {
       setAnimStage('shockwave');
     }, 2900);
 
-    // 3.9s: 'dissolve' (fade out overlay)
+    // Stage 4: Dissolve into Website (3.9s)
     setTimeout(() => {
       setAnimStage('dissolve');
     }, 3900);
 
-    // 4.4s: Complete and hand over to catalog
+    // Stage 5: Handover to Showroom (4.4s)
     setTimeout(() => {
       if (onFinish) onFinish();
     }, 4400);
@@ -286,8 +131,8 @@ export default function SiteIntro({ onFinish }) {
 
     return () => {
       clearTimeout(timer);
-      if (soundEngineRef.current) {
-        soundEngineRef.current.destroy();
+      if (audioPlayerRef.current) {
+        audioPlayerRef.current.destroy();
       }
     };
   }, []);
@@ -304,8 +149,8 @@ export default function SiteIntro({ onFinish }) {
   }, []);
 
   const skipIntro = () => {
-    if (soundEngineRef.current) {
-      soundEngineRef.current.destroy();
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.destroy();
     }
     if (onFinish) onFinish();
   };
@@ -313,20 +158,17 @@ export default function SiteIntro({ onFinish }) {
   const toggleMute = () => {
     const nextMute = !isMuted;
     setIsMuted(nextMute);
-    if (soundEngineRef.current) {
-      soundEngineRef.current.setMuted(nextMute);
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.setMuted(nextMute);
     }
   };
 
   const handleUserTap = () => {
     if (!hasStarted) {
       startIntroSequence();
-    } else if (soundEngineRef.current) {
-      if (soundEngineRef.current.ctx && soundEngineRef.current.ctx.state === 'suspended') {
-        soundEngineRef.current.ctx.resume();
-      }
-      if (soundEngineRef.current.audioElement && soundEngineRef.current.audioElement.paused) {
-        soundEngineRef.current.audioElement.play().catch(() => {});
+    } else if (audioPlayerRef.current) {
+      if (audioPlayerRef.current.startAudio && audioPlayerRef.current.startAudio.paused && !isMuted) {
+        audioPlayerRef.current.play();
       }
     }
   };
@@ -348,140 +190,138 @@ export default function SiteIntro({ onFinish }) {
         transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
         pointerEvents: animStage === 'dissolve' ? 'none' : 'auto',
         userSelect: 'none',
-        cursor: 'pointer'
+        cursor: 'default'
       }}
     >
       {/* 1. Cinematic Radial Lighting Atmosphere */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'radial-gradient(circle at 45% 55%, rgba(255, 70, 5, 0.12) 0%, rgba(15, 23, 42, 0.6) 45%, #03050A 85%)',
+        background: 'radial-gradient(circle at 45% 50%, rgba(255, 70, 5, 0.14) 0%, rgba(15, 23, 42, 0.6) 45%, #03050A 85%)',
         pointerEvents: 'none'
       }} />
 
-      {/* Grid Floor / Perspective Grid */}
+      {/* 2. Realistic Asphalt Highway Road */}
       <div style={{
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-        height: '45vh',
-        background: 'linear-gradient(180deg, rgba(255, 70, 5, 0.05) 0%, rgba(3, 5, 10, 0.95) 100%)',
+        height: '28vh',
+        background: 'linear-gradient(180deg, #070B14 0%, #030509 100%)',
         borderTop: '1px solid rgba(255, 70, 5, 0.25)',
-        perspective: '600px',
         overflow: 'hidden'
       }}>
-        {/* Animated Rushing Speed Road Markings */}
+        {/* Animated Dashed Center Road Line Under Wheels */}
         <div style={{
           position: 'absolute',
-          top: '32%',
+          bottom: '32%',
           left: 0,
           right: 0,
           height: '4px',
           background: 'repeating-linear-gradient(90deg, rgba(255, 107, 0, 0.85) 0, rgba(255, 107, 0, 0.85) 70px, transparent 70px, transparent 150px)',
-          animation: animStage === 'speeding' ? 'roadRush 0.28s linear infinite' : 'none',
-          boxShadow: '0 0 15px rgba(255, 70, 5, 0.8)'
+          animation: animStage === 'speeding' ? 'roadRush 0.25s linear infinite' : 'none',
+          boxShadow: '0 0 14px rgba(255, 70, 5, 0.7)'
         }} />
 
         {/* Dynamic Road Underglow Reflection */}
         <div style={{
           position: 'absolute',
-          bottom: '22%',
+          top: 0,
           left: 0,
           right: 0,
-          height: '90px',
-          background: 'linear-gradient(180deg, rgba(255, 70, 5, 0.22) 0%, transparent 100%)',
-          filter: 'blur(20px)'
+          height: '60px',
+          background: 'linear-gradient(180deg, rgba(255, 70, 5, 0.18) 0%, transparent 100%)',
+          filter: 'blur(15px)'
         }} />
       </div>
 
-      {/* 2. Hyper-Speed Laser Ribbons (Taillight & Exhaust Streaks) */}
+      {/* 3. Hyper-Speed Laser Ribbons (Taillight & Exhaust Streaks) */}
       {animStage === 'speeding' && (
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 12 }}>
-          {/* Laser Taillight Ribbon */}
+          {/* Laser Crimson Taillight Ribbon */}
           <div style={{
             position: 'absolute',
-            top: '55.5%',
+            bottom: '22vh',
             left: 0,
             width: '100vw',
-            height: '5px',
+            height: '4px',
             background: 'linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.8) 35%, #FF4605 85%, #FFFFFF 100%)',
             boxShadow: '0 0 20px rgba(239, 68, 68, 1), 0 0 40px rgba(255, 70, 5, 0.7)',
-            animation: 'laserStreak 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
+            animation: 'laserStreak 1.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
           }} />
 
-          {/* Golden Exhaust Streak */}
+          {/* Golden Exhaust Flame Streak */}
           <div style={{
             position: 'absolute',
-            top: '60%',
+            bottom: '20.5vh',
             left: 0,
             width: '100vw',
             height: '3px',
             background: 'linear-gradient(90deg, transparent 0%, rgba(251, 191, 36, 0.9) 45%, #FFFFFF 100%)',
             boxShadow: '0 0 18px rgba(251, 191, 36, 0.9)',
-            animation: 'laserStreak 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
+            animation: 'laserStreak 1.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
           }} />
         </div>
       )}
 
-      {/* 3. The Perfect Supercar Container */}
+      {/* 4. The Perfect Supercar (Pure Transparent Cut-Out, Zero Borders) */}
       <div
         style={{
           position: 'absolute',
-          top: '48%',
+          bottom: '16vh',
           // Movement trajectory:
-          // 'standby' / 'ignited' -> parked at left side: left 4%
-          // 'speeding' -> rockets all the way off the right side: 130vw
-          left: animStage === 'standby' || animStage === 'ignited' ? '4%' : '130vw',
-          transform: `translateY(-50%) ${animStage === 'standby' ? 'scale(1)' : 'scale(1)'}`,
+          // 'standby' / 'ignited' -> poised on left side: left 3%
+          // 'speeding' -> rockets all the way off the right side: 125vw
+          left: animStage === 'standby' || animStage === 'ignited' ? '3%' : '125vw',
           transition: animStage === 'speeding' ? 'left 1.55s cubic-bezier(0.38, 0.05, 0.15, 1)' : 'left 0.2s ease',
           zIndex: 25,
           pointerEvents: 'none',
-          animation: animStage === 'standby' ? 'crankVibration 0.16s ease-in-out infinite' : animStage === 'ignited' ? 'igniteBuck 0.3s ease-out' : 'none'
+          animation: animStage === 'standby' ? 'crankVibration 0.15s ease-in-out infinite' : animStage === 'ignited' ? 'igniteBuck 0.25s ease-out' : 'none'
         }}
       >
-        <div style={{ position: 'relative', width: 'clamp(460px, 48vw, 680px)' }}>
+        <div style={{ position: 'relative', width: 'clamp(440px, 48vw, 660px)' }}>
           {/* Volumetric Xenon Headlight Beam Projection */}
           <div style={{
             position: 'absolute',
-            right: '-380px',
-            top: '36%',
-            width: '440px',
-            height: '140px',
-            background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(147, 197, 253, 0.6) 25%, rgba(56, 189, 248, 0.15) 60%, transparent 100%)',
-            clipPath: 'polygon(0 42%, 100% 0, 100% 100%, 0 62%)',
-            filter: 'blur(5px)',
+            left: '94%',
+            top: '46%',
+            width: '420px',
+            height: '110px',
+            background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(147, 197, 253, 0.5) 25%, rgba(56, 189, 248, 0.1) 65%, transparent 100%)',
+            clipPath: 'polygon(0 35%, 100% 0, 100% 100%, 0 65%)',
+            filter: 'blur(4px)',
             opacity: animStage === 'standby' ? 0.35 : 0.95,
             transition: 'opacity 0.25s ease',
             pointerEvents: 'none',
             zIndex: 10
           }} />
 
-          {/* Headlight Flare Glow */}
+          {/* Headlight Crystal Flare Glow */}
           <div style={{
             position: 'absolute',
-            right: '25px',
+            left: '92%',
             top: '48%',
-            width: '50px',
-            height: '50px',
-            background: 'radial-gradient(circle, #FFFFFF 0%, #38BDF8 50%, transparent 75%)',
-            filter: 'blur(6px)',
+            width: '35px',
+            height: '35px',
+            background: 'radial-gradient(circle, #FFFFFF 0%, #38BDF8 60%, transparent 80%)',
+            filter: 'blur(4px)',
             opacity: animStage === 'standby' ? 0.4 : 1,
             pointerEvents: 'none',
             zIndex: 15
           }} />
 
-          {/* Exhaust Flame Tongues (Flicker on Ignition & Launch) */}
+          {/* Exhaust Flame Burst (Flickers on Ignition & Launch) */}
           {(animStage === 'ignited' || animStage === 'speeding') && (
             <div style={{
               position: 'absolute',
-              left: '-45px',
-              bottom: '26%',
-              width: '65px',
-              height: '24px',
-              background: 'radial-gradient(ellipse at right, #FFFFFF 0%, #FBBF24 25%, #FF4605 60%, transparent 90%)',
-              filter: 'blur(2px) drop-shadow(0 0 12px #FF4605)',
-              clipPath: 'polygon(100% 25%, 0% 48%, 100% 75%)',
+              left: '-35px',
+              bottom: '22%',
+              width: '55px',
+              height: '20px',
+              background: 'radial-gradient(ellipse at right, #FFFFFF 0%, #FBBF24 30%, #FF4605 70%, transparent 95%)',
+              filter: 'blur(1.5px) drop-shadow(0 0 10px #FF4605)',
+              clipPath: 'polygon(100% 25%, 0% 50%, 100% 75%)',
               animation: 'flameFlicker 0.08s infinite alternate',
               zIndex: 8
             }} />
@@ -491,36 +331,47 @@ export default function SiteIntro({ onFinish }) {
           {(animStage === 'ignited' || animStage === 'speeding') && (
             <div style={{
               position: 'absolute',
-              left: '60px',
-              bottom: '10%',
-              width: '120px',
-              height: '45px',
-              background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.45) 0%, rgba(255, 70, 5, 0.25) 45%, transparent 75%)',
-              filter: 'blur(12px)',
+              left: '80px',
+              bottom: '6%',
+              width: '100px',
+              height: '40px',
+              background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.45) 0%, rgba(255, 70, 5, 0.2) 45%, transparent 75%)',
+              filter: 'blur(10px)',
               animation: 'smokePuff 0.6s ease-out forwards',
               zIndex: 6
             }} />
           )}
 
-          {/* The High-End Exotic Hypercar (High-Res Render with Screen Blending) */}
+          {/* Ground Contact Shadow / Underglow (Beneath Wheels) */}
+          <div style={{
+            position: 'absolute',
+            bottom: '-10px',
+            left: '8%',
+            right: '8%',
+            height: '26px',
+            background: 'radial-gradient(ellipse at center, rgba(255, 70, 5, 0.45) 0%, rgba(255, 107, 0, 0.18) 50%, transparent 75%)',
+            filter: 'blur(8px)',
+            pointerEvents: 'none'
+          }} />
+
+          {/* The High-End Exotic Hypercar (True Transparent PNG - No Rectangular Border!) */}
           <img
-            src="/intro_supercar.jpg"
+            src="/intro_supercar.png"
             alt="Showroom Exotic Hypercar"
             style={{
               width: '100%',
               height: 'auto',
               display: 'block',
-              mixBlendMode: 'screen',
               filter: animStage === 'ignited' || animStage === 'speeding' 
-                ? 'drop-shadow(0 0 25px rgba(255, 70, 5, 0.7)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.9)) brightness(1.08)' 
-                : 'drop-shadow(0 0 15px rgba(255, 70, 5, 0.35)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.9)) brightness(0.92)',
+                ? 'brightness(1.08) contrast(1.05)' 
+                : 'brightness(0.95) contrast(1.02)',
               transition: 'filter 0.25s ease'
             }}
           />
         </div>
       </div>
 
-      {/* 4. Engine Ignition Prompt (If user interaction needed) */}
+      {/* 5. Start Engine Button (If user gesture needed) */}
       {!hasStarted && (
         <div style={{
           position: 'absolute',
@@ -554,7 +405,7 @@ export default function SiteIntro({ onFinish }) {
         </div>
       )}
 
-      {/* 5. Shockwave Sonic Brand Reveal */}
+      {/* 6. Shockwave Sonic Brand Reveal */}
       {(animStage === 'shockwave' || animStage === 'dissolve') && (
         <div style={{
           position: 'relative',
@@ -621,7 +472,7 @@ export default function SiteIntro({ onFinish }) {
         </div>
       )}
 
-      {/* 6. Top Right Controls (Sound & Skip) */}
+      {/* 7. Top Right Controls (Sound & Skip) */}
       <div style={{
         position: 'absolute',
         top: '24px',
@@ -690,16 +541,16 @@ export default function SiteIntro({ onFinish }) {
           100% { background-position: -300px 0; }
         }
         @keyframes crankVibration {
-          0% { transform: translateY(-50%) translate(0, 0); }
-          25% { transform: translateY(-50%) translate(1.5px, -1px); }
-          50% { transform: translateY(-50%) translate(-1px, 1.5px); }
-          75% { transform: translateY(-50%) translate(1px, 0.5px); }
-          100% { transform: translateY(-50%) translate(0, 0); }
+          0% { transform: translateY(0) translate(0, 0); }
+          25% { transform: translateY(0) translate(1.5px, -1px); }
+          50% { transform: translateY(0) translate(-1px, 1.5px); }
+          75% { transform: translateY(0) translate(1px, 0.5px); }
+          100% { transform: translateY(0) translate(0, 0); }
         }
         @keyframes igniteBuck {
-          0% { transform: translateY(-50%) scale(1); }
-          40% { transform: translateY(-52%) scale(1.03); }
-          100% { transform: translateY(-50%) scale(1); }
+          0% { transform: translateY(0) scale(1); }
+          40% { transform: translateY(-4px) scale(1.02); }
+          100% { transform: translateY(0) scale(1); }
         }
         @keyframes flameFlicker {
           0% { transform: scaleX(0.8) scaleY(0.9); opacity: 0.85; }
