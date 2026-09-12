@@ -123,30 +123,50 @@ export default function SiteIntro({ onFinish }) {
     }, 4400);
   };
 
+  const [requiresUserClick, setRequiresUserClick] = useState(false);
+
   useEffect(() => {
-    // Attempt instant auto-start
-    const timer = setTimeout(() => {
-      startIntroSequence();
-    }, 200);
+    // Probe if the browser allows unmuted autoplay
+    const probe = new Audio('/sounds/real_engine_start.mp3');
+    probe.volume = 0.05;
+    const playPromise = probe.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          // Autoplay allowed by browser! Clean up probe and start sequence
+          probe.pause();
+          probe.currentTime = 0;
+          startIntroSequence();
+        })
+        .catch(() => {
+          // Browser Autoplay Policy requires user interaction first:
+          // Keep the car in pristine standby and prompt the user to start!
+          setRequiresUserClick(true);
+        });
+    } else {
+      setRequiresUserClick(true);
+    }
 
     return () => {
-      clearTimeout(timer);
       if (audioPlayerRef.current) {
         audioPlayerRef.current.destroy();
       }
     };
   }, []);
 
-  // Keyboard shortcut: ESC to skip
+  // Keyboard shortcut: ESC to skip, Space/Enter to start
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         skipIntro();
+      } else if ((e.key === ' ' || e.key === 'Enter') && !hasStarted) {
+        startIntroSequence();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [hasStarted]);
 
   const skipIntro = () => {
     if (audioPlayerRef.current) {
@@ -371,37 +391,54 @@ export default function SiteIntro({ onFinish }) {
         </div>
       </div>
 
-      {/* 5. Start Engine Button (If user gesture needed) */}
+      {/* 5. Start Engine Button (Requires user gesture for browser audio) */}
       {!hasStarted && (
         <div style={{
           position: 'absolute',
           bottom: '22%',
+          left: '50%',
+          transform: 'translateX(-50%)',
           zIndex: 60,
-          textAlign: 'center'
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '12px'
         }}>
           <button
-            onClick={startIntroSequence}
+            onClick={(e) => {
+              e.stopPropagation();
+              startIntroSequence();
+            }}
             style={{
-              height: '52px',
-              padding: '0 28px',
+              height: '56px',
+              padding: '0 32px',
               borderRadius: '9999px',
               background: 'linear-gradient(135deg, #FF4605 0%, #FF7847 100%)',
-              border: '2px solid rgba(255, 255, 255, 0.4)',
+              border: '2px solid rgba(255, 255, 255, 0.5)',
               color: '#FFFFFF',
-              fontSize: '1rem',
+              fontSize: '1.05rem',
               fontWeight: 800,
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '10px',
-              boxShadow: '0 0 35px rgba(255, 70, 5, 0.65), 0 8px 25px rgba(0, 0, 0, 0.6)',
+              gap: '12px',
+              boxShadow: '0 0 40px rgba(255, 70, 5, 0.75), 0 10px 30px rgba(0, 0, 0, 0.8)',
               cursor: 'pointer',
-              animation: 'pulseGlow 1.5s infinite',
-              letterSpacing: '0.04em'
+              animation: 'pulseGlow 1.4s infinite',
+              letterSpacing: '0.06em'
             }}
           >
-            <Play size={18} fill="#FFFFFF" />
+            <Play size={20} fill="#FFFFFF" />
             <span>START ENGINE V8</span>
           </button>
+          <span style={{
+            fontSize: '0.85rem',
+            color: 'rgba(255, 255, 255, 0.75)',
+            letterSpacing: '0.04em',
+            textShadow: '0 2px 8px rgba(0,0,0,0.8)'
+          }}>
+            Cliquez ou appuyez sur [ESPACE] pour démarrer avec le son du moteur
+          </span>
         </div>
       )}
 
