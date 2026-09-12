@@ -268,11 +268,53 @@ export default function AdminDashboard({
       color: '#F8FAFC',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
+      {/* ===== RESPONSIVE CSS ===== */}
+      <style>{`
+        .dash-header { padding: 14px 28px; }
+        .dash-header-subtitle { display: inline-flex; }
+        .dash-header-btn-text { display: inline; }
+        .dash-sidebar { width: 240px; display: flex; flex-direction: column; }
+        .dash-main { padding: 32px; }
+        .dash-body { display: flex; min-height: calc(100vh - 65px); }
+        .dash-bottom-nav { display: none; }
+        .dash-kpi-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+        .dash-quick-grid { grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); }
+        .dash-vehicle-header { flex-direction: row; align-items: center; gap: 16px; }
+        .dash-vehicle-filters { flex-direction: row; flex-wrap: wrap; }
+        .dash-orders-header { flex-direction: row; align-items: center; }
+        @media (max-width: 900px) {
+          .dash-header { padding: 12px 16px; }
+          .dash-header-subtitle { display: none !important; }
+          .dash-header-btn-text { display: none !important; }
+          .dash-sidebar { display: none !important; }
+          .dash-bottom-nav { display: flex !important; position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+            background: #0B0F19; border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 8px 4px; gap: 2px; padding-bottom: env(safe-area-inset-bottom, 8px); }
+          .dash-body { min-height: calc(100vh - 57px); }
+          .dash-main { padding: 16px 12px 80px 12px; }
+          .dash-kpi-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+          .dash-quick-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+          .dash-vehicle-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+          .dash-vehicle-filters { flex-direction: column; width: 100%; }
+          .dash-vehicle-filters select, .dash-vehicle-filters input { width: 100% !important; box-sizing: border-box; }
+          .dash-orders-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+          .dash-orders-header input { width: 100% !important; box-sizing: border-box; }
+        }
+        @media (max-width: 480px) {
+          .dash-kpi-grid { grid-template-columns: 1fr !important; }
+          .dash-main { padding: 12px 10px 90px 10px; }
+        }
+        .dash-bottom-nav-btn {
+          flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+          gap: 4px; padding: 8px 4px; background: none; border: none; cursor: pointer;
+          border-radius: 10px; transition: background 0.2s; font-size: 0.65rem; font-weight: 600;
+        }
+      `}</style>
+
       {/* ==================== TOP NAVIGATION BAR ==================== */}
-      <header style={{
+      <header className="dash-header" style={{
         background: '#0B0F19',
         borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-        padding: '14px 28px',
         position: 'sticky',
         top: 0,
         zIndex: 100,
@@ -281,32 +323,33 @@ export default function AdminDashboard({
         justifyContent: 'space-between'
       }}>
         {/* Brand & Mode Title */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-          <Logo size="small" subtitle="ESPACE GESTION CONCESSIONNAIRE" />
-          <div style={{
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+          <Logo size="small" subtitle="" />
+          <div className="dash-header-subtitle" style={{
             background: 'rgba(255, 107, 0, 0.15)',
             border: '1px solid rgba(255, 107, 0, 0.4)',
             color: '#FF6B00',
-            fontSize: '0.75rem',
+            fontSize: '0.72rem',
             fontWeight: 800,
             padding: '4px 10px',
             borderRadius: '6px',
             letterSpacing: '0.04em',
-            textTransform: 'uppercase'
+            textTransform: 'uppercase',
+            whiteSpace: 'nowrap'
           }}>
             Administration Active
           </div>
         </div>
 
         {/* Right Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
           <button
             onClick={onClose}
             style={{
               background: 'rgba(255, 255, 255, 0.06)',
               border: '1px solid rgba(255, 255, 255, 0.12)',
               color: '#CBD5E1',
-              padding: '8px 16px',
+              padding: '8px 12px',
               borderRadius: '8px',
               fontSize: '0.84rem',
               fontWeight: 600,
@@ -320,7 +363,7 @@ export default function AdminDashboard({
             onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'}
           >
             <Eye size={15} color="#FBBF24" />
-            <span>Voir le site public</span>
+            <span className="dash-header-btn-text">Voir le site</span>
           </button>
 
           <button
@@ -329,7 +372,7 @@ export default function AdminDashboard({
               background: 'rgba(239, 68, 68, 0.15)',
               border: '1px solid rgba(239, 68, 68, 0.3)',
               color: '#F87171',
-              padding: '8px 16px',
+              padding: '8px 12px',
               borderRadius: '8px',
               fontSize: '0.84rem',
               fontWeight: 600,
@@ -343,21 +386,18 @@ export default function AdminDashboard({
             onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)'}
           >
             <LogOut size={15} />
-            <span>Déconnexion</span>
+            <span className="dash-header-btn-text">Déconnexion</span>
           </button>
         </div>
       </header>
 
       {/* ==================== DASHBOARD BODY & TABS ==================== */}
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - 65px)' }}>
-        {/* Sidebar */}
-        <aside style={{
-          width: '240px',
+      <div className="dash-body">
+        {/* Desktop Sidebar */}
+        <aside className="dash-sidebar" style={{
           background: '#0B0F19',
           borderRight: '1px solid rgba(255, 255, 255, 0.08)',
           padding: '24px 14px',
-          display: 'flex',
-          flexDirection: 'column',
           gap: '6px',
           flexShrink: 0
         }}>
@@ -386,7 +426,8 @@ export default function AdminDashboard({
                   cursor: 'pointer',
                   textAlign: 'left',
                   transition: 'all 0.2s',
-                  borderLeft: isActive ? '3px solid #FF6B00' : '3px solid transparent'
+                  borderLeft: isActive ? '3px solid #FF6B00' : '3px solid transparent',
+                  width: '100%'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -419,8 +460,43 @@ export default function AdminDashboard({
           </div>
         </aside>
 
+        {/* Mobile Bottom Navigation */}
+        <nav className="dash-bottom-nav">
+          {[
+            { id: 'overview', label: 'Aperçu', icon: <LayoutDashboard size={20} /> },
+            { id: 'vehicles', label: 'Stock', icon: <Car size={20} />, count: totalStockCount },
+            { id: 'orders', label: 'Leads', icon: <ShoppingBag size={20} />, count: newOrdersCount, highlight: true },
+            { id: 'showrooms', label: 'Showrooms', icon: <Store size={20} />, count: SHOWROOMS.length }
+          ].map(tab => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                className="dash-bottom-nav-btn"
+                onClick={() => setActiveTab(tab.id)}
+                style={{ color: isActive ? '#FF6B00' : '#64748B', position: 'relative' }}
+              >
+                <div style={{ position: 'relative' }}>
+                  {tab.icon}
+                  {tab.count !== undefined && tab.count > 0 && (
+                    <span style={{
+                      position: 'absolute', top: '-5px', right: '-8px',
+                      background: tab.highlight ? '#FF6B00' : 'rgba(255,255,255,0.15)',
+                      color: '#fff', borderRadius: '9999px',
+                      fontSize: '0.6rem', fontWeight: 800,
+                      width: '16px', height: '16px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}>{tab.count}</span>
+                  )}
+                </div>
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+
         {/* Main Workspace */}
-        <main style={{ flexGrow: 1, padding: '32px', overflowY: 'auto' }}>
+        <main className="dash-main" style={{ flexGrow: 1, overflowY: 'auto' }}>
 
           {/* ==================== TAB 1: OVERVIEW ==================== */}
           {activeTab === 'overview' && (
@@ -435,9 +511,8 @@ export default function AdminDashboard({
               </div>
 
               {/* KPI Cards Grid */}
-              <div style={{
+              <div className="dash-kpi-grid" style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
                 gap: '20px',
                 marginBottom: '36px'
               }}>
@@ -547,7 +622,7 @@ export default function AdminDashboard({
               </div>
 
               {/* Quick Actions & Recent Orders Preview */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '24px' }}>
+              <div className="dash-quick-grid" style={{ display: 'grid', gap: '24px' }}>
                 {/* Recent Orders Box */}
                 <div style={{ background: '#0F172A', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', padding: '24px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
@@ -691,7 +766,7 @@ export default function AdminDashboard({
           {/* ==================== TAB 2: STOCK & DEALS (CRUD) ==================== */}
           {activeTab === 'vehicles' && (
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+              <div className="dash-vehicle-header" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginBottom: '24px' }}>
                 <div>
                   <h1 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '4px' }}>
                     Gestion du Stock & Deals Showroom ({filteredVehicles.length})
@@ -822,13 +897,14 @@ export default function AdminDashboard({
                 </select>
               </div>
 
-              {/* Vehicles Table */}
+              {/* Vehicles Table - horizontal scroll on mobile */}
               <div style={{
                 background: '#0F172A',
                 border: '1px solid rgba(255, 255, 255, 0.08)',
                 borderRadius: '16px',
                 overflow: 'hidden'
               }}>
+                <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
                   <thead>
                     <tr style={{ background: 'rgba(255, 255, 255, 0.03)', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#94A3B8' }}>
@@ -979,6 +1055,7 @@ export default function AdminDashboard({
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
             </div>
           )}
@@ -986,7 +1063,7 @@ export default function AdminDashboard({
           {/* ==================== TAB 3: ORDERS & LEADS ==================== */}
           {activeTab === 'orders' && (
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+              <div className="dash-vehicle-header" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginBottom: '24px' }}>
                 <div>
                   <h1 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '4px' }}>
                     Commandes & Demandes Clients ({filteredOrders.length})

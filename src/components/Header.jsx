@@ -50,20 +50,37 @@ export default function Header({
 }) {
   const { language, setLanguage, t, isRTL } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null); // 'search' | 'pages' | null
 
   const dropdownRef = useRef(null);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 30) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
+      const currentY = window.scrollY;
+      const delta = currentY - lastScrollY.current;
+
+      // Update sticky state
+      setIsScrolled(currentY > 30);
+
+      // Show/hide header based on scroll direction
+      if (currentY < 80) {
+        // Always show near the top
+        setHeaderVisible(true);
+      } else if (delta > 6) {
+        // Scrolling DOWN — hide
+        setHeaderVisible(false);
+        setMobileMenuOpen(false); // close drawer when hiding
+      } else if (delta < -4) {
+        // Scrolling UP — reveal
+        setHeaderVisible(true);
       }
+
+      lastScrollY.current = currentY;
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -87,16 +104,22 @@ export default function Header({
           left: 0,
           right: 0,
           zIndex: 900,
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, box-shadow 0.3s ease',
+          transform: headerVisible ? 'translateY(0)' : 'translateY(-100%)',
+          willChange: 'transform',
         }}
         className={isScrolled ? 'header-sticky' : 'header-transparent'}
       >
-        {/* Top Minimal Info Bar */}
+        {/* Top Minimal Info Bar — collapses on scroll */}
         <div style={{
           borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
           fontSize: '0.78rem',
-          padding: '6px 0',
-          color: '#94A3B8'
+          color: '#94A3B8',
+          overflow: 'hidden',
+          maxHeight: isScrolled ? '0px' : '40px',
+          opacity: isScrolled ? 0 : 1,
+          transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease',
+          padding: isScrolled ? '0' : '6px 0',
         }}>
           <div className="container-wide top-info-bar-wrap" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="top-info-bar-left" style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
@@ -253,7 +276,14 @@ export default function Header({
         <div 
           ref={dropdownRef} 
           className="container-wide main-nav-container" 
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            transition: 'padding 0.3s ease',
+            paddingTop: isScrolled ? '6px' : undefined,
+            paddingBottom: isScrolled ? '6px' : undefined,
+          }}
         >
           {/* Brand Logo */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

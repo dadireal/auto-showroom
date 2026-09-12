@@ -31,7 +31,7 @@ export default function VehicleList({
   });
 
   return (
-    <section id="inventory" style={{ padding: '96px 0', background: '#090D16' }}>
+    <section id="inventory" style={{ padding: 'clamp(48px, 8vw, 96px) 0', background: '#090D16' }}>
       <div className="container">
         {/* Section Header */}
         <div className="inventory-header">
@@ -98,7 +98,8 @@ export default function VehicleList({
                 key={cat.id}
                 onClick={() => onSelectCategory(cat.id)}
                 style={{
-                  padding: '8px 20px',
+                  padding: '10px 20px',
+                  minHeight: '44px',
                   borderRadius: '9999px',
                   fontSize: '0.84rem',
                   fontWeight: 700,

@@ -20,7 +20,13 @@ export default function Footer({ onScrollToSection, onSelectWilaya }) {
   };
 
   return (
-    <footer style={{ background: '#090D16', color: '#94a3b8', borderTop: '1px solid rgba(255, 255, 255, 0.06)', paddingTop: '80px', paddingBottom: '36px' }}>
+    <footer style={{
+      background: '#090D16',
+      color: '#94a3b8',
+      borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+      paddingTop: 'clamp(48px, 8vw, 80px)',
+      paddingBottom: 'max(36px, env(safe-area-inset-bottom, 36px))'
+    }}>
       <div className="container">
         {/* Top 4-Column Grid */}
         <div className="footer-grid" style={{ marginBottom: '50px' }}>
@@ -86,7 +92,7 @@ export default function Footer({ onScrollToSection, onSelectWilaya }) {
                 : 'Soyez notifié en priorité dès l’arrivée de nouveaux véhicules 00 km et d\'opportunités sélectionnées.'}
             </p>
 
-            <form onSubmit={handleSubscribe} style={{ display: 'flex', gap: '6px', marginBottom: '18px' }}>
+            <form onSubmit={handleSubscribe} className="footer-newsletter-form">
               <input
                 type="email"
                 placeholder={language === 'ar' ? 'بريدك الإلكتروني...' : language === 'en' ? 'Your email address...' : 'Votre adresse email...'}
@@ -100,14 +106,14 @@ export default function Footer({ onScrollToSection, onSelectWilaya }) {
                   padding: '9px 12px',
                   color: '#fff',
                   fontSize: '0.85rem',
-                  width: '100%',
-                  outline: 'none'
+                  outline: 'none',
+                  minHeight: '44px'
                 }}
               />
               <button
                 type="submit"
                 className="btn-primary"
-                style={{ padding: '9px 14px' }}
+                style={{ padding: '9px 16px', flexShrink: 0 }}
                 title="S'abonner"
               >
                 <Send size={16} />
@@ -135,21 +141,19 @@ export default function Footer({ onScrollToSection, onSelectWilaya }) {
         </div>
 
         {/* Bottom Copyright */}
-        <div style={{
-          borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-          paddingTop: '24px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '12px',
-          fontSize: '0.82rem',
-          color: 'rgba(255,255,255,0.5)'
-        }}>
+        <div
+          className="footer-bottom-row"
+          style={{
+            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+            paddingTop: '24px',
+            fontSize: '0.82rem',
+            color: 'rgba(255,255,255,0.5)'
+          }}
+        >
           <div>
-            © {new Date().getFullYear()} Auto Showroom — {t('footer.rights')}
+            &copy; {new Date().getFullYear()} Auto Showroom — {t('footer.rights')}
           </div>
-          <div style={{ display: 'flex', gap: '18px' }}>
+          <div className="footer-legal-links">
             <a href="#" style={{ color: 'inherit' }}>{language === 'ar' ? 'إشعار قانوني' : language === 'en' ? 'Legal Notice' : 'Mentions Légales'}</a>
             <a href="#" style={{ color: 'inherit' }}>{language === 'ar' ? 'سياسة الخصوصية' : language === 'en' ? 'Privacy Policy' : 'Politique de Confidentialité'}</a>
             <a href="#" style={{ color: 'inherit' }}>{language === 'ar' ? 'الشروط والأحكام' : language === 'en' ? 'Terms & Conditions' : 'Conditions Générales de Vente'}</a>

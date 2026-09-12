@@ -45,6 +45,26 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   ROOT OVERFLOW GUARD — prevents ANY element from causing
+   horizontal scroll on any viewport width
+   ========================================================= */
+#root {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 html {
@@ -76,6 +96,7 @@ body {
   background-color: var(--bg-base);
   color: var(--text-main);
   overflow-x: hidden;
+  max-width: 100vw;
   line-height: 1.5;
 }
 
@@ -100,17 +121,21 @@ button {
   transition: all 0.2s ease;
 }
 
-/* Container Utilities */
+/* Container Utilities — Tiered padding: 12px → 16px → 24px */
 .container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 clamp(12px, 4vw, 24px);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .container-wide {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 clamp(12px, 4vw, 24px);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Header & Navigation */
@@ -146,13 +171,14 @@ button {
   background: rgba(255, 255, 255, 0.06);
 }
 
-/* Primary Action Buttons */
+/* Primary Action Buttons — 44px min touch target */
 .btn-primary {
   background: var(--primary);
   color: #fff;
   font-weight: 700;
   font-size: 0.92rem;
   padding: 10px 20px;
+  min-height: 44px;
   border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
@@ -169,6 +195,10 @@ button {
   box-shadow: 0 8px 24px rgba(255, 70, 5, 0.55);
 }
 
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
 .btn-outline {
   background: rgba(255, 255, 255, 0.04);
   color: #e2e8f0;
@@ -176,6 +206,7 @@ button {
   font-weight: 600;
   font-size: 0.88rem;
   padding: 9px 16px;
+  min-height: 44px;
   border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
@@ -190,6 +221,10 @@ button {
   color: #fff;
 }
 
+.btn-outline:active {
+  transform: scale(0.97);
+}
+
 /* WhatsApp Primary CTA - Full Touch & Glowing Hover State */
 .btn-whatsapp {
   background: linear-gradient(135deg, #059669 0%, #10b981 100%);
@@ -201,6 +236,7 @@ button {
   justify-content: center;
   gap: 8px;
   padding: 11px 16px;
+  min-height: 44px;
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.28);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -212,6 +248,10 @@ button {
   transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(16, 185, 129, 0.6), 0 0 16px rgba(16, 185, 129, 0.35);
   color: #064e3b;
+}
+
+.btn-whatsapp:active {
+  transform: scale(0.97);
 }
 
 /* Luxury Concierge Bar */
@@ -227,12 +267,13 @@ button {
   margin: 0 auto;
 }
 
-/* Silhouette Pills */
+/* Silhouette Pills — 44px min touch target */
 .silhouette-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 18px;
+  padding: 10px 18px;
+  min-height: 44px;
   border-radius: 9999px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -242,6 +283,7 @@ button {
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .silhouette-pill:hover {
@@ -249,6 +291,10 @@ button {
   border-color: rgba(255, 255, 255, 0.16);
   color: #ffffff;
   transform: translateY(-1px);
+}
+
+.silhouette-pill:active {
+  transform: scale(0.96);
 }
 
 .silhouette-pill.active {
@@ -565,217 +611,269 @@ html[dir="rtl"] .drawer-content {
 }
 
 /* --- Responsive Layout Containers & Grids --- */
+
+/* Car Card Grid — explicit breakpoints for pixel-perfect control */
 .car-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-  gap: 28px;
+  grid-template-columns: 1fr; /* mobile-first: 1 col */
+  gap: 20px;
 }
 
 .showrooms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 28px;
+  grid-template-columns: 1fr;
+  gap: 20px;
 }
 
 .concierge-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: 1fr 1fr; /* 2x2 on mobile */
   gap: 10px;
-  align-items: center;
+  align-items: end;
 }
 
 .popular-brands-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
 }
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 28px;
+  grid-template-columns: 1fr;
+  gap: 20px;
 }
 
 .why-us-pillars-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
 
 .why-us-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 40px;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+/* Newsletter form — stacks on mobile */
+.footer-newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.footer-newsletter-form input {
+  width: 100%;
+}
+
+.footer-newsletter-form button {
+  width: 100%;
+}
+
+/* Footer copyright row */
+.footer-bottom-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.footer-legal-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .silhouette-scroll-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 8px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding: 4px 2px;
+  -ms-overflow-style: none;
+  padding: 4px 0 8px 0;
 }
 
 .silhouette-scroll-row::-webkit-scrollbar {
   display: none;
 }
 
-/* Touch-friendly min heights */
-select, input, button {
-  min-height: 38px;
+/* Touch-friendly min heights — 44px for iOS/Android compliance */
+select, input {
+  min-height: 44px;
+  font-size: max(16px, 1em); /* Prevents iOS Safari auto-zoom */
 }
 
-/* --- Ultra-Wide & Smart TV / Showroom Kiosks (1920px - 3840px+) --- */
-@media (min-width: 1920px) {
-  .container-wide {
-    max-width: 1720px;
-  }
-  .container {
-    max-width: 1560px;
-  }
+button {
+  min-height: 38px; /* base — CTAs override with 44px via their own class */
+}
+
+/* =========================================================
+   BREAKPOINT SYSTEM — Mobile-first, ascending
+   XS:  ≤380px   (iPhone SE, Galaxy A-series)
+   SM:  381-640px (iPhone 14/15/16, Galaxy S)
+   MD:  641-1023px (Tablets, Foldables)
+   LG:  1024-1535px (Laptops, Desktops)
+   XL:  1536px+ (Ultra-wide, 4K)
+   ========================================================= */
+
+/* SM: Standard mobile (381px+) — concierge stays 2-col, cards 1-col */
+@media (min-width: 381px) {
+  .car-card-grid { gap: 20px; }
+}
+
+/* MD: Tablets & Foldables (641px+) */
+@media (min-width: 641px) {
   .car-card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+  .showrooms-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+  .why-us-pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .concierge-grid {
+    grid-template-columns: repeat(2, 1fr) auto;
+    gap: 12px;
+  }
+  .footer-newsletter-form {
+    flex-direction: row;
+  }
+  .footer-newsletter-form button {
+    width: auto;
+    flex-shrink: 0;
+  }
+  .footer-bottom-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+  }
+  .footer-legal-links {
+    justify-content: flex-end;
+  }
+}
+
+/* LG: Laptops & Desktops (1024px+) */
+@media (min-width: 1024px) {
+  .car-card-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .showrooms-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .why-us-pillars-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .why-us-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .footer-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+  .concierge-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .container { padding: 0 24px; }
+  .container-wide { padding: 0 24px; }
+}
+
+/* XL: Ultra-Wide & 4K (1536px+) */
+@media (min-width: 1536px) {
+  .container { max-width: 1280px; }
+  .container-wide { max-width: 1440px; }
+}
+
+/* Ultra-Wide & Smart TV / Showroom Kiosks (1920px+) */
+@media (min-width: 1920px) {
+  .container-wide { max-width: 1720px; }
+  .container { max-width: 1560px; }
+  .car-card-grid {
+    grid-template-columns: repeat(4, 1fr);
     gap: 32px;
   }
 }
 
 @media (min-width: 2560px) {
-  :root {
-    font-size: 18px;
-  }
-  .container-wide {
-    max-width: 2200px;
-  }
-  .container {
-    max-width: 1960px;
-  }
+  :root { font-size: 18px; }
+  .container-wide { max-width: 2200px; }
+  .container { max-width: 1960px; }
   .car-card-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 36px;
   }
-  .showrooms-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
-  }
+  .showrooms-grid { grid-template-columns: repeat(4, 1fr); gap: 32px; }
 }
 
 @media (min-width: 3840px) {
-  :root {
-    font-size: 22px;
-  }
-  .container-wide {
-    max-width: 3000px;
-  }
-  .container {
-    max-width: 2600px;
-  }
+  :root { font-size: 22px; }
+  .container-wide { max-width: 3000px; }
+  .container { max-width: 2600px; }
 }
 
-/* --- Tablets (769px – 1024px) --- */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .container, .container-wide {
-    padding: 0 20px;
-  }
-  .car-card-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 22px !important;
-  }
-  .showrooms-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 22px !important;
-  }
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 22px !important;
-  }
-  .why-us-pillars-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 20px !important;
-  }
-  .why-us-stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 20px !important;
-  }
-  .footer-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 28px !important;
-  }
-  .concierge-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-  }
-  .concierge-bar {
-    max-width: 96% !important;
-  }
+/* --- Legacy tablet override (kept for backward compat, now handled by mobile-first above) --- */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .concierge-bar { max-width: 96% !important; }
 }
 
-/* --- Mobile & Phablets (max-width: 768px) --- */
-@media (max-width: 768px) {
-  .container, .container-wide {
-    padding: 0 16px !important;
-  }
-  .car-card-grid {
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
-  }
-  .showrooms-grid {
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
-  }
-  .products-grid {
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
-  }
-  .why-us-pillars-grid {
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
-  }
-  .why-us-stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 16px !important;
-    padding: 24px 16px !important;
-  }
-  .footer-grid {
-    grid-template-columns: 1fr !important;
-    gap: 32px !important;
-  }
-  .concierge-grid {
-    grid-template-columns: 1fr !important;
-    gap: 12px !important;
-  }
+/* --- Mobile & Phablets (≤640px) --- */
+@media (max-width: 640px) {
   .concierge-bar {
     border-radius: 14px !important;
     padding: 12px !important;
     max-width: 100% !important;
   }
-  .silhouette-scroll-row {
-    justify-content: flex-start !important;
-  }
   .modal-overlay {
-    padding: 10px !important;
+    padding: 8px !important;
+    align-items: flex-end !important; /* sheet-style on mobile */
   }
   .modal-content {
     width: 100% !important;
     max-width: 100% !important;
-    border-radius: 14px !important;
-    max-height: 94vh !important;
+    border-radius: 18px 18px 0 0 !important;
+    max-height: 92vh !important;
   }
   .comparison-dock {
-    width: calc(100% - 24px) !important;
-    max-width: 440px !important;
-    bottom: 14px !important;
-    padding: 10px 14px !important;
+    width: calc(100% - 16px) !important;
+    max-width: 420px !important;
+    bottom: 10px !important;
+    padding: 10px 12px !important;
     flex-direction: column !important;
-    gap: 10px !important;
+    gap: 8px !important;
     align-items: stretch !important;
   }
   .comparison-dock > div {
@@ -788,8 +886,8 @@ select, input, button {
   }
 }
 
-/* --- Compact Mobile Phones (max-width: 480px) --- */
-@media (max-width: 480px) {
+/* --- Extra-Small phones (≤380px): iPhone SE, Galaxy A-series --- */
+@media (max-width: 380px) {
   .top-info-bar-left {
     display: none !important;
   }
@@ -798,22 +896,27 @@ select, input, button {
     width: 100%;
   }
   .popular-brands-grid {
-    grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)) !important;
-    gap: 10px !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
   }
-  .car-card {
-    border-radius: 12px !important;
+  .car-card { border-radius: 10px !important; }
+  .why-us-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
   }
-  .car-card-image-wrap {
-    aspect-ratio: 16 / 10;
+  /* Tightest container padding at XS */
+  .container, .container-wide {
+    padding: 0 12px !important;
   }
-  .btn-primary, .btn-outline, .btn-whatsapp {
-    min-height: 44px; /* Ergonomic iOS/Android touch target */
+  /* Concierge bar single column at XS */
+  .concierge-grid {
+    grid-template-columns: 1fr !important;
   }
-  select, input {
-    min-height: 44px !important;
-    font-size: 16px !important; /* Prevents auto-zoom on iOS Safari */
-  }
+}
+
+/* --- Standard Mobile Phones (381px – 640px) --- */
+@media (max-width: 640px) and (min-width: 381px) {
+  .top-info-bar-left { display: none !important; }
+  .top-info-bar-wrap { justify-content: center !important; }
 }
 
 /* Category Filter Pills Smooth Swipe */

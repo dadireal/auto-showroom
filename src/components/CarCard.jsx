@@ -185,8 +185,9 @@ export default function CarCard({
               else setLocalFavorite(!localFavorite);
             }}
             style={{
-              width: '28px',
-              height: '28px',
+              /* 44px tap area via padding, 36px visible disc */
+              width: '36px',
+              height: '36px',
               borderRadius: '50%',
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
@@ -198,11 +199,16 @@ export default function CarCard({
               color: effectiveFavorite ? '#ffffff' : '#e2e8f0',
               cursor: 'pointer',
               transition: 'all 0.2s',
-              boxShadow: effectiveFavorite ? '0 0 12px rgba(239, 68, 68, 0.6)' : 'none'
+              boxShadow: effectiveFavorite ? '0 0 12px rgba(239, 68, 68, 0.6)' : 'none',
+              /* expand tap zone without changing visual size */
+              padding: '4px',
+              margin: '-4px',
+              minHeight: '44px',
+              minWidth: '44px'
             }}
             title={effectiveFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
           >
-            <Heart size={13} fill={effectiveFavorite ? '#ffffff' : 'none'} color={effectiveFavorite ? '#ffffff' : '#cbd5e1'} />
+            <Heart size={14} fill={effectiveFavorite ? '#ffffff' : 'none'} color={effectiveFavorite ? '#ffffff' : '#cbd5e1'} />
           </button>
         </div>
 
@@ -213,47 +219,53 @@ export default function CarCard({
               onClick={prevImage}
               style={{
                 position: 'absolute',
-                left: '8px',
+                left: '4px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                background: 'rgba(0, 0, 0, 0.6)',
+                background: 'rgba(0, 0, 0, 0.55)',
                 backdropFilter: 'blur(4px)',
                 color: '#fff',
-                width: '26px',
-                height: '26px',
+                width: '36px',
+                height: '36px',
+                minWidth: '44px',
+                minHeight: '44px',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 zIndex: 6,
-                border: '1px solid rgba(255, 255, 255, 0.1)'
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                padding: '4px'
               }}
               aria-label="Précédent"
             >
-              <ChevronLeft size={16} />
+              <ChevronLeft size={17} />
             </button>
             <button 
               onClick={nextImage}
               style={{
                 position: 'absolute',
-                right: '8px',
+                right: '4px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                background: 'rgba(0, 0, 0, 0.6)',
+                background: 'rgba(0, 0, 0, 0.55)',
                 backdropFilter: 'blur(4px)',
                 color: '#fff',
-                width: '26px',
-                height: '26px',
+                width: '36px',
+                height: '36px',
+                minWidth: '44px',
+                minHeight: '44px',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 zIndex: 6,
-                border: '1px solid rgba(255, 255, 255, 0.1)'
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                padding: '4px'
               }}
               aria-label="Suivant"
             >
-              <ChevronRight size={16} />
+              <ChevronRight size={17} />
             </button>
 
             {/* Indicator Dots */}
@@ -428,8 +440,8 @@ export default function CarCard({
           <button
             onClick={() => onRequestProforma && onRequestProforma(car)}
             style={{
-              width: '40px',
-              height: '40px',
+              width: '44px',
+              height: '44px',
               borderRadius: '8px',
               background: 'rgba(255, 107, 0, 0.12)',
               border: '1px solid rgba(255, 107, 0, 0.3)',
@@ -443,15 +455,15 @@ export default function CarCard({
             }}
             title={t('proforma.btn')}
           >
-            <FileText size={15} />
+            <FileText size={16} />
           </button>
 
           {/* Secondary Outline Action: Compare */}
           <button
             onClick={() => onToggleCompare(car)}
             style={{
-              width: '40px',
-              height: '40px',
+              width: '44px',
+              height: '44px',
               borderRadius: '8px',
               background: isCompared ? 'rgba(251, 191, 36, 0.15)' : 'rgba(255, 255, 255, 0.04)',
               border: isCompared ? '1.5px solid #FBBF24' : '1px solid rgba(255, 255, 255, 0.08)',
@@ -465,15 +477,15 @@ export default function CarCard({
             }}
             title={isCompared ? t('card.removeCompare') : t('card.compare')}
           >
-            <GitCompare size={15} />
+            <GitCompare size={16} />
           </button>
 
           {/* Secondary Outline Action: View Full Specs */}
           <button
             onClick={() => onViewDetails(car)}
             style={{
-              width: '40px',
-              height: '40px',
+              width: '44px',
+              height: '44px',
               borderRadius: '8px',
               background: 'rgba(255, 255, 255, 0.04)',
               border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -487,7 +499,7 @@ export default function CarCard({
             }}
             title={t('card.details')}
           >
-            <ExternalLink size={15} />
+            <ExternalLink size={16} />
           </button>
         </div>
       </div>

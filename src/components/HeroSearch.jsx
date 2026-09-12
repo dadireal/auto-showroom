@@ -86,8 +86,8 @@ export default function HeroSearch({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingTop: '130px',
-      paddingBottom: '90px',
+      paddingTop: 'clamp(90px, 16vh, 160px)',
+      paddingBottom: 'clamp(40px, 7vh, 90px)',
       background: '#090D16',
       overflow: 'hidden',
       color: '#fff'
@@ -112,17 +112,18 @@ export default function HeroSearch({
         pointerEvents: 'none'
       }} />
 
-      {/* Subtle Orange Glow Ambient Effect */}
+      {/* Subtle Orange Glow Ambient Effect — constrained to prevent X-overflow */}
       <div style={{
         position: 'absolute',
         top: '15%',
         left: '50%',
         transform: 'translateX(-50%)',
-        width: '600px',
-        height: '350px',
+        width: 'min(600px, 90vw)',
+        height: 'clamp(200px, 35vw, 350px)',
         background: 'radial-gradient(circle, rgba(255, 70, 5, 0.16) 0%, transparent 70%)',
         pointerEvents: 'none',
-        filter: 'blur(70px)'
+        filter: 'blur(70px)',
+        maxWidth: '100%'
       }} />
 
       <div className="container" style={{ position: 'relative', zIndex: 10, width: '100%' }}>
@@ -191,6 +192,8 @@ export default function HeroSearch({
           borderRadius: '20px',
           padding: '12px',
           maxWidth: '880px',
+          width: '100%',
+          boxSizing: 'border-box',
           margin: '0 auto'
         }}>
           {/* Top Condition Switcher & Reset */}
@@ -387,9 +390,10 @@ export default function HeroSearch({
           </div>
         </div>
 
-        {/* Minimalist Car Silhouette Pills Directly Below */}
-        <div className="silhouette-scroll-row" style={{
-          marginTop: '22px'
+        {/* Minimalist Car Silhouette Pills — horizontally scrollable */}
+        <div className="silhouette-scroll-row no-scrollbar" style={{
+          marginTop: '22px',
+          paddingInline: '2px'
         }}>
           <span style={{ fontSize: '0.78rem', color: '#64748B', fontWeight: 600, marginInlineEnd: '4px', flexShrink: 0 }}>
             {t('hero.bodyType', 'Carrosserie :')}
