@@ -34,14 +34,7 @@ export default function VehicleList({
     <section id="inventory" style={{ padding: '96px 0', background: '#090D16' }}>
       <div className="container">
         {/* Section Header */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-          marginBottom: '32px',
-          flexWrap: 'wrap',
-          gap: '24px'
-        }}>
+        <div className="inventory-header">
           <div>
             <div style={{
               display: 'inline-flex',
@@ -57,19 +50,19 @@ export default function VehicleList({
               <Sparkles size={14} />
               {t('inventory.badge')}
             </div>
-            <h2 style={{ fontSize: 'clamp(1.9rem, 4vw, 2.5rem)', color: '#FFFFFF', fontWeight: 900, letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', color: '#FFFFFF', fontWeight: 900, letterSpacing: '-0.02em', lineHeight: 1.2 }}>
               {t('inventory.title')}
             </h2>
-            <p style={{ color: '#94A3B8', fontSize: '0.94rem', marginTop: '6px' }}>
+            <p style={{ color: '#94A3B8', fontSize: '0.92rem', marginTop: '6px' }}>
               {sortedVehicles.length} {t('inventory.subtitle')}
             </p>
           </div>
 
           {/* Sort selector */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '0.84rem', color: '#94A3B8', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <div className="inventory-sort-wrap">
+            <span style={{ fontSize: '0.84rem', color: '#94A3B8', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap' }}>
               <ArrowUpDown size={14} color="#64748B" />
-              {t('inventory.sortBy')}
+              <span>{t('inventory.sortBy')}</span>
             </span>
             <select
               value={sortBy}
@@ -97,13 +90,7 @@ export default function VehicleList({
         </div>
 
         {/* Category Filter Pills Bar */}
-        <div style={{
-          display: 'flex',
-          gap: '8px',
-          overflowX: 'auto',
-          paddingBottom: '14px',
-          marginBottom: '36px'
-        }}>
+        <div className="category-pills-row">
           {BODY_TYPES.map(cat => {
             const isActive = activeCategory === cat.id;
             return (

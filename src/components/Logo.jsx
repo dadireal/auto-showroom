@@ -2,9 +2,9 @@ import React from 'react';
 
 export default function Logo({ size = 'medium', subtitle = 'SHOWROOM' }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+    <div className="site-logo" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
       {/* Sleek Automotive Emblem */}
-      <div style={{
+      <div className="logo-emblem" style={{
         width: size === 'large' ? '46px' : '38px',
         height: size === 'large' ? '46px' : '38px',
         background: 'linear-gradient(135deg, #1e2536 0%, #0d111a 100%)',
@@ -36,7 +36,7 @@ export default function Logo({ size = 'medium', subtitle = 'SHOWROOM' }) {
       {/* Typography */}
       <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <span style={{
+          <span className="logo-text-main" style={{
             fontSize: size === 'large' ? '1.5rem' : '1.25rem',
             fontWeight: 900,
             color: '#ffffff',
@@ -45,7 +45,7 @@ export default function Logo({ size = 'medium', subtitle = 'SHOWROOM' }) {
           }}>
             AUTO
           </span>
-          <span style={{
+          <span className="logo-text-main" style={{
             fontSize: size === 'large' ? '1.5rem' : '1.25rem',
             fontWeight: 900,
             color: 'var(--primary)',
@@ -55,7 +55,7 @@ export default function Logo({ size = 'medium', subtitle = 'SHOWROOM' }) {
             SHOWROOM
           </span>
         </div>
-        <span style={{
+        <span className="logo-subtitle" style={{
           fontSize: '0.62rem',
           fontWeight: 700,
           color: 'rgba(255, 255, 255, 0.6)',

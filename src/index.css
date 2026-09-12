@@ -816,4 +816,58 @@ select, input, button {
   }
 }
 
+/* Category Filter Pills Smooth Swipe */
+.category-pills-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 14px;
+  margin-bottom: 36px;
+}
+
+.category-pills-row::-webkit-scrollbar {
+  display: none;
+}
+
+.main-nav-container {
+  padding: 12px 24px;
+}
+
+@media (max-width: 640px) {
+  .main-nav-container {
+    padding: 8px 12px !important;
+  }
+  .logo-emblem {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .logo-emblem svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .logo-text-main {
+    font-size: 1.05rem !important;
+  }
+  .logo-subtitle {
+    display: none !important;
+  }
+  .inventory-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    margin-bottom: 24px !important;
+  }
+  .inventory-sort-wrap {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+  .inventory-sort-wrap select {
+    flex: 1 !important;
+    max-width: 240px;
+  }
+}
+
+
 

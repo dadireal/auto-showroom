@@ -142,9 +142,9 @@ export default function Header({
               </div>
 
               {/* Currency Selector */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <div className="top-bar-currency" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                 <Coins size={13} color="#FBBF24" />
-                <span style={{ fontWeight: 600, color: '#94A3B8', fontSize: '0.75rem' }}>{t('topBar.currency')}</span>
+                <span className="desktop-text" style={{ fontWeight: 600, color: '#94A3B8', fontSize: '0.75rem' }}>{t('topBar.currency')}</span>
                 <div style={{ position: 'relative' }}>
                   <select
                     value={currency}
@@ -163,16 +163,16 @@ export default function Header({
                       WebkitAppearance: 'none'
                     }}
                   >
-                    <option value="M" style={{ background: '#0F172A', color: '#fff' }}>Millions Cts (M)</option>
-                    <option value="DZD" style={{ background: '#0F172A', color: '#fff' }}>Dinar Algérien (DZD)</option>
-                    <option value="EUR" style={{ background: '#0F172A', color: '#fff' }}>Euro (€ indicatif)</option>
+                    <option value="M" style={{ background: '#0F172A', color: '#fff' }}>Millions (M)</option>
+                    <option value="DZD" style={{ background: '#0F172A', color: '#fff' }}>DZD</option>
+                    <option value="EUR" style={{ background: '#0F172A', color: '#fff' }}>EUR (€)</option>
                   </select>
                   <ChevronDown size={11} color="#94A3B8" style={{ position: 'absolute', right: '6px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
                 </div>
               </div>
 
               {isAdminLoggedIn ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="top-bar-admin" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <button
                     onClick={onOpenDashboard}
                     style={{
@@ -191,7 +191,7 @@ export default function Header({
                     }}
                   >
                     <LayoutDashboard size={13} />
-                    <span>{t('topBar.adminDashboard')}</span>
+                    <span className="desktop-text">{t('topBar.adminDashboard')}</span>
                     {pendingOrdersCount > 0 && (
                       <span style={{
                         background: '#FF6B00',
@@ -226,6 +226,7 @@ export default function Header({
               ) : (
                 <button
                   onClick={onOpenLogin}
+                  className="top-bar-dealer"
                   style={{
                     background: 'none',
                     color: '#94A3B8',
@@ -251,8 +252,8 @@ export default function Header({
         {/* Main Nav Bar */}
         <div 
           ref={dropdownRef} 
-          className="container-wide" 
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 24px' }}
+          className="container-wide main-nav-container" 
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
         >
           {/* Brand Logo */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -457,14 +458,14 @@ export default function Header({
           </nav>
 
           {/* Right Action CTAs (Vehica-Style: Connexion + Ajouter une Annonce) */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div className="header-actions-wrap" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {/* Comparateur badge button */}
             <button
               onClick={onOpenComparison}
-              className="btn-outline"
+              className="btn-outline header-action-btn"
               style={{
                 position: 'relative',
-                padding: '8px 12px',
+                padding: '8px 10px',
                 fontSize: '0.82rem'
               }}
               title={t('nav.compare')}
@@ -493,10 +494,10 @@ export default function Header({
             {/* Mon Garage (Favorites) button */}
             <button
               onClick={onOpenFavorites}
-              className="btn-outline"
+              className="btn-outline header-action-btn"
               style={{
                 position: 'relative',
-                padding: '8px 12px',
+                padding: '8px 10px',
                 fontSize: '0.82rem'
               }}
               title={t('garage.fullTitle')}
@@ -564,15 +565,8 @@ export default function Header({
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{
-                background: 'rgba(255, 255, 255, 0.06)',
-                color: '#fff',
-                padding: '8px',
-                borderRadius: '8px',
-                display: 'none',
-                border: '1px solid rgba(255, 255, 255, 0.08)'
-              }}
               className="mobile-toggle"
+              aria-label="Menu"
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -721,17 +715,36 @@ export default function Header({
           color: #FFFFFF;
           padding-left: 22px;
         }
+        .mobile-toggle {
+          display: none;
+          background: rgba(255, 255, 255, 0.06);
+          color: #fff;
+          padding: 8px;
+          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
         @media (max-width: 1040px) {
           .desktop-nav { display: none !important; }
           .desktop-text { display: none !important; }
-          .mobile-toggle { display: block !important; }
+          .mobile-toggle { display: flex !important; }
         }
         @media (max-width: 640px) {
           .header-login-btn { display: none !important; }
-        }
-        @media (max-width: 480px) {
-          .header-add-btn-text { display: none !important; }
-          .header-add-btn { padding: 8px 10px !important; }
+          .header-add-btn { display: none !important; }
+          .top-bar-dealer { display: none !important; }
+          .main-nav-container { padding: 8px 12px !important; }
+          .header-actions-wrap { gap: 6px !important; }
+          .header-action-btn { padding: 6px 8px !important; }
+          .mobile-toggle {
+            display: flex !important;
+            width: 36px !important;
+            height: 36px !important;
+            min-height: 36px !important;
+            padding: 0 !important;
+          }
         }
       `}</style>
     </>
