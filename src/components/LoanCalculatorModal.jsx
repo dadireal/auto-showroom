@@ -116,31 +116,33 @@ export default function LoanCalculatorModal({ isOpen, onClose }) {
       >
         {/* Header */}
         <div style={{
-          padding: '24px 28px',
+          padding: 'clamp(12px, 2.5vw, 20px) clamp(14px, 3vw, 24px)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          gap: '10px',
           background: 'linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%)'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
             <div style={{
-              width: '42px',
-              height: '42px',
-              borderRadius: '10px',
+              width: '36px',
+              height: '36px',
+              borderRadius: '9px',
               background: 'rgba(255, 70, 5, 0.15)',
               border: '1px solid rgba(255, 70, 5, 0.3)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              flexShrink: 0
             }}>
-              <Calculator size={22} color="#FF6B00" />
+              <Calculator size={18} color="#FF6B00" />
             </div>
-            <div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: '#FFFFFF', margin: 0 }}>
+            <div style={{ minWidth: 0 }}>
+              <h3 style={{ fontSize: 'clamp(1rem, 3.4vw, 1.25rem)', fontWeight: 900, color: '#FFFFFF', margin: 0, lineHeight: 1.25 }}>
                 {t.title}
               </h3>
-              <p style={{ fontSize: '0.84rem', color: '#94A3B8', margin: '2px 0 0' }}>
+              <p style={{ fontSize: '0.78rem', color: '#94A3B8', margin: '2px 0 0' }}>
                 {t.subtitle}
               </p>
             </div>
@@ -152,25 +154,26 @@ export default function LoanCalculatorModal({ isOpen, onClose }) {
               background: 'rgba(255, 255, 255, 0.06)',
               border: '1px solid rgba(255, 255, 255, 0.1)',
               color: '#94A3B8',
-              width: '36px',
-              height: '36px',
+              width: '32px',
+              height: '32px',
               borderRadius: '8px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
+              flexShrink: 0,
               transition: 'all 0.2s'
             }}
             onMouseEnter={(e) => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(255, 70, 5, 0.2)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = '#94A3B8'; e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'; }}
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
 
         {/* Calculator Body */}
-        <div style={{ padding: '24px 28px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+        <div style={{ padding: 'clamp(14px, 3.2vw, 26px)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
             {/* Controls Column */}
             <div>
               {/* Price control */}

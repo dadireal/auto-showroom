@@ -958,10 +958,34 @@ button {
   }
 }
 
-/* --- Standard Mobile Phones (381px – 640px) --- */
-@media (max-width: 640px) and (min-width: 381px) {
-  .top-info-bar-left { display: none !important; }
-  .top-info-bar-wrap { justify-content: center !important; }
+/* Responsive Text Visibility Utilities */
+.mobile-text {
+  display: none !important;
+}
+.desktop-text {
+  display: inline !important;
+}
+
+@media (max-width: 640px) {
+  .mobile-text {
+    display: inline !important;
+  }
+  .desktop-text {
+    display: none !important;
+  }
+}
+
+/* Proforma Document Responsive Rules */
+#proforma-document {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 640px) {
+  #proforma-document {
+    padding: 12px 10px !important;
+    border-radius: 8px !important;
+  }
 }
 
 /* Inventory Header & Sorting Layout */

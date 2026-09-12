@@ -255,37 +255,55 @@ export default function ProformaModal({
       >
         {/* Modal Top Bar (Controls - Hidden on Print) */}
         <div className="no-print" style={{
-          padding: '18px 24px',
+          padding: 'clamp(12px, 2.5vw, 18px) clamp(14px, 3vw, 24px)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          gap: '10px',
           background: 'linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 100%)'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
             <div style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '10px',
+              width: '36px',
+              height: '36px',
+              borderRadius: '9px',
               background: 'rgba(255, 107, 0, 0.15)',
               border: '1px solid rgba(255, 107, 0, 0.3)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              flexShrink: 0
             }}>
-              <FileText size={20} color="#FF6B00" />
+              <FileText size={18} color="#FF6B00" />
             </div>
-            <div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#FFFFFF', margin: 0 }}>
+            <div style={{ minWidth: 0 }}>
+              <h3 style={{
+                fontSize: 'clamp(0.95rem, 3.4vw, 1.22rem)',
+                fontWeight: 900,
+                color: '#FFFFFF',
+                margin: 0,
+                lineHeight: 1.25,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>
                 {t('proforma.modalTitle')}
               </h3>
-              <p style={{ fontSize: '0.8rem', color: '#94A3B8', margin: '2px 0 0' }}>
+              <p style={{
+                fontSize: '0.74rem',
+                color: '#94A3B8',
+                margin: '2px 0 0',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>
                 {t('proforma.modalSubtitle')}
               </p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
             <button
               onClick={handlePrint}
               style={{
@@ -293,19 +311,20 @@ export default function ProformaModal({
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 color: '#FFFFFF',
                 borderRadius: '8px',
-                padding: '7px 14px',
-                fontSize: '0.8rem',
+                padding: '6px 12px',
+                fontSize: '0.78rem',
                 fontWeight: 700,
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '5px',
                 cursor: 'pointer',
+                whiteSpace: 'nowrap',
                 transition: 'all 0.2s'
               }}
               title={t('proforma.printBtn')}
             >
               <Printer size={15} color="#FBBF24" />
-              <span>{t('proforma.printBtn')}</span>
+              <span>PDF</span>
             </button>
 
             <button
@@ -314,13 +333,14 @@ export default function ProformaModal({
                 background: 'rgba(255, 255, 255, 0.06)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 color: '#94A3B8',
-                width: '34px',
-                height: '34px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '8px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                transition: 'all 0.2s'
               }}
             >
               <X size={16} />
@@ -329,23 +349,23 @@ export default function ProformaModal({
         </div>
 
         {/* Scrollable Container */}
-        <div style={{ maxHeight: '78vh', overflowY: 'auto', padding: '24px' }}>
+        <div style={{ maxHeight: '82vh', overflowY: 'auto', padding: 'clamp(12px, 2.5vw, 24px)' }}>
           {/* Quick Client Configurator Bar (Hidden on Print) */}
           <div className="no-print" style={{
             background: 'rgba(255, 255, 255, 0.02)',
             border: '1px solid rgba(255, 255, 255, 0.08)',
             borderRadius: '12px',
-            padding: '16px',
-            marginBottom: '20px'
+            padding: '14px',
+            marginBottom: '18px'
           }}>
-            <div style={{ fontSize: '0.82rem', fontWeight: 800, color: '#FBBF24', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#FBBF24', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Car size={15} />
               <span>{t('proforma.clientSection')}</span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', color: '#94A3B8', marginBottom: '4px', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.74rem', color: '#94A3B8', marginBottom: '4px', fontWeight: 600 }}>
                   {t('proforma.fullName')}
                 </label>
                 <input
@@ -353,12 +373,12 @@ export default function ProformaModal({
                   placeholder="ex: Mohamed Brahimi"
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', background: '#080C14', border: '1px solid #1E293B', borderRadius: '6px', color: '#FFFFFF', fontSize: '0.84rem' }}
+                  style={{ width: '100%', padding: '7px 10px', background: '#080C14', border: '1px solid #1E293B', borderRadius: '6px', color: '#FFFFFF', fontSize: '0.82rem', boxSizing: 'border-box' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', color: '#94A3B8', marginBottom: '4px', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.74rem', color: '#94A3B8', marginBottom: '4px', fontWeight: 600 }}>
                   {t('proforma.phone')}
                 </label>
                 <input
@@ -366,18 +386,18 @@ export default function ProformaModal({
                   placeholder="0550 12 34 56"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', background: '#080C14', border: '1px solid #1E293B', borderRadius: '6px', color: '#FFFFFF', fontSize: '0.84rem' }}
+                  style={{ width: '100%', padding: '7px 10px', background: '#080C14', border: '1px solid #1E293B', borderRadius: '6px', color: '#FFFFFF', fontSize: '0.82rem', boxSizing: 'border-box' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', color: '#94A3B8', marginBottom: '4px', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.74rem', color: '#94A3B8', marginBottom: '4px', fontWeight: 600 }}>
                   {t('proforma.wilaya')}
                 </label>
                 <select
                   value={wilaya}
                   onChange={(e) => setWilaya(e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', background: '#080C14', border: '1px solid #1E293B', borderRadius: '6px', color: '#FFFFFF', fontSize: '0.84rem' }}
+                  style={{ width: '100%', padding: '7px 10px', background: '#080C14', border: '1px solid #1E293B', borderRadius: '6px', color: '#FFFFFF', fontSize: '0.82rem', boxSizing: 'border-box' }}
                 >
                   {WILAYAS.filter(w => w !== 'Toutes les Wilayas').map(w => (
                     <option key={w} value={w}>{w}</option>
@@ -386,13 +406,13 @@ export default function ProformaModal({
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', color: '#94A3B8', marginBottom: '4px', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.74rem', color: '#94A3B8', marginBottom: '4px', fontWeight: 600 }}>
                   {t('proforma.paymentMode')}
                 </label>
                 <select
                   value={paymentMode}
                   onChange={(e) => setPaymentMode(e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', background: '#080C14', border: '1px solid #1E293B', borderRadius: '6px', color: '#FFFFFF', fontSize: '0.84rem' }}
+                  style={{ width: '100%', padding: '7px 10px', background: '#080C14', border: '1px solid #1E293B', borderRadius: '6px', color: '#FFFFFF', fontSize: '0.82rem', boxSizing: 'border-box' }}
                 >
                   <option value="cash">{t('proforma.cash')}</option>
                   <option value="financing">{t('proforma.financing')}</option>
@@ -407,13 +427,13 @@ export default function ProformaModal({
                 paddingTop: '12px',
                 borderTop: '1px dashed rgba(255, 255, 255, 0.08)',
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '16px'
+                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                gap: '14px'
               }}>
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#CBD5E1', marginBottom: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', color: '#CBD5E1', marginBottom: '4px' }}>
                     <span>{t('proforma.downPayment')} ({downPaymentPercent}%)</span>
-                    <strong style={{ color: '#FBBF24' }}>{Math.round(downPaymentM)} Millions Cts</strong>
+                    <strong style={{ color: '#FBBF24' }}>{Math.round(downPaymentM)} M Cts</strong>
                   </div>
                   <input
                     type="range"
@@ -427,7 +447,7 @@ export default function ProformaModal({
                 </div>
 
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#CBD5E1', marginBottom: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', color: '#CBD5E1', marginBottom: '4px' }}>
                     <span>{t('proforma.duration')}</span>
                     <strong style={{ color: '#FBBF24' }}>{durationMonths} mois ({durationMonths / 12} ans)</strong>
                   </div>
@@ -448,15 +468,17 @@ export default function ProformaModal({
           {/* =========================================================
               THE OFFICIAL PRINTABLE PROFORMA DOCUMENT
               ========================================================= */}
-          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '10px' }}>
+          <div style={{ width: '100%', maxWidth: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '10px' }}>
             <div 
               id="proforma-document"
               style={{
                 background: '#FFFFFF',
                 color: '#0F172A',
                 borderRadius: '12px',
-                padding: '36px',
-                minWidth: '560px',
+                padding: 'clamp(14px, 3.2vw, 32px)',
+                width: '100%',
+                maxWidth: '100%',
+                boxSizing: 'border-box',
                 boxShadow: '0 10px 40px rgba(0, 0, 0, 0.4)',
                 fontFamily: isRTL ? "'Cairo', sans-serif" : 'system-ui, -apple-system, sans-serif'
               }}
@@ -467,38 +489,40 @@ export default function ProformaModal({
               justifyContent: 'space-between',
               alignItems: 'flex-start',
               borderBottom: '2px solid #0F172A',
-              paddingBottom: '20px',
-              marginBottom: '24px'
+              paddingBottom: '16px',
+              marginBottom: '18px',
+              gap: '12px',
+              flexWrap: 'wrap'
             }}>
-              <div>
-                <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ minWidth: '180px', flex: '1 1 220px' }}>
+                <div style={{ fontSize: 'clamp(1.15rem, 3.4vw, 1.45rem)', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ color: '#FF6B00' }}>⚡</span> AUTO SHOWROOM ALGÉRIE
                 </div>
-                <div style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: 600, marginTop: '2px' }}>
+                <div style={{ fontSize: '0.78rem', color: '#64748B', fontWeight: 600, marginTop: '2px' }}>
                   Réseau National de Showrooms Agréés Multi-Marques • 58 Wilayas
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#94A3B8', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.72rem', color: '#94A3B8', marginTop: '2px' }}>
                   Agrément Ministériel N° DZ-AUTO-2024 • Registre du Commerce Conforme
                 </div>
               </div>
 
-              <div style={{ textAlign: isRTL ? 'left' : 'right' }}>
+              <div style={{ textAlign: isRTL ? 'left' : 'right', flexShrink: 0 }}>
                 <div style={{
                   display: 'inline-block',
                   background: '#0F172A',
                   color: '#FFFFFF',
-                  fontSize: '0.75rem',
+                  fontSize: '0.72rem',
                   fontWeight: 900,
-                  padding: '4px 10px',
+                  padding: '3px 8px',
                   borderRadius: '4px',
                   letterSpacing: '0.05em'
                 }}>
                   FACTURE PROFORMA
                 </div>
-                <div style={{ fontSize: '0.84rem', fontWeight: 800, color: '#0F172A', marginTop: '6px' }}>
+                <div style={{ fontSize: '0.82rem', fontWeight: 800, color: '#0F172A', marginTop: '4px' }}>
                   {refNumber}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#64748B' }}>
+                <div style={{ fontSize: '0.74rem', color: '#64748B' }}>
                   {t('proforma.date')} {todayDate}
                 </div>
                 <div style={{ fontSize: '0.72rem', color: '#10B981', fontWeight: 700 }}>
@@ -510,129 +534,133 @@ export default function ProformaModal({
             {/* Client & Showroom 2-Column Info */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '24px',
-              marginBottom: '24px',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '14px',
+              marginBottom: '18px',
               background: '#F8FAFC',
               borderRadius: '8px',
-              padding: '16px',
+              padding: '12px 14px',
               border: '1px solid #E2E8F0'
             }}>
               <div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#FF6B00', textTransform: 'uppercase', marginBottom: '6px' }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#FF6B00', textTransform: 'uppercase', marginBottom: '4px' }}>
                   {t('proforma.clientSection')}
                 </div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0F172A' }}>
+                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#0F172A' }}>
                   {clientName || 'Client Particulier / Entreprise'}
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#475569', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.78rem', color: '#475569', marginTop: '2px' }}>
                   Téléphone : <strong>{phone || '0550 00 00 00'}</strong>
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#475569' }}>
+                <div style={{ fontSize: '0.78rem', color: '#475569' }}>
                   Wilaya : <strong>{wilaya}</strong>
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#0F172A', textTransform: 'uppercase', marginBottom: '6px' }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#0F172A', textTransform: 'uppercase', marginBottom: '4px' }}>
                   Showroom Vendeur Agréé
                 </div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0F172A' }}>
+                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#0F172A' }}>
                   {vehicle.showroom}
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#475569', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.78rem', color: '#475569', marginTop: '2px' }}>
                   Contact Showroom : <strong>{vehicle.phone || '0550 12 34 56'}</strong>
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#475569' }}>
+                <div style={{ fontSize: '0.78rem', color: '#475569' }}>
                   Lieu d'exposition : <strong>{vehicle.wilaya}</strong>
                 </div>
               </div>
             </div>
 
             {/* Vehicle Specifications Table */}
-            <div style={{ marginBottom: '24px' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 900, color: '#0F172A', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.04em' }}>
+            <div style={{ marginBottom: '18px' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 900, color: '#0F172A', textTransform: 'uppercase', marginBottom: '6px', letterSpacing: '0.04em' }}>
                 {t('proforma.vehicleSection')}
               </div>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.84rem' }}>
-                <tbody>
-                  <tr style={{ background: '#F1F5F9' }}>
-                    <td style={{ padding: '8px 12px', fontWeight: 700, width: '25%', border: '1px solid #E2E8F0' }}>Désignation :</td>
-                    <td style={{ padding: '8px 12px', fontWeight: 800, color: '#0F172A', border: '1px solid #E2E8F0' }}>{vehicle.title}</td>
-                    <td style={{ padding: '8px 12px', fontWeight: 700, width: '20%', border: '1px solid #E2E8F0' }}>Année / Millésime :</td>
-                    <td style={{ padding: '8px 12px', fontWeight: 800, border: '1px solid #E2E8F0' }}>{vehicle.year}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: '8px 12px', fontWeight: 700, border: '1px solid #E2E8F0' }}>N° Châssis (VIN) :</td>
-                    <td style={{ padding: '8px 12px', fontFamily: 'monospace', fontWeight: 700, border: '1px solid #E2E8F0' }}>{vinNumber}</td>
-                    <td style={{ padding: '8px 12px', fontWeight: 700, border: '1px solid #E2E8F0' }}>Kilométrage :</td>
-                    <td style={{ padding: '8px 12px', fontWeight: 800, color: vehicle.mileage === 0 ? '#10B981' : '#0F172A', border: '1px solid #E2E8F0' }}>
-                      {vehicle.mileage === 0 ? '00 km (Neuf)' : `${vehicle.mileage.toLocaleString()} km`}
-                    </td>
-                  </tr>
-                  <tr style={{ background: '#F1F5F9' }}>
-                    <td style={{ padding: '8px 12px', fontWeight: 700, border: '1px solid #E2E8F0' }}>Motorisation :</td>
-                    <td style={{ padding: '8px 12px', border: '1px solid #E2E8F0' }}>{vehicle.engine || 'Essence Multi-soupapes'}</td>
-                    <td style={{ padding: '8px 12px', fontWeight: 700, border: '1px solid #E2E8F0' }}>Transmission :</td>
-                    <td style={{ padding: '8px 12px', border: '1px solid #E2E8F0' }}>{vehicle.transmission}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: '8px 12px', fontWeight: 700, border: '1px solid #E2E8F0' }}>Couleur / Finition :</td>
-                    <td style={{ padding: '8px 12px', border: '1px solid #E2E8F0' }}>{vehicle.color || 'Peinture d\'origine certifiée'}</td>
-                    <td style={{ padding: '8px 12px', fontWeight: 700, border: '1px solid #E2E8F0' }}>Document Admin :</td>
-                    <td style={{ padding: '8px 12px', fontWeight: 800, color: '#10B981', border: '1px solid #E2E8F0' }}>{vehicle.papers || 'Carte Grise'}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div style={{ width: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'clamp(0.72rem, 1.8vw, 0.82rem)' }}>
+                  <tbody>
+                    <tr style={{ background: '#F1F5F9' }}>
+                      <td style={{ padding: '6px 10px', fontWeight: 700, width: '25%', border: '1px solid #E2E8F0' }}>Désignation :</td>
+                      <td style={{ padding: '6px 10px', fontWeight: 800, color: '#0F172A', border: '1px solid #E2E8F0' }}>{vehicle.title}</td>
+                      <td style={{ padding: '6px 10px', fontWeight: 700, width: '22%', border: '1px solid #E2E8F0' }}>Année / Millésime :</td>
+                      <td style={{ padding: '6px 10px', fontWeight: 800, border: '1px solid #E2E8F0' }}>{vehicle.year}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: '6px 10px', fontWeight: 700, border: '1px solid #E2E8F0' }}>N° Châssis (VIN) :</td>
+                      <td style={{ padding: '6px 10px', fontFamily: 'monospace', fontWeight: 700, border: '1px solid #E2E8F0' }}>{vinNumber}</td>
+                      <td style={{ padding: '6px 10px', fontWeight: 700, border: '1px solid #E2E8F0' }}>Kilométrage :</td>
+                      <td style={{ padding: '6px 10px', fontWeight: 800, color: vehicle.mileage === 0 ? '#10B981' : '#0F172A', border: '1px solid #E2E8F0' }}>
+                        {vehicle.mileage === 0 ? '00 km (Neuf)' : `${vehicle.mileage.toLocaleString()} km`}
+                      </td>
+                    </tr>
+                    <tr style={{ background: '#F1F5F9' }}>
+                      <td style={{ padding: '6px 10px', fontWeight: 700, border: '1px solid #E2E8F0' }}>Motorisation :</td>
+                      <td style={{ padding: '6px 10px', border: '1px solid #E2E8F0' }}>{vehicle.engine || 'Essence Multi-soupapes'}</td>
+                      <td style={{ padding: '6px 10px', fontWeight: 700, border: '1px solid #E2E8F0' }}>Transmission :</td>
+                      <td style={{ padding: '6px 10px', border: '1px solid #E2E8F0' }}>{vehicle.transmission}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: '6px 10px', fontWeight: 700, border: '1px solid #E2E8F0' }}>Couleur / Finition :</td>
+                      <td style={{ padding: '6px 10px', border: '1px solid #E2E8F0' }}>{vehicle.color || 'Peinture d\'origine certifiée'}</td>
+                      <td style={{ padding: '6px 10px', fontWeight: 700, border: '1px solid #E2E8F0' }}>Document Admin :</td>
+                      <td style={{ padding: '6px 10px', fontWeight: 800, color: '#10B981', border: '1px solid #E2E8F0' }}>{vehicle.papers || 'Carte Grise'}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             {/* Financial Breakdown Table */}
-            <div style={{ marginBottom: '24px' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 900, color: '#0F172A', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.04em' }}>
+            <div style={{ marginBottom: '18px' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 900, color: '#0F172A', textTransform: 'uppercase', marginBottom: '6px', letterSpacing: '0.04em' }}>
                 {t('proforma.financialSection')}
               </div>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
-                <thead>
-                  <tr style={{ background: '#0F172A', color: '#FFFFFF' }}>
-                    <th style={{ padding: '8px 12px', textAlign: isRTL ? 'right' : 'left' }}>Élément de Facturation</th>
-                    <th style={{ padding: '8px 12px', textAlign: 'center' }}>Quantité</th>
-                    <th style={{ padding: '8px 12px', textAlign: isRTL ? 'left' : 'right' }}>Prix en Millions Cts</th>
-                    <th style={{ padding: '8px 12px', textAlign: isRTL ? 'left' : 'right' }}>Montant en Dinars (DZD)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
-                    <td style={{ padding: '10px 12px', fontWeight: 700 }}>
-                      {vehicle.title} ({vehicle.year})
-                      <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: 400 }}>Garantie constructeur & showroom incluse</div>
-                    </td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center' }}>1</td>
-                    <td style={{ padding: '10px 12px', textAlign: isRTL ? 'left' : 'right', fontWeight: 800 }}>{priceM} M</td>
-                    <td style={{ padding: '10px 12px', textAlign: isRTL ? 'left' : 'right', fontWeight: 800 }}>{priceDZD.toLocaleString('fr-FR')} DZD</td>
-                  </tr>
-                  <tr style={{ borderBottom: '1px solid #E2E8F0', background: '#F8FAFC' }}>
-                    <td style={{ padding: '10px 12px' }}>{t('proforma.dossierFee')}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center' }}>1</td>
-                    <td style={{ padding: '10px 12px', textAlign: isRTL ? 'left' : 'right', color: '#10B981', fontWeight: 700 }}>{t('proforma.included')}</td>
-                    <td style={{ padding: '10px 12px', textAlign: isRTL ? 'left' : 'right', color: '#10B981', fontWeight: 700 }}>0 DZD</td>
-                  </tr>
-                  <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
-                    <td style={{ padding: '10px 12px' }}>{t('proforma.deliveryFee')} ({wilaya})</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center' }}>1</td>
-                    <td style={{ padding: '10px 12px', textAlign: isRTL ? 'left' : 'right', color: '#10B981', fontWeight: 700 }}>{t('proforma.included')}</td>
-                    <td style={{ padding: '10px 12px', textAlign: isRTL ? 'left' : 'right', color: '#10B981', fontWeight: 700 }}>0 DZD</td>
-                  </tr>
-                  <tr style={{ background: '#0F172A', color: '#FFFFFF', fontWeight: 900, fontSize: '0.98rem' }}>
-                    <td colSpan="2" style={{ padding: '12px 14px' }}>{t('proforma.totalAmount')} :</td>
-                    <td style={{ padding: '12px 14px', textAlign: isRTL ? 'left' : 'right', color: '#FBBF24', fontSize: '1.2rem' }}>
-                      {priceM} <span style={{ fontSize: '0.78rem' }}>M Cts</span>
-                    </td>
-                    <td style={{ padding: '12px 14px', textAlign: isRTL ? 'left' : 'right', color: '#FBBF24', fontSize: '1.1rem' }}>
-                      {priceDZD.toLocaleString('fr-FR')} DZD
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div style={{ width: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'clamp(0.72rem, 1.8vw, 0.82rem)' }}>
+                  <thead>
+                    <tr style={{ background: '#0F172A', color: '#FFFFFF' }}>
+                      <th style={{ padding: '7px 10px', textAlign: isRTL ? 'right' : 'left' }}>Élément de Facturation</th>
+                      <th style={{ padding: '7px 10px', textAlign: 'center' }}>Quantité</th>
+                      <th style={{ padding: '7px 10px', textAlign: isRTL ? 'left' : 'right' }}>Prix en Millions Cts</th>
+                      <th style={{ padding: '7px 10px', textAlign: isRTL ? 'left' : 'right' }}>Montant en Dinars (DZD)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
+                      <td style={{ padding: '8px 10px', fontWeight: 700 }}>
+                        {vehicle.title} ({vehicle.year})
+                        <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 400 }}>Garantie constructeur & showroom incluse</div>
+                      </td>
+                      <td style={{ padding: '8px 10px', textAlign: 'center' }}>1</td>
+                      <td style={{ padding: '8px 10px', textAlign: isRTL ? 'left' : 'right', fontWeight: 800, whiteSpace: 'nowrap' }}>{priceM} M</td>
+                      <td style={{ padding: '8px 10px', textAlign: isRTL ? 'left' : 'right', fontWeight: 800, whiteSpace: 'nowrap' }}>{priceDZD.toLocaleString('fr-FR')} DZD</td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid #E2E8F0', background: '#F8FAFC' }}>
+                      <td style={{ padding: '8px 10px' }}>{t('proforma.dossierFee')}</td>
+                      <td style={{ padding: '8px 10px', textAlign: 'center' }}>1</td>
+                      <td style={{ padding: '8px 10px', textAlign: isRTL ? 'left' : 'right', color: '#10B981', fontWeight: 700, whiteSpace: 'nowrap' }}>{t('proforma.included')}</td>
+                      <td style={{ padding: '8px 10px', textAlign: isRTL ? 'left' : 'right', color: '#10B981', fontWeight: 700, whiteSpace: 'nowrap' }}>0 DZD</td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
+                      <td style={{ padding: '8px 10px' }}>{t('proforma.deliveryFee')} ({wilaya})</td>
+                      <td style={{ padding: '8px 10px', textAlign: 'center' }}>1</td>
+                      <td style={{ padding: '8px 10px', textAlign: isRTL ? 'left' : 'right', color: '#10B981', fontWeight: 700, whiteSpace: 'nowrap' }}>{t('proforma.included')}</td>
+                      <td style={{ padding: '8px 10px', textAlign: isRTL ? 'left' : 'right', color: '#10B981', fontWeight: 700, whiteSpace: 'nowrap' }}>0 DZD</td>
+                    </tr>
+                    <tr style={{ background: '#0F172A', color: '#FFFFFF', fontWeight: 900, fontSize: 'clamp(0.82rem, 2vw, 0.94rem)' }}>
+                      <td colSpan="2" style={{ padding: '10px 12px' }}>{t('proforma.totalAmount')} :</td>
+                      <td style={{ padding: '10px 12px', textAlign: isRTL ? 'left' : 'right', color: '#FBBF24', fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)', whiteSpace: 'nowrap' }}>
+                        {priceM} <span style={{ fontSize: '0.72rem' }}>M Cts</span>
+                      </td>
+                      <td style={{ padding: '10px 12px', textAlign: isRTL ? 'left' : 'right', color: '#FBBF24', fontSize: 'clamp(0.9rem, 2.2vw, 1.05rem)', whiteSpace: 'nowrap' }}>
+                        {priceDZD.toLocaleString('fr-FR')} DZD
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             {/* Financing Box if applicable */}
@@ -641,28 +669,28 @@ export default function ProformaModal({
                 background: '#F8FAFC',
                 border: '1px solid #CBD5E1',
                 borderRadius: '8px',
-                padding: '14px',
-                marginBottom: '24px'
+                padding: '12px',
+                marginBottom: '18px'
               }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#0F172A', textTransform: 'uppercase', marginBottom: '6px' }}>
+                <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#0F172A', textTransform: 'uppercase', marginBottom: '6px' }}>
                   📊 {t('proforma.financingSchedule')} (Taux indicatif : 7.5% annuel)
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', fontSize: '0.82rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '10px', fontSize: '0.78rem' }}>
                   <div>
                     <span style={{ color: '#64748B' }}>Apport personnel ({downPaymentPercent}%) :</span>
-                    <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.92rem' }}>
-                      {Math.round(downPaymentM)} Millions Cts ({(Math.round(downPaymentM) * 10000).toLocaleString()} DZD)
+                    <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.86rem' }}>
+                      {Math.round(downPaymentM)} M Cts ({(Math.round(downPaymentM) * 10000).toLocaleString()} DZD)
                     </div>
                   </div>
                   <div>
                     <span style={{ color: '#64748B' }}>Montant emprunté :</span>
-                    <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.92rem' }}>
-                      {Math.round(loanAmountM)} Millions Cts ({(Math.round(loanAmountM) * 10000).toLocaleString()} DZD)
+                    <div style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.86rem' }}>
+                      {Math.round(loanAmountM)} M Cts ({(Math.round(loanAmountM) * 10000).toLocaleString()} DZD)
                     </div>
                   </div>
                   <div>
                     <span style={{ color: '#64748B' }}>{t('proforma.monthlyPayment')} :</span>
-                    <div style={{ fontWeight: 900, color: '#FF6B00', fontSize: '1rem' }}>
+                    <div style={{ fontWeight: 900, color: '#FF6B00', fontSize: '0.92rem' }}>
                       ~ {monthlyPaymentM.toFixed(2)} M / mois ({monthlyPaymentDZD.toLocaleString()} DZD)
                     </div>
                   </div>
@@ -673,34 +701,34 @@ export default function ProformaModal({
             {/* Official Security Stamp & Signature Footer */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: '1.2fr 1fr',
-              gap: '24px',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '16px',
               borderTop: '2px solid #0F172A',
-              paddingTop: '20px',
+              paddingTop: '16px',
               alignItems: 'center'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 {/* Simulated High-Res Vector QR Code */}
                 <div style={{
-                  width: '64px',
-                  height: '64px',
+                  width: '54px',
+                  height: '54px',
                   border: '2px solid #0F172A',
                   borderRadius: '6px',
-                  padding: '4px',
+                  padding: '3px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   background: '#FFFFFF',
                   flexShrink: 0
                 }}>
-                  <QrCode size={52} color="#0F172A" />
+                  <QrCode size={44} color="#0F172A" />
                 </div>
                 <div>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ fontSize: '0.74rem', fontWeight: 800, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <ShieldCheck size={14} color="#10B981" />
                     <span>DOCUMENT OFFICIEL SÉCURISÉ</span>
                   </div>
-                  <div style={{ fontSize: '0.7rem', color: '#64748B', lineHeight: 1.4, marginTop: '2px' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748B', lineHeight: 1.4, marginTop: '2px' }}>
                     {t('proforma.verifiedQr')}. Les prix indiqués sont garantis pendant la durée de validité de la présente offre.
                   </div>
                 </div>
@@ -710,18 +738,18 @@ export default function ProformaModal({
               <div style={{
                 border: '1px dashed #64748B',
                 borderRadius: '8px',
-                padding: '12px',
+                padding: '10px',
                 textAlign: 'center',
-                height: '80px',
+                height: '75px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 background: '#FAFAFA'
               }}>
-                <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: 700 }}>
+                <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: 700 }}>
                   {t('proforma.authorizedStamp')}
                 </div>
-                <div style={{ fontSize: '0.68rem', color: '#94A3B8', fontStyle: 'italic' }}>
+                <div style={{ fontSize: '0.65rem', color: '#94A3B8', fontStyle: 'italic' }}>
                   Visa & Signature Direction Showroom
                 </div>
               </div>
@@ -732,21 +760,21 @@ export default function ProformaModal({
           {/* Submission Feedback (Hidden on Print) */}
           {submitted && (
             <div className="no-print" style={{
-              marginTop: '18px',
+              marginTop: '16px',
               background: 'rgba(16, 185, 129, 0.15)',
               border: '1px solid rgba(16, 185, 129, 0.35)',
               borderRadius: '10px',
-              padding: '14px 18px',
+              padding: '12px 16px',
               display: 'flex',
               alignItems: 'center',
               gap: '12px'
             }}>
-              <CheckCircle2 size={24} color="#10B981" flexShrink={0} />
+              <CheckCircle2 size={22} color="#10B981" flexShrink={0} />
               <div>
-                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#FFFFFF' }}>
+                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#FFFFFF' }}>
                   {t('proforma.bookingSuccess')}
                 </div>
-                <div style={{ fontSize: '0.78rem', color: '#94A3B8' }}>
+                <div style={{ fontSize: '0.76rem', color: '#94A3B8' }}>
                   Le dossier <strong>{refNumber}</strong> a été consigné dans le système et transmis au conseiller commercial du showroom.
                 </div>
               </div>
@@ -755,29 +783,31 @@ export default function ProformaModal({
 
           {/* Action Footer Buttons (Hidden on Print) */}
           <div className="no-print" style={{
-            marginTop: '20px',
+            marginTop: '18px',
             display: 'flex',
             justifyContent: 'flex-end',
-            gap: '12px',
+            gap: '10px',
             flexWrap: 'wrap'
           }}>
             <button
               onClick={handlePrint}
               style={{
+                flex: '1 1 140px',
                 background: 'rgba(255, 255, 255, 0.08)',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 color: '#FFFFFF',
                 borderRadius: '8px',
-                padding: '12px 20px',
-                fontSize: '0.88rem',
+                padding: '10px 18px',
+                fontSize: '0.84rem',
                 fontWeight: 700,
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '8px',
                 cursor: 'pointer'
               }}
             >
-              <Printer size={17} color="#FBBF24" />
+              <Printer size={16} color="#FBBF24" />
               <span>{t('proforma.printBtn')}</span>
             </button>
 
@@ -785,14 +815,16 @@ export default function ProformaModal({
               onClick={handleConfirmAndSend}
               className="btn-primary"
               style={{
-                padding: '12px 24px',
-                fontSize: '0.9rem',
+                flex: '1 1 160px',
+                padding: '10px 20px',
+                fontSize: '0.86rem',
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '8px'
               }}
             >
-              <Send size={16} />
+              <Send size={15} />
               <span>{t('proforma.sendWhatsApp')}</span>
             </button>
           </div>

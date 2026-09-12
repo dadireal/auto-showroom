@@ -309,17 +309,17 @@ export default function CarCard({
         <h3 
           onClick={() => onViewDetails(car)}
           style={{
-            fontSize: '1.02rem',
+            fontSize: 'clamp(0.92rem, 2.4vw, 1rem)',
             fontWeight: 800,
-            lineHeight: 1.35,
-            height: '2.8rem',
+            lineHeight: 1.3,
+            height: '2.6rem',
             overflow: 'hidden',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             color: '#FFFFFF',
             cursor: 'pointer',
-            marginBottom: '12px'
+            marginBottom: '10px'
           }}
           title={car.title}
         >
@@ -328,7 +328,7 @@ export default function CarCard({
 
         {/* Pricing Area: Bold Colloquial Millions & Tabular Legal DZD */}
         <div style={{
-          marginBottom: '14px',
+          marginBottom: '12px',
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'space-between'
@@ -336,22 +336,22 @@ export default function CarCard({
           <div>
             {/* Bold, prominent colloquial price in bright amber/orange */}
             <div style={{
-              fontSize: '1.55rem',
+              fontSize: 'clamp(1.22rem, 3.4vw, 1.48rem)',
               fontWeight: 900,
               color: '#FBBF24',
               letterSpacing: '-0.02em',
-              lineHeight: 1.1
+              lineHeight: 1.15
             }}>
               {formatColloquialPrice()}
             </div>
             {/* Crisp, tabular legal price in slate-300 */}
             {currency !== 'DZD' && (
               <div style={{
-                fontSize: '0.78rem',
+                fontSize: '0.74rem',
                 fontWeight: 600,
                 color: '#CBD5E1',
                 fontVariantNumeric: 'tabular-nums',
-                marginTop: '3px'
+                marginTop: '2px'
               }}>
                 {car.priceDZD.toLocaleString('fr-FR')} DZD
               </div>
@@ -359,8 +359,8 @@ export default function CarCard({
           </div>
 
           <span style={{
-            fontSize: '0.72rem',
-            padding: '3px 8px',
+            fontSize: '0.7rem',
+            padding: '2px 7px',
             borderRadius: '4px',
             background: 'rgba(255, 255, 255, 0.04)',
             border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -380,7 +380,7 @@ export default function CarCard({
           borderRadius: '8px',
           border: '1px solid rgba(255, 255, 255, 0.05)',
           padding: '8px 4px',
-          marginBottom: '16px'
+          marginBottom: '14px'
         }}>
           {/* Pillar 1: Boîte */}
           <div style={{ textAlign: 'center', borderInlineEnd: '1px solid rgba(255, 255, 255, 0.06)', padding: '0 4px' }}>
@@ -420,7 +420,7 @@ export default function CarCard({
           alignItems: 'center',
           gap: '8px',
           borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-          paddingTop: '14px'
+          paddingTop: '12px'
         }}>
           {/* Primary Touch: WhatsApp Showroom Button */}
           <a
@@ -430,11 +430,11 @@ export default function CarCard({
             className="btn-whatsapp"
             style={{
               flex: 1,
-              padding: '11px 14px',
-              fontSize: '0.84rem'
+              padding: '9px 12px',
+              fontSize: '0.82rem'
             }}
           >
-            <MessageCircle size={16} />
+            <MessageCircle size={15} />
             <span>{t('card.whatsappShowroom')}</span>
           </a>
 
@@ -442,8 +442,8 @@ export default function CarCard({
           <button
             onClick={() => onRequestProforma && onRequestProforma(car)}
             style={{
-              width: '44px',
-              height: '44px',
+              width: '40px',
+              height: '40px',
               borderRadius: '8px',
               background: 'rgba(255, 107, 0, 0.12)',
               border: '1px solid rgba(255, 107, 0, 0.3)',
@@ -457,7 +457,7 @@ export default function CarCard({
             }}
             title={t('proforma.btn')}
           >
-            <FileText size={16} />
+            <FileText size={15} />
           </button>
 
           {/* Secondary Outline Action: Compare */}

@@ -78,41 +78,43 @@ export default function VehicleDetailModal({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '16px 24px',
+          padding: 'clamp(10px, 2vw, 16px) clamp(12px, 2.5vw, 24px)',
           borderBottom: '1px solid #1E293B',
-          background: '#0B0F19'
+          background: '#0B0F19',
+          gap: '8px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span className={`badge ${car.condition === 'neuf' ? 'badge-new' : 'badge-used'}`}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0 }}>
+            <span className={`badge ${car.condition === 'neuf' ? 'badge-new' : 'badge-used'}`} style={{ fontSize: '0.72rem', padding: '3px 8px' }}>
               {car.condition === 'neuf' ? t('card.newBadge') : t('card.usedBadge')}
             </span>
-            <span style={{ fontSize: '0.85rem', color: '#94A3B8', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <MapPin size={14} color="#FBBF24" />
-              {car.wilaya}
+            <span style={{ fontSize: '0.8rem', color: '#94A3B8', display: 'flex', alignItems: 'center', gap: '3px', whiteSpace: 'nowrap' }}>
+              <MapPin size={13} color="#FBBF24" />
+              <span>{car.wilaya}</span>
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
             {/* 360 Lightbox Button */}
             <button
               onClick={() => onOpenLightbox && onOpenLightbox(car)}
               style={{
                 background: 'rgba(251, 191, 36, 0.12)',
                 border: '1px solid rgba(251, 191, 36, 0.3)',
-                padding: '6px 12px',
+                padding: '5px 10px',
                 borderRadius: '6px',
-                fontSize: '0.8rem',
+                fontSize: '0.78rem',
                 fontWeight: 700,
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '5px',
                 color: '#FBBF24',
                 cursor: 'pointer'
               }}
               title={t('lightbox.viewGallery')}
             >
-              <Eye size={14} />
-              <span>360° {t('lightbox.viewGallery')}</span>
+              <Eye size={13} />
+              <span className="desktop-text">360° {t('lightbox.viewGallery')}</span>
+              <span className="mobile-text">360°</span>
             </button>
 
             {/* Favorite Button */}
@@ -121,13 +123,16 @@ export default function VehicleDetailModal({
               style={{
                 background: isFavorite ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.06)',
                 border: isFavorite ? '1px solid #EF4444' : '1px solid #1E293B',
-                padding: '6px 10px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '6px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '5px',
+                justifyContent: 'center',
                 color: isFavorite ? '#EF4444' : '#CBD5E1',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                padding: 0,
+                flexShrink: 0
               }}
               title={isFavorite ? 'Retirer du garage' : 'Sauvegarder dans mon garage'}
             >
@@ -139,41 +144,46 @@ export default function VehicleDetailModal({
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid #1E293B',
-                padding: '6px 12px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '6px',
-                fontSize: '0.8rem',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
-                color: '#CBD5E1',
-                cursor: 'pointer'
+                justifyContent: 'center',
+                color: copied ? '#10B981' : '#CBD5E1',
+                cursor: 'pointer',
+                padding: 0,
+                flexShrink: 0
               }}
+              title={copied ? (language === 'ar' ? 'تم نسخ الرابط !' : 'Lien copié !') : (language === 'ar' ? 'مشاركة' : 'Partager')}
             >
               <Share2 size={14} />
-              {copied ? (language === 'ar' ? 'تم نسخ الرابط !' : language === 'en' ? 'Link Copied!' : 'Lien copié !') : (language === 'ar' ? 'مشاركة' : language === 'en' ? 'Share' : 'Partager')}
             </button>
+
             <button
               onClick={onClose}
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid #1E293B',
-                width: '34px',
-                height: '34px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#CBD5E1',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                padding: 0,
+                flexShrink: 0
               }}
             >
-              <X size={18} />
+              <X size={16} />
             </button>
           </div>
         </div>
 
         {/* Modal Body Container */}
-        <div style={{ maxHeight: '82vh', overflowY: 'auto', padding: '24px' }}>
+        <div style={{ maxHeight: '84vh', overflowY: 'auto', padding: 'clamp(14px, 3vw, 24px)' }}>
           {/* Main Photo & Carousel (clickable to open 360 lightbox) */}
           <div 
             style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden', background: '#080C14', marginBottom: '14px', border: '1px solid #1E293B', cursor: 'pointer' }}
@@ -284,91 +294,92 @@ export default function VehicleDetailModal({
             justifyContent: 'space-between',
             alignItems: 'flex-start',
             flexWrap: 'wrap',
-            gap: '16px',
-            marginBottom: '24px',
-            paddingBottom: '20px',
+            gap: '14px',
+            marginBottom: '20px',
+            paddingBottom: '16px',
             borderBottom: '1px solid #1E293B'
           }}>
             <div>
-              <h2 style={{ fontSize: 'clamp(1.25rem, 3.5vw, 1.8rem)', fontWeight: 900, color: '#FFFFFF', marginBottom: '6px' }}>
+              <h2 style={{ fontSize: 'clamp(1.15rem, 3.2vw, 1.65rem)', fontWeight: 900, color: '#FFFFFF', marginBottom: '4px', lineHeight: 1.25 }}>
                 {car.title}
               </h2>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#94A3B8', fontSize: '0.88rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94A3B8', fontSize: '0.84rem', flexWrap: 'wrap' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Store size={15} color="#FBBF24" />
+                  <Store size={14} color="#FBBF24" />
                   {language === 'ar' ? 'المعرض :' : language === 'en' ? 'Showroom:' : 'Showroom :'} <strong style={{ color: '#E2E8F0' }}>{car.showroom}</strong>
                 </span>
                 <span>•</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#10B981', fontWeight: 700 }}>
-                  <ShieldCheck size={15} />
+                  <ShieldCheck size={14} />
                   {language === 'ar' ? 'فحص معتمد :' : language === 'en' ? 'Certified Inspection:' : 'Contrôle Certifié :'} {car.inspectionScore}/100
                 </span>
               </div>
             </div>
 
             <div style={{ textAlign: isRTL ? 'left' : 'right' }}>
-              <div style={{ fontSize: 'clamp(1.4rem, 4vw, 2rem)', fontWeight: 900, color: '#FBBF24' }}>
+              <div style={{ fontSize: 'clamp(1.3rem, 3.8vw, 1.85rem)', fontWeight: 900, color: '#FBBF24', lineHeight: 1.15 }}>
                 {formatPrice()}
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#94A3B8' }}>
+              <div style={{ fontSize: '0.8rem', color: '#94A3B8', marginTop: '2px' }}>
                 {language === 'ar' ? 'الوثائق :' : language === 'en' ? 'Papers:' : 'Papiers :'} <strong style={{ color: '#10B981' }}>{car.papers}</strong>
               </div>
             </div>
           </div>
 
           {/* Key Specs Table Grid */}
-          <div style={{ marginBottom: '28px' }}>
-            <h4 style={{ fontSize: '1.15rem', color: '#FFFFFF', marginBottom: '14px', fontWeight: 800 }}>
+          <div style={{ marginBottom: '24px' }}>
+            <h4 style={{ fontSize: '1.05rem', color: '#FFFFFF', marginBottom: '12px', fontWeight: 800 }}>
               {language === 'ar' ? 'البطاقة التقنية المفصلة' : language === 'en' ? 'Detailed Technical Specifications' : 'Fiche Technique Détaillée'}
             </h4>
 
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-              gap: '12px',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+              gap: '10px',
               background: '#080C14',
-              padding: '18px',
+              padding: '14px',
               borderRadius: '8px',
               border: '1px solid #1E293B'
             }}>
-              <div><span style={{ color: '#64748B', fontSize: '0.8rem' }}>{t('hero.brand')} :</span> <strong style={{ display: 'block', color: '#FFFFFF' }}>{car.brand}</strong></div>
-              <div><span style={{ color: '#64748B', fontSize: '0.8rem' }}>{t('hero.model')} :</span> <strong style={{ display: 'block', color: '#FFFFFF' }}>{car.model}</strong></div>
-              <div><span style={{ color: '#64748B', fontSize: '0.8rem' }}>{language === 'ar' ? 'سنة الصنع :' : language === 'en' ? 'Year:' : 'Année :'}</span> <strong style={{ display: 'block', color: '#FFFFFF' }}>{car.year}</strong></div>
-              <div><span style={{ color: '#64748B', fontSize: '0.8rem' }}>{t('card.mileage')} :</span> <strong style={{ display: 'block', color: '#FFFFFF' }}>{car.mileage === 0 ? (language === 'ar' ? '00 كم جديد' : '00 km Neuf') : `${car.mileage.toLocaleString()} ${language === 'ar' ? 'كم' : 'km'}`}</strong></div>
-              <div><span style={{ color: '#64748B', fontSize: '0.8rem' }}>{t('card.gearbox')} :</span> <strong style={{ display: 'block', color: '#FFFFFF' }}>{car.transmission}</strong></div>
-              <div><span style={{ color: '#64748B', fontSize: '0.8rem' }}>{language === 'ar' ? 'المحرك :' : language === 'en' ? 'Engine:' : 'Motorisation :'}</span> <strong style={{ display: 'block', color: '#FFFFFF' }}>{car.engine}</strong></div>
-              <div><span style={{ color: '#64748B', fontSize: '0.8rem' }}>{t('card.fuel')} :</span> <strong style={{ display: 'block', color: '#FFFFFF' }}>{car.fuel}</strong></div>
-              <div><span style={{ color: '#64748B', fontSize: '0.8rem' }}>{language === 'ar' ? 'نظام الدفع :' : language === 'en' ? 'Drivetrain:' : 'Transmission :'}</span> <strong style={{ display: 'block', color: '#FFFFFF' }}>{car.drivetrain}</strong></div>
-              <div><span style={{ color: '#64748B', fontSize: '0.8rem' }}>{language === 'ar' ? 'اللون :' : language === 'en' ? 'Color:' : 'Couleur :'}</span> <strong style={{ display: 'block', color: '#FFFFFF' }}>{car.color}</strong></div>
-              <div><span style={{ color: '#64748B', fontSize: '0.8rem' }}>{language === 'ar' ? 'الموقع :' : language === 'en' ? 'Location:' : 'Emplacement :'}</span> <strong style={{ display: 'block', color: '#FFFFFF' }}>{car.wilaya}</strong></div>
+              <div><span style={{ color: '#64748B', fontSize: '0.75rem' }}>{t('hero.brand')} :</span> <strong style={{ display: 'block', color: '#FFFFFF', fontSize: '0.84rem' }}>{car.brand}</strong></div>
+              <div><span style={{ color: '#64748B', fontSize: '0.75rem' }}>{t('hero.model')} :</span> <strong style={{ display: 'block', color: '#FFFFFF', fontSize: '0.84rem' }}>{car.model}</strong></div>
+              <div><span style={{ color: '#64748B', fontSize: '0.75rem' }}>{language === 'ar' ? 'سنة الصنع :' : language === 'en' ? 'Year:' : 'Année :'}</span> <strong style={{ display: 'block', color: '#FFFFFF', fontSize: '0.84rem' }}>{car.year}</strong></div>
+              <div><span style={{ color: '#64748B', fontSize: '0.75rem' }}>{t('card.mileage')} :</span> <strong style={{ display: 'block', color: '#FFFFFF', fontSize: '0.84rem' }}>{car.mileage === 0 ? (language === 'ar' ? '00 كم جديد' : '00 km Neuf') : `${car.mileage.toLocaleString()} ${language === 'ar' ? 'كم' : 'km'}`}</strong></div>
+              <div><span style={{ color: '#64748B', fontSize: '0.75rem' }}>{t('card.gearbox')} :</span> <strong style={{ display: 'block', color: '#FFFFFF', fontSize: '0.84rem' }}>{car.transmission}</strong></div>
+              <div><span style={{ color: '#64748B', fontSize: '0.75rem' }}>{language === 'ar' ? 'المحرك :' : language === 'en' ? 'Engine:' : 'Motorisation :'}</span> <strong style={{ display: 'block', color: '#FFFFFF', fontSize: '0.84rem' }}>{car.engine}</strong></div>
+              <div><span style={{ color: '#64748B', fontSize: '0.75rem' }}>{t('card.fuel')} :</span> <strong style={{ display: 'block', color: '#FFFFFF', fontSize: '0.84rem' }}>{car.fuel}</strong></div>
+              <div><span style={{ color: '#64748B', fontSize: '0.75rem' }}>{language === 'ar' ? 'نظام الدفع :' : language === 'en' ? 'Drivetrain:' : 'Transmission :'}</span> <strong style={{ display: 'block', color: '#FFFFFF', fontSize: '0.84rem' }}>{car.drivetrain}</strong></div>
+              <div><span style={{ color: '#64748B', fontSize: '0.75rem' }}>{language === 'ar' ? 'اللون :' : language === 'en' ? 'Color:' : 'Couleur :'}</span> <strong style={{ display: 'block', color: '#FFFFFF', fontSize: '0.84rem' }}>{car.color}</strong></div>
+              <div><span style={{ color: '#64748B', fontSize: '0.75rem' }}>{language === 'ar' ? 'الموقع :' : language === 'en' ? 'Location:' : 'Emplacement :'}</span> <strong style={{ display: 'block', color: '#FFFFFF', fontSize: '0.84rem' }}>{car.wilaya}</strong></div>
             </div>
           </div>
 
           {/* Options & Equipment */}
           {car.features && car.features.length > 0 && (
-            <div style={{ marginBottom: '28px' }}>
-              <h4 style={{ fontSize: '1.15rem', color: '#FFFFFF', marginBottom: '14px', fontWeight: 800 }}>
+            <div style={{ marginBottom: '24px' }}>
+              <h4 style={{ fontSize: '1.05rem', color: '#FFFFFF', marginBottom: '12px', fontWeight: 800 }}>
                 {language === 'ar' ? 'التجهيزات والخيارات المرفقة' : language === 'en' ? 'Included Equipment & Features' : 'Équipements & Options Inclus'}
               </h4>
 
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                gap: '10px'
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '8px'
               }}>
                 {car.features.map((feat, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: '#CBD5E1' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.84rem', color: '#CBD5E1' }}>
                     <div style={{
-                      width: '20px',
-                      height: '20px',
+                      width: '18px',
+                      height: '18px',
                       borderRadius: '50%',
                       background: 'rgba(16, 185, 129, 0.15)',
                       color: '#10B981',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      flexShrink: 0
                     }}>
-                      <Check size={13} />
+                      <Check size={12} />
                     </div>
                     <span>{feat}</span>
                   </div>
@@ -382,22 +393,22 @@ export default function VehicleDetailModal({
             background: '#0B0F19',
             color: '#fff',
             borderRadius: '10px',
-            padding: '24px',
+            padding: 'clamp(14px, 3vw, 22px)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
-            gap: '20px',
+            gap: '16px',
             border: '1px solid #1E293B'
           }}>
             <div>
-              <div style={{ fontSize: '0.8rem', color: '#FBBF24', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>
+              <div style={{ fontSize: '0.74rem', color: '#FBBF24', fontWeight: 700, textTransform: 'uppercase', marginBottom: '3px' }}>
                 {language === 'ar' ? 'معرض شريك معتمد وموثق' : language === 'en' ? 'Verified Partner Showroom' : 'Showroom Concessionnaire Vérifié'}
               </div>
-              <h3 style={{ fontSize: '1.4rem', color: '#fff', marginBottom: '6px', fontWeight: 800 }}>
+              <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '4px', fontWeight: 800 }}>
                 {car.showroom}
               </h3>
-              <p style={{ color: '#94A3B8', fontSize: '0.88rem' }}>
+              <p style={{ color: '#94A3B8', fontSize: '0.82rem', margin: 0 }}>
                 {language === 'ar' 
                   ? 'السيارة متوفرة فوراً في المعرض مع فحص تقني كامل وإمكانية تجربة القيادة.' 
                   : language === 'en' 
@@ -406,22 +417,22 @@ export default function VehicleDetailModal({
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', width: '100%', marginTop: '8px' }}>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', width: '100%', marginTop: '4px' }}>
               <button
                 onClick={() => onRequestProforma && onRequestProforma(car)}
                 className="btn-primary"
-                style={{ flex: '1 1 160px', fontSize: '0.88rem', padding: '11px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                style={{ flex: '1 1 140px', fontSize: '0.84rem', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
               >
-                <FileText size={16} />
+                <FileText size={15} />
                 <span>{t('proforma.btn')}</span>
               </button>
 
               <a
                 href={`tel:${car.phone.replace(/\s+/g, '')}`}
                 className="btn-outline"
-                style={{ flex: '1 1 140px', fontSize: '0.88rem', padding: '11px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                style={{ flex: '1 1 130px', fontSize: '0.84rem', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
               >
-                <PhoneCall size={16} />
+                <PhoneCall size={15} />
                 <span>{language === 'ar' ? `اتصال ${car.phone}` : language === 'en' ? `Call ${car.phone}` : `Appeler ${car.phone}`}</span>
               </a>
 
@@ -430,9 +441,9 @@ export default function VehicleDetailModal({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-whatsapp"
-                style={{ flex: '1 1 180px', fontSize: '0.88rem', padding: '11px 18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                style={{ flex: '1 1 150px', fontSize: '0.84rem', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
               >
-                <MessageCircle size={18} />
+                <MessageCircle size={16} />
                 <span>{language === 'ar' ? 'واتساب' : language === 'en' ? 'WhatsApp' : 'WhatsApp'}</span>
               </a>
             </div>

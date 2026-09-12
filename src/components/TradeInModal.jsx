@@ -89,16 +89,16 @@ export default function TradeInModal({ isOpen, onClose }) {
       <div 
         className="modal-content" 
         dir={isRTL ? 'rtl' : 'ltr'}
-        style={{ maxWidth: '540px', padding: '28px' }}
+        style={{ maxWidth: '540px', padding: 'clamp(14px, 3.5vw, 26px)' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #1E293B', paddingBottom: '14px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', borderBottom: '1px solid #1E293B', paddingBottom: '12px' }}>
           <div>
-            <div style={{ fontSize: '0.8rem', color: '#FBBF24', fontWeight: 800, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <div style={{ fontSize: '0.75rem', color: '#FBBF24', fontWeight: 800, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '5px' }}>
               <RefreshCw size={13} />
               {t.badge}
             </div>
-            <h3 style={{ fontSize: '1.4rem', color: '#FFFFFF', fontWeight: 900 }}>
+            <h3 style={{ fontSize: 'clamp(1.05rem, 3.4vw, 1.35rem)', color: '#FFFFFF', fontWeight: 900, margin: '2px 0 0' }}>
               {t.title}
             </h3>
           </div>
@@ -111,7 +111,11 @@ export default function TradeInModal({ isOpen, onClose }) {
               height: '32px', 
               borderRadius: '50%',
               color: '#94A3B8',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
             }}
           >
             <X size={16} />
@@ -129,10 +133,10 @@ export default function TradeInModal({ isOpen, onClose }) {
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#94A3B8', marginBottom: '4px', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.76rem', color: '#94A3B8', marginBottom: '4px', fontWeight: 600 }}>
                   {t.brand}
                 </label>
                 <input
@@ -141,7 +145,7 @@ export default function TradeInModal({ isOpen, onClose }) {
                   value={formData.brand}
                   onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
                   required
-                  style={{ width: '100%', padding: '9px 12px', background: '#080C14', border: '1px solid #1E293B', borderRadius: '6px', color: '#fff', fontSize: '0.88rem', textAlign: isRTL ? 'right' : 'left' }}
+                  style={{ width: '100%', padding: '8px 10px', background: '#080C14', border: '1px solid #1E293B', borderRadius: '6px', color: '#fff', fontSize: '0.84rem', textAlign: isRTL ? 'right' : 'left', boxSizing: 'border-box' }}
                 />
               </div>
 

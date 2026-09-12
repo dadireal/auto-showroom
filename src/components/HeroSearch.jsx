@@ -177,8 +177,8 @@ export default function HeroSearch({
 
           {/* Razor-Sharp Headline */}
           <h1 style={{
-            fontSize: 'clamp(2.4rem, 5.2vw, 3.9rem)',
-            lineHeight: 1.14,
+            fontSize: 'clamp(1.75rem, 4.6vw, 3.8rem)',
+            lineHeight: 1.15,
             fontWeight: 900,
             letterSpacing: '-0.03em',
             marginBottom: '14px',
@@ -196,7 +196,7 @@ export default function HeroSearch({
           </h1>
 
           <p style={{
-            fontSize: 'clamp(0.95rem, 1.8vw, 1.15rem)',
+            fontSize: 'clamp(0.88rem, 1.8vw, 1.12rem)',
             color: '#94A3B8',
             lineHeight: 1.5,
             maxWidth: '620px',
@@ -226,11 +226,12 @@ export default function HeroSearch({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '4px 10px 12px 10px',
+            padding: '4px 8px 10px 8px',
             borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
-            marginBottom: '12px'
+            marginBottom: '12px',
+            gap: '6px'
           }}>
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
               {[
                 { id: 'all', label: t('hero.allStock') },
                 { id: 'neuf', label: t('nav.newCars') },
@@ -242,14 +243,15 @@ export default function HeroSearch({
                     key={tab.id}
                     onClick={() => handleFilterChange('condition', tab.id)}
                     style={{
-                      padding: '5px 14px',
+                      padding: '5px clamp(8px, 1.8vw, 14px)',
                       borderRadius: '8px',
-                      fontSize: '0.8rem',
+                      fontSize: 'clamp(0.72rem, 1.8vw, 0.8rem)',
                       fontWeight: 700,
                       background: isActive ? 'rgba(255, 70, 5, 0.18)' : 'transparent',
                       color: isActive ? '#FF6B00' : '#94A3B8',
                       border: isActive ? '1px solid rgba(255, 70, 5, 0.4)' : '1px solid transparent',
-                      transition: 'all 0.2s ease'
+                      transition: 'all 0.2s ease',
+                      whiteSpace: 'nowrap'
                     }}
                   >
                     {tab.label}

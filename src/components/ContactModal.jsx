@@ -47,18 +47,19 @@ export default function ContactModal({ isOpen, onClose }) {
       >
         {/* Header */}
         <div style={{
-          padding: '24px 28px',
+          padding: 'clamp(12px, 2.5vw, 20px) clamp(14px, 3vw, 24px)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          gap: '10px',
           background: 'linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%)'
         }}>
-          <div>
-            <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: '#FFFFFF', margin: 0 }}>
+          <div style={{ minWidth: 0 }}>
+            <h3 style={{ fontSize: 'clamp(1rem, 3.4vw, 1.25rem)', fontWeight: 900, color: '#FFFFFF', margin: 0, lineHeight: 1.25 }}>
               {language === 'ar' ? 'اتصل بنا وخدمة الكونسيرج' : language === 'en' ? 'Contact & Showroom Concierge' : 'Contact & Service Concierge Showroom'}
             </h3>
-            <p style={{ fontSize: '0.84rem', color: '#94A3B8', margin: '2px 0 0' }}>
+            <p style={{ fontSize: '0.78rem', color: '#94A3B8', margin: '2px 0 0' }}>
               {language === 'ar' ? 'مستشارونا في خدمتكم 7 أيام في الأسبوع لمرافقتكم في اختيار سيارتكم المثالية' : language === 'en' ? 'Our concierge advisors are available 7 days a week to assist your automotive project' : 'Nos conseillers vous accueillent 7j/7 pour vous assister dans votre projet automobile'}
             </p>
           </div>
@@ -69,22 +70,23 @@ export default function ContactModal({ isOpen, onClose }) {
               background: 'rgba(255, 255, 255, 0.06)',
               border: '1px solid rgba(255, 255, 255, 0.1)',
               color: '#94A3B8',
-              width: '36px',
-              height: '36px',
+              width: '32px',
+              height: '32px',
               borderRadius: '8px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              flexShrink: 0
             }}
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
 
         {/* Content Body */}
-        <div style={{ padding: '24px 28px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px' }}>
+        <div style={{ padding: 'clamp(14px, 3.2vw, 26px)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
             {/* Direct Contact Details */}
             <div>
               <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '16px' }}>
