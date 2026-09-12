@@ -312,17 +312,19 @@ export default function ProformaModal({
           {/* =========================================================
               THE OFFICIAL PRINTABLE PROFORMA DOCUMENT
               ========================================================= */}
-          <div 
-            id="proforma-document"
-            style={{
-              background: '#FFFFFF',
-              color: '#0F172A',
-              borderRadius: '12px',
-              padding: '36px',
-              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.4)',
-              fontFamily: isRTL ? "'Cairo', sans-serif" : 'system-ui, -apple-system, sans-serif'
-            }}
-          >
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '10px' }}>
+            <div 
+              id="proforma-document"
+              style={{
+                background: '#FFFFFF',
+                color: '#0F172A',
+                borderRadius: '12px',
+                padding: '36px',
+                minWidth: '560px',
+                boxShadow: '0 10px 40px rgba(0, 0, 0, 0.4)',
+                fontFamily: isRTL ? "'Cairo', sans-serif" : 'system-ui, -apple-system, sans-serif'
+              }}
+            >
             {/* Header / Letterhead */}
             <div style={{
               display: 'flex',
@@ -588,6 +590,7 @@ export default function ProformaModal({
                 </div>
               </div>
             </div>
+          </div>
           </div>
 
           {/* Submission Feedback (Hidden on Print) */}

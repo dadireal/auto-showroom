@@ -45,11 +45,7 @@ export default function AutoProducts() {
         </div>
 
         {/* Product Cards Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '28px'
-        }}>
+        <div className="products-grid">
           {AUTO_PRODUCTS.map(p => (
             <div 
               key={p.id}

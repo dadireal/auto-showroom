@@ -98,8 +98,8 @@ export default function Header({
           padding: '6px 0',
           color: '#94A3B8'
         }}>
-          <div className="container-wide" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+          <div className="container-wide top-info-bar-wrap" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="top-info-bar-left" style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#CBD5E1' }}>
                 <ShieldCheck size={13} color="#10B981" />
                 <span>{t('topBar.certifiedPlatform')}</span>
@@ -525,6 +525,7 @@ export default function Header({
             {/* User Connexion Link */}
             <button 
               onClick={onOpenLogin}
+              className="header-login-btn"
               style={{
                 background: 'none',
                 color: '#CBD5E1',
@@ -547,7 +548,7 @@ export default function Header({
             {/* High-Visibility CTA: + Ajouter un Véhicule / Annonce */}
             <button 
               onClick={onOpenAddVehicle}
-              className="btn-primary"
+              className="btn-primary header-add-btn"
               style={{ 
                 padding: '9px 16px', 
                 fontSize: '0.84rem', 
@@ -557,7 +558,7 @@ export default function Header({
               }}
             >
               <PlusCircle size={15} />
-              <span>{t('nav.addVehicle')}</span>
+              <span className="header-add-btn-text">{t('nav.addVehicle')}</span>
             </button>
 
             {/* Mobile Menu Toggle */}
@@ -724,6 +725,13 @@ export default function Header({
           .desktop-nav { display: none !important; }
           .desktop-text { display: none !important; }
           .mobile-toggle { display: block !important; }
+        }
+        @media (max-width: 640px) {
+          .header-login-btn { display: none !important; }
+        }
+        @media (max-width: 480px) {
+          .header-add-btn-text { display: none !important; }
+          .header-add-btn { padding: 8px 10px !important; }
         }
       `}</style>
     </>

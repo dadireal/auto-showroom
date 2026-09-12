@@ -290,24 +290,24 @@ export default function VehicleDetailModal({
             borderBottom: '1px solid #1E293B'
           }}>
             <div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#FFFFFF', marginBottom: '6px' }}>
+              <h2 style={{ fontSize: 'clamp(1.25rem, 3.5vw, 1.8rem)', fontWeight: 900, color: '#FFFFFF', marginBottom: '6px' }}>
                 {car.title}
               </h2>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#94A3B8', fontSize: '0.9rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#94A3B8', fontSize: '0.88rem', flexWrap: 'wrap' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Store size={16} color="#FBBF24" />
+                  <Store size={15} color="#FBBF24" />
                   {language === 'ar' ? 'المعرض :' : language === 'en' ? 'Showroom:' : 'Showroom :'} <strong style={{ color: '#E2E8F0' }}>{car.showroom}</strong>
                 </span>
                 <span>•</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#10B981', fontWeight: 700 }}>
-                  <ShieldCheck size={16} />
+                  <ShieldCheck size={15} />
                   {language === 'ar' ? 'فحص معتمد :' : language === 'en' ? 'Certified Inspection:' : 'Contrôle Certifié :'} {car.inspectionScore}/100
                 </span>
               </div>
             </div>
 
             <div style={{ textAlign: isRTL ? 'left' : 'right' }}>
-              <div style={{ fontSize: '2rem', fontWeight: 900, color: '#FBBF24' }}>
+              <div style={{ fontSize: 'clamp(1.4rem, 4vw, 2rem)', fontWeight: 900, color: '#FBBF24' }}>
                 {formatPrice()}
               </div>
               <div style={{ fontSize: '0.85rem', color: '#94A3B8' }}>
@@ -324,7 +324,7 @@ export default function VehicleDetailModal({
 
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
               gap: '12px',
               background: '#080C14',
               padding: '18px',
@@ -406,11 +406,11 @@ export default function VehicleDetailModal({
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', width: '100%', marginTop: '8px' }}>
               <button
                 onClick={() => onRequestProforma && onRequestProforma(car)}
                 className="btn-primary"
-                style={{ fontSize: '0.88rem', padding: '10px 18px', display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{ flex: '1 1 160px', fontSize: '0.88rem', padding: '11px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
                 <FileText size={16} />
                 <span>{t('proforma.btn')}</span>
@@ -419,7 +419,7 @@ export default function VehicleDetailModal({
               <a
                 href={`tel:${car.phone.replace(/\s+/g, '')}`}
                 className="btn-outline"
-                style={{ fontSize: '0.9rem', padding: '10px 18px' }}
+                style={{ flex: '1 1 140px', fontSize: '0.88rem', padding: '11px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
                 <PhoneCall size={16} />
                 <span>{language === 'ar' ? `اتصال ${car.phone}` : language === 'en' ? `Call ${car.phone}` : `Appeler ${car.phone}`}</span>
@@ -430,10 +430,10 @@ export default function VehicleDetailModal({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-whatsapp"
-                style={{ fontSize: '0.9rem', padding: '10px 20px' }}
+                style={{ flex: '1 1 180px', fontSize: '0.88rem', padding: '11px 18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
                 <MessageCircle size={18} />
-                <span>{language === 'ar' ? 'محادثة عبر واتساب' : language === 'en' ? 'Chat on WhatsApp' : 'Discuter sur WhatsApp'}</span>
+                <span>{language === 'ar' ? 'واتساب' : language === 'en' ? 'WhatsApp' : 'WhatsApp'}</span>
               </a>
             </div>
           </div>

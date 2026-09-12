@@ -18,11 +18,7 @@ export default function PopularBrands({ vehicles = [], onSelectBrand, activeBran
           </p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(135px, 1fr))',
-          gap: '14px'
-        }}>
+        <div className="popular-brands-grid">
           {POPULAR_BRANDS.map(b => {
             const isSelected = activeBrand === b.name;
             const realCount = vehicles.filter(v => v.brand.toLowerCase() === b.name.toLowerCase()).length;

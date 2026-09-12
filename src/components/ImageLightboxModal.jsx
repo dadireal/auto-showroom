@@ -148,8 +148,8 @@ export default function ImageLightboxModal({
           {/* Vehicle Info */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#FFFFFF', margin: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <h3 style={{ fontSize: 'clamp(0.95rem, 3vw, 1.2rem)', fontWeight: 900, color: '#FFFFFF', margin: 0, maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {vehicle.title}
                 </h3>
                 <span style={{
@@ -191,7 +191,7 @@ export default function ImageLightboxModal({
               }}
             >
               {isAutoSpin ? <Pause size={14} /> : <Play size={14} />}
-              <span>{isAutoSpin ? t('lightbox.stopSpin') : t('lightbox.autoSpin')}</span>
+              <span className="desktop-text">{isAutoSpin ? t('lightbox.stopSpin') : t('lightbox.autoSpin')}</span>
             </button>
 
             {/* Zoom Toggle */}
@@ -212,7 +212,7 @@ export default function ImageLightboxModal({
               }}
             >
               {isZoomed ? <ZoomOut size={14} /> : <ZoomIn size={14} />}
-              <span>{isZoomed ? t('lightbox.zoomOut') : t('lightbox.zoomIn')}</span>
+              <span className="desktop-text">{isZoomed ? t('lightbox.zoomOut') : t('lightbox.zoomIn')}</span>
             </button>
 
             {/* Counter pill */}

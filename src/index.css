@@ -546,3 +546,274 @@ html[dir="rtl"] .drawer-content {
   }
 }
 
+/* =========================================================
+   CROSS-DEVICE RESPONSIVE DESIGN SYSTEM
+   (Mobile, Phablet, Tablet, Desktop, Smart TV & 4K Kiosks)
+   ========================================================= */
+
+/* --- Focus Rings for TV Remotes, D-Pads, and Keyboard Navigation --- */
+:focus-visible {
+  outline: 3px solid #FF4605 !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 20px rgba(255, 70, 5, 0.6) !important;
+  border-radius: 6px;
+}
+
+/* Smooth Touch Scrolling on iOS & Android */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --- Responsive Layout Containers & Grids --- */
+.car-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 28px;
+}
+
+.showrooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.concierge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  align-items: center;
+}
+
+.popular-brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 14px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+}
+
+.why-us-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.why-us-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+}
+
+.silhouette-scroll-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 4px 2px;
+}
+
+.silhouette-scroll-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch-friendly min heights */
+select, input, button {
+  min-height: 38px;
+}
+
+/* --- Ultra-Wide & Smart TV / Showroom Kiosks (1920px - 3840px+) --- */
+@media (min-width: 1920px) {
+  .container-wide {
+    max-width: 1720px;
+  }
+  .container {
+    max-width: 1560px;
+  }
+  .car-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 32px;
+  }
+}
+
+@media (min-width: 2560px) {
+  :root {
+    font-size: 18px;
+  }
+  .container-wide {
+    max-width: 2200px;
+  }
+  .container {
+    max-width: 1960px;
+  }
+  .car-card-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 36px;
+  }
+  .showrooms-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+}
+
+@media (min-width: 3840px) {
+  :root {
+    font-size: 22px;
+  }
+  .container-wide {
+    max-width: 3000px;
+  }
+  .container {
+    max-width: 2600px;
+  }
+}
+
+/* --- Tablets (769px – 1024px) --- */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container, .container-wide {
+    padding: 0 20px;
+  }
+  .car-card-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 22px !important;
+  }
+  .showrooms-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 22px !important;
+  }
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 22px !important;
+  }
+  .why-us-pillars-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+  .why-us-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 28px !important;
+  }
+  .concierge-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  .concierge-bar {
+    max-width: 96% !important;
+  }
+}
+
+/* --- Mobile & Phablets (max-width: 768px) --- */
+@media (max-width: 768px) {
+  .container, .container-wide {
+    padding: 0 16px !important;
+  }
+  .car-card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .showrooms-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .products-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .why-us-pillars-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .why-us-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+    padding: 24px 16px !important;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .concierge-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .concierge-bar {
+    border-radius: 14px !important;
+    padding: 12px !important;
+    max-width: 100% !important;
+  }
+  .silhouette-scroll-row {
+    justify-content: flex-start !important;
+  }
+  .modal-overlay {
+    padding: 10px !important;
+  }
+  .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 14px !important;
+    max-height: 94vh !important;
+  }
+  .comparison-dock {
+    width: calc(100% - 24px) !important;
+    max-width: 440px !important;
+    bottom: 14px !important;
+    padding: 10px 14px !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+  }
+  .comparison-dock > div {
+    justify-content: space-between !important;
+    width: 100%;
+  }
+  .drawer-content {
+    max-width: 100vw !important;
+    width: 100vw !important;
+  }
+}
+
+/* --- Compact Mobile Phones (max-width: 480px) --- */
+@media (max-width: 480px) {
+  .top-info-bar-left {
+    display: none !important;
+  }
+  .top-info-bar-wrap {
+    justify-content: center !important;
+    width: 100%;
+  }
+  .popular-brands-grid {
+    grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)) !important;
+    gap: 10px !important;
+  }
+  .car-card {
+    border-radius: 12px !important;
+  }
+  .car-card-image-wrap {
+    aspect-ratio: 16 / 10;
+  }
+  .btn-primary, .btn-outline, .btn-whatsapp {
+    min-height: 44px; /* Ergonomic iOS/Android touch target */
+  }
+  select, input {
+    min-height: 44px !important;
+    font-size: 16px !important; /* Prevents auto-zoom on iOS Safari */
+  }
+}
+
+

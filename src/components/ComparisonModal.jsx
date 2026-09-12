@@ -157,8 +157,20 @@ export default function ComparisonModal({
                 </p>
               </div>
             ) : (
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: isRTL ? 'right' : 'left' }}>
+              <div>
+                <div style={{
+                  fontSize: '0.75rem',
+                  color: '#94A3B8',
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}>
+                  <span>↔</span>
+                  <span>{language === 'ar' ? 'اسحب أفقياً لمقارنة باقي السيارات' : language === 'en' ? 'Swipe horizontally to view all vehicles' : 'Faites glisser horizontalement pour voir tous les véhicules'}</span>
+                </div>
+                <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '10px' }}>
+                  <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', textAlign: isRTL ? 'right' : 'left' }}>
                   <thead>
                     <tr>
                       <th style={{ width: '180px', padding: '12px', color: '#94A3B8', fontSize: '0.85rem', borderBottom: '1px solid #1E293B' }}>
@@ -324,6 +336,7 @@ export default function ComparisonModal({
                     </tr>
                   </tbody>
                 </table>
+              </div>
               </div>
             )}
           </div>

@@ -182,7 +182,7 @@ export default function HeroSearch({
         </div>
 
         {/* Floating Glassmorphic Concierge Bar */}
-        <div style={{
+        <div className="concierge-bar" style={{
           background: 'rgba(15, 23, 42, 0.82)',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
@@ -253,12 +253,7 @@ export default function HeroSearch({
           </div>
 
           {/* Single Row Essential Filters Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '10px',
-            alignItems: 'center'
-          }}>
+          <div className="concierge-grid">
             {/* Filter 1: Marque */}
             <div style={{ position: 'relative' }}>
               <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94A3B8', marginBottom: '4px', paddingLeft: '4px' }}>
@@ -393,15 +388,10 @@ export default function HeroSearch({
         </div>
 
         {/* Minimalist Car Silhouette Pills Directly Below */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '10px',
-          marginTop: '22px',
-          flexWrap: 'wrap'
+        <div className="silhouette-scroll-row" style={{
+          marginTop: '22px'
         }}>
-          <span style={{ fontSize: '0.78rem', color: '#64748B', fontWeight: 600, marginInlineEnd: '4px' }}>
+          <span style={{ fontSize: '0.78rem', color: '#64748B', fontWeight: 600, marginInlineEnd: '4px', flexShrink: 0 }}>
             {t('hero.bodyType', 'Carrosserie :')}
           </span>
           {SILHOUETTE_PILLS.map(pill => {

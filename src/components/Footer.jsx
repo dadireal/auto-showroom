@@ -23,12 +23,7 @@ export default function Footer({ onScrollToSection, onSelectWilaya }) {
     <footer style={{ background: '#090D16', color: '#94a3b8', borderTop: '1px solid rgba(255, 255, 255, 0.06)', paddingTop: '80px', paddingBottom: '36px' }}>
       <div className="container">
         {/* Top 4-Column Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: '40px',
-          marginBottom: '50px'
-        }}>
+        <div className="footer-grid" style={{ marginBottom: '50px' }}>
           {/* Column 1: Brand */}
           <div>
             <div style={{ marginBottom: '18px' }}>

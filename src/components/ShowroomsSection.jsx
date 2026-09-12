@@ -34,11 +34,7 @@ export default function ShowroomsSection({ vehicles = [], onSelectShowroom }) {
         </div>
 
         {/* Showrooms Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '28px'
-        }}>
+        <div className="showrooms-grid">
           {SHOWROOMS.map(sr => {
             const showroomCount = vehicles.filter(v => v.showroom.toLowerCase() === sr.name.toLowerCase()).length;
             const waText = encodeURIComponent(

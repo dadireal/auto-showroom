@@ -115,12 +115,7 @@ export default function WhyChooseUs({ totalVehicles = 24 }) {
         </div>
 
         {/* 4 Pillars Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '24px',
-          marginBottom: '56px'
-        }}>
+        <div className="why-us-pillars-grid" style={{ marginBottom: '56px' }}>
           {reasons.map((r, i) => (
             <div
               key={i}
@@ -167,15 +162,12 @@ export default function WhyChooseUs({ totalVehicles = 24 }) {
         </div>
 
         {/* Live Counters */}
-        <div style={{
+        <div className="why-us-stats-grid" style={{
           background: 'rgba(15, 23, 42, 0.85)',
           border: '1px solid rgba(255, 255, 255, 0.08)',
           backdropFilter: 'blur(16px)',
           borderRadius: '16px',
           padding: '40px 24px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '24px',
           textAlign: 'center',
           boxShadow: '0 16px 36px rgba(0, 0, 0, 0.45)'
         }}>

@@ -131,11 +131,7 @@ export default function VehicleList({
 
         {/* Vehicle Grid */}
         {sortedVehicles.length > 0 ? (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))',
-            gap: '28px'
-          }}>
+          <div className="car-card-grid">
             {sortedVehicles.map(car => (
               <CarCard
                 key={car.id}
