@@ -930,14 +930,36 @@ button {
   .top-info-bar-wrap { justify-content: center !important; }
 }
 
+/* Inventory Header & Sorting Layout */
+.inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.inventory-sort-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-bottom: 4px;
+}
+
+.inventory-sort-wrap select {
+  cursor: pointer;
+}
+
 /* Category Filter Pills Smooth Swipe */
 .category-pills-row {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding-bottom: 14px;
+  padding: 4px 2px 14px 2px;
+  margin-top: 8px;
   margin-bottom: 36px;
 }
 

@@ -92,8 +92,8 @@ export default function VehicleList({
           </div>
 
           {/* Sort selector */}
-          <div className="inventory-sort-wrap">
-            <span style={{ fontSize: '0.84rem', color: '#94A3B8', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap' }}>
+          <div className="inventory-sort-wrap" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '0.84rem', color: '#94A3B8', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
               <ArrowUpDown size={14} color="#64748B" />
               <span>{t('inventory.sortBy')}</span>
             </span>
@@ -101,9 +101,9 @@ export default function VehicleList({
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               style={{
-                padding: '9px 16px',
-                borderRadius: '10px',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                padding: '10px 18px',
+                borderRadius: '12px',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
                 background: 'rgba(15, 23, 42, 0.85)',
                 fontSize: '0.86rem',
                 color: '#E2E8F0',
@@ -123,7 +123,7 @@ export default function VehicleList({
         </div>
 
         {/* Category Filter Pills Bar */}
-        <div className="category-pills-row">
+        <div className="category-pills-row" style={{ marginTop: '16px', marginBottom: '36px' }}>
           {BODY_TYPES.map(cat => {
             const isActive = activeCategory === cat.id;
             return (
