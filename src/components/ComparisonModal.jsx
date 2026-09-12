@@ -109,7 +109,14 @@ export default function ComparisonModal({
         <div className="modal-overlay" onClick={onClose}>
           <div 
             className="modal-content" 
-            style={{ maxWidth: '1100px', padding: '30px', background: '#0F172A', border: '1px solid #1E293B' }}
+            style={{ 
+              maxWidth: '1100px', 
+              padding: 'clamp(14px, 3.5vw, 28px)', 
+              background: '#0F172A', 
+              border: '1px solid #1E293B',
+              borderRadius: '16px',
+              boxSizing: 'border-box'
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
@@ -118,15 +125,16 @@ export default function ComparisonModal({
               justifyContent: 'space-between',
               alignItems: 'center',
               borderBottom: '1px solid #1E293B',
-              paddingBottom: '16px',
-              marginBottom: '24px'
+              paddingBottom: '14px',
+              marginBottom: '20px',
+              gap: '12px'
             }}>
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#FBBF24', fontWeight: 800, fontSize: '0.82rem', textTransform: 'uppercase' }}>
-                  <GitCompare size={18} />
-                  {language === 'ar' ? 'المقارن التقني للمعرض' : language === 'en' ? 'Technical Showroom Comparison' : 'Comparateur Technique Showroom'}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#FBBF24', fontWeight: 800, fontSize: '0.76rem', textTransform: 'uppercase' }}>
+                  <GitCompare size={15} />
+                  <span>{language === 'ar' ? 'المقارن التقني للمعرض' : language === 'en' ? 'Technical Showroom Comparison' : 'Comparateur Technique Showroom'}</span>
                 </div>
-                <h3 style={{ fontSize: '1.6rem', color: '#FFFFFF', fontWeight: 900 }}>
+                <h3 style={{ fontSize: 'clamp(1.05rem, 3.4vw, 1.4rem)', color: '#FFFFFF', fontWeight: 900, marginTop: '4px', lineHeight: 1.25 }}>
                   {language === 'ar' ? `مقارنة جنباً إلى جنب (${comparedCars.length} مركبات)` : language === 'en' ? `Side-by-Side Comparison (${comparedCars.length} vehicles)` : `Comparatif Côte-à-Côte (${comparedCars.length} véhicules)`}
                 </h3>
               </div>
@@ -138,15 +146,18 @@ export default function ComparisonModal({
                   border: '1px solid #1E293B',
                   color: '#94A3B8',
                   borderRadius: '50%',
-                  width: '36px',
-                  height: '36px',
+                  width: '32px',
+                  height: '32px',
+                  minWidth: '32px',
+                  minHeight: '32px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  flexShrink: 0
                 }}
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
 
