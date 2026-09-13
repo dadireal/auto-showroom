@@ -1,0 +1,177 @@
+import React, { useState } from 'react';
+import { Mail, Phone, MapPin, Send, CheckCircle, ShieldCheck } from 'lucide-react';
+import Logo from './Logo';
+import { useLanguage } from '../i18n/LanguageContext';
+
+export default function Footer({ onScrollToSection, onSelectWilaya, onReplayIntro }) {
+  const { t, language } = useLanguage();
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (email) {
+      setSubscribed(true);
+      setTimeout(() => {
+        setSubscribed(false);
+        setEmail('');
+      }, 3000);
+    }
+  };
+
+  return (
+    <footer style={{
+      background: 'var(--bg-section-alt)',
+      color: 'var(--text-secondary)',
+      borderTop: '1px solid var(--border-subtle)',
+      paddingTop: 'clamp(48px, 8vw, 80px)',
+      paddingBottom: 'max(36px, env(safe-area-inset-bottom, 36px))'
+    }}>
+      <div className="container">
+        {/* Top 4-Column Grid */}
+        <div className="footer-grid" style={{ marginBottom: '50px' }}>
+          {/* Column 1: Brand */}
+          <div>
+            <div style={{ marginBottom: '18px' }}>
+              <Logo size="medium" subtitle={language === 'ar' ? 'بوابة المعارض المعتمدة' : 'PORTAIL AUTOMOBILE'} />
+            </div>
+            <p style={{ fontSize: '0.88rem', lineHeight: 1.6, color: 'var(--text-secondary)', marginBottom: '20px' }}>
+              {t('footer.description')}
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#10B981', fontSize: '0.82rem', fontWeight: 600 }}>
+              <ShieldCheck size={16} />
+              <span>{language === 'ar' ? 'مركبات معتمدة ومضمونة 100%' : language === 'en' ? 'Certified & Guaranteed Vehicles' : 'Véhicules Certifiés & Garantis'}</span>
+            </div>
+          </div>
+
+          {/* Column 2: Navigation Rapide */}
+          <div>
+            <h4 style={{ color: 'var(--text-main)', fontSize: '1rem', fontWeight: 800, marginBottom: '18px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              {t('footer.quickLinks')}
+            </h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem' }}>
+              <li><a href="#" style={{ color: 'var(--text-secondary)' }} onMouseEnter={e => e.target.style.color='var(--primary)'} onMouseLeave={e => e.target.style.color='var(--text-secondary)'}>{t('nav.home')}</a></li>
+              <li><button onClick={() => onScrollToSection('inventory')} style={{ background: 'none', color: 'var(--text-secondary)', fontSize: '0.88rem', padding: 0 }} onMouseEnter={e => e.target.style.color='var(--primary)'} onMouseLeave={e => e.target.style.color='var(--text-secondary)'}>{t('nav.allVehicles')}</button></li>
+              <li><button onClick={() => onScrollToSection('showrooms')} style={{ background: 'none', color: 'var(--text-secondary)', fontSize: '0.88rem', padding: 0 }} onMouseEnter={e => e.target.style.color='var(--primary)'} onMouseLeave={e => e.target.style.color='var(--text-secondary)'}>{t('nav.showrooms')}</button></li>
+              <li><button onClick={() => onScrollToSection('products')} style={{ background: 'none', color: 'var(--text-secondary)', fontSize: '0.88rem', padding: 0 }} onMouseEnter={e => e.target.style.color='var(--primary)'} onMouseLeave={e => e.target.style.color='var(--text-secondary)'}>{t('nav.accessories')}</button></li>
+              <li><button onClick={() => onScrollToSection('why-us')} style={{ background: 'none', color: 'var(--text-secondary)', fontSize: '0.88rem', padding: 0 }} onMouseEnter={e => e.target.style.color='var(--primary)'} onMouseLeave={e => e.target.style.color='var(--text-secondary)'}>{t('nav.pledge')}</button></li>
+              {onReplayIntro && (
+                <li>
+                  <button 
+                    onClick={onReplayIntro} 
+                    style={{ background: 'none', color: '#FF7847', fontSize: '0.88rem', padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}
+                    onMouseEnter={e => e.currentTarget.style.color='#FFA07A'}
+                    onMouseLeave={e => e.currentTarget.style.color='#FF7847'}
+                  >
+                    <span>🏎️ {language === 'ar' ? 'إعادة العرض الرياضي' : language === 'en' ? 'Replay Supercar Intro' : 'Rejouer l\'intro sportive'}</span>
+                  </button>
+                </li>
+              )}
+            </ul>
+          </div>
+
+          {/* Column 3: Showrooms par Wilaya */}
+          <div>
+            <h4 style={{ color: 'var(--text-main)', fontSize: '1rem', fontWeight: 800, marginBottom: '18px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              {language === 'ar' ? 'معارض حسب الولاية' : language === 'en' ? 'Showrooms by Region' : 'Showrooms par Région'}
+            </h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem' }}>
+              {['Alger (16)', 'Oran (31)', 'Annaba (23)', 'Blida (09)', 'Sétif (19)', 'Constantine (25)'].map(w => (
+                <li key={w}>
+                  <button
+                    onClick={() => { onSelectWilaya(w); onScrollToSection('inventory'); }}
+                    style={{ background: 'none', color: 'var(--text-secondary)', fontSize: '0.88rem', padding: 0, cursor: 'pointer' }}
+                    onMouseEnter={e => e.target.style.color='var(--primary)'}
+                    onMouseLeave={e => e.target.style.color='var(--text-secondary)'}
+                  >
+                    {language === 'ar' ? `معارض في ${w}` : language === 'en' ? `Showrooms in ${w}` : `Showrooms à ${w}`}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Newsletter & Contact */}
+          <div>
+            <h4 style={{ color: 'var(--text-main)', fontSize: '1rem', fontWeight: 800, marginBottom: '18px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              {language === 'ar' ? 'النشرة البريدية للمعرض' : language === 'en' ? 'Showroom Newsletter' : 'Newsletter Showroom'}
+            </h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '14px', lineHeight: 1.5 }}>
+              {language === 'ar' 
+                ? 'اشترك ليصلك إشعار فوري عند وصول سيارات جديدة 00 كم وفرص حصرية.'
+                : language === 'en'
+                ? 'Be notified in priority when new 00 km arrivals and exclusive opportunities drop.'
+                : 'Soyez notifié en priorité dès l’arrivée de nouveaux véhicules 00 km et d\'opportunités sélectionnées.'}
+            </p>
+
+            <form onSubmit={handleSubscribe} className="footer-newsletter-form">
+              <input
+                type="email"
+                placeholder={language === 'ar' ? 'بريدك الإلكتروني...' : language === 'en' ? 'Your email address...' : 'Votre adresse email...'}
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                style={{
+                  background: 'var(--surface-input)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '6px',
+                  padding: '9px 12px',
+                  color: 'var(--text-main)',
+                  fontSize: '0.85rem',
+                  outline: 'none',
+                  minHeight: '44px'
+                }}
+              />
+              <button
+                type="submit"
+                className="btn-primary"
+                style={{ padding: '9px 16px', flexShrink: 0 }}
+                title="S'abonner"
+              >
+                <Send size={16} />
+              </button>
+            </form>
+
+            {subscribed && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#10B981', fontSize: '0.82rem', marginBottom: '12px' }}>
+                <CheckCircle size={15} />
+                <span>{language === 'ar' ? 'شكراً لك! تم تسجيل اشتراكك بنجاح.' : language === 'en' ? 'Thank you! You are subscribed.' : 'Merci ! Vous êtes bien inscrit(e).'}</span>
+              </div>
+            )}
+
+            <div style={{ fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Phone size={14} color="var(--primary)" />
+                <span>+213 (0) 550 00 00 00</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Mail size={14} color="var(--primary)" />
+                <span>contact@autoshowroom.com</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Copyright */}
+        <div
+          className="footer-bottom-row"
+          style={{
+            borderTop: '1px solid var(--border-subtle)',
+            paddingTop: '24px',
+            fontSize: '0.82rem',
+            color: 'var(--text-muted)'
+          }}
+        >
+          <div>
+            &copy; {new Date().getFullYear()} Auto Showroom — {t('footer.rights')}
+          </div>
+          <div className="footer-legal-links">
+            <a href="#" style={{ color: 'inherit' }}>{language === 'ar' ? 'إشعار قانوني' : language === 'en' ? 'Legal Notice' : 'Mentions Légales'}</a>
+            <a href="#" style={{ color: 'inherit' }}>{language === 'ar' ? 'سياسة الخصوصية' : language === 'en' ? 'Privacy Policy' : 'Politique de Confidentialité'}</a>
+            <a href="#" style={{ color: 'inherit' }}>{language === 'ar' ? 'الشروط والأحكام' : language === 'en' ? 'Terms & Conditions' : 'Conditions Générales de Vente'}</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
