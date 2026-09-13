@@ -7,13 +7,13 @@ export default function PopularBrands({ vehicles = [], onSelectBrand, activeBran
   const { t } = useLanguage();
 
   return (
-    <section style={{ padding: '80px 0', background: 'var(--bg-section-alt)', borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)' }}>
+    <section className="popular-brands-section" style={{ padding: 'clamp(32px, 5vw, 64px) 0', background: 'var(--bg-section-alt)', borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)' }}>
       <div className="container">
-        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-          <h2 style={{ fontSize: '2rem', color: 'var(--text-main)', fontWeight: 900, marginBottom: '8px', letterSpacing: '-0.02em' }}>
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(18px, 3.5vw, 32px)' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2rem)', color: 'var(--text-main)', fontWeight: 900, marginBottom: '6px', letterSpacing: '-0.02em' }}>
             {t('brands.title')}
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.94rem' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }}>
             {t('brands.subtitle')}
           </p>
         </div>

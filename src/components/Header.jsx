@@ -25,7 +25,8 @@ import {
   Heart,
   Play,
   Sun,
-  Moon
+  Moon,
+  Search
 } from 'lucide-react';
 import Logo from './Logo';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -634,10 +635,25 @@ export default function Header({
 
           {/* Right Action CTAs (Vehica-Style: Connexion + Ajouter une Annonce) */}
           <div className="header-actions-wrap" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Quick Search / Catalog Anchor button */}
+            <button
+              onClick={() => onScrollToSection('inventory')}
+              className="btn-outline header-action-btn mobile-search-btn"
+              title={t('hero.advancedSearch')}
+              aria-label={t('hero.advancedSearch')}
+              style={{
+                position: 'relative',
+                padding: '8px 10px',
+                fontSize: '0.82rem'
+              }}
+            >
+              <Search size={15} color="#FF6B00" />
+            </button>
+
             {/* Comparateur badge button */}
             <button
               onClick={onOpenComparison}
-              className="btn-outline header-action-btn"
+              className="btn-outline header-action-btn header-compare-btn"
               style={{
                 position: 'relative',
                 padding: '8px 10px',
@@ -761,26 +777,108 @@ export default function Header({
             maxHeight: '80vh',
             overflowY: 'auto'
           }}>
-            {/* Mobile Theme Toggle Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--surface-subtle)', borderRadius: '10px', border: '1px solid var(--border-subtle)', marginBottom: '6px' }}>
-              <span style={{ fontSize: '0.84rem', fontWeight: 600, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                {theme === 'dark' ? <Moon size={16} color="#FF6B00" /> : <Sun size={16} color="#FBBF24" />}
-                {theme === 'dark' ? t('theme.dark') : t('theme.light')}
-              </span>
+            {/* Mobile Consolidated Controls: Language, Currency, Theme Mode */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr auto',
+              gap: '8px',
+              padding: '10px',
+              background: 'var(--surface-subtle)',
+              borderRadius: '12px',
+              border: '1px solid var(--border-subtle)',
+              marginBottom: '6px'
+            }}>
+              {/* Mobile Language Selector */}
+              <div style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'var(--surface-card)',
+                borderRadius: '8px',
+                padding: '6px 8px',
+                border: '1px solid var(--border-subtle)'
+              }}>
+                <Globe size={13} color="#FF6B00" style={{ pointerEvents: 'none', flexShrink: 0 }} />
+                <span style={{ fontSize: '0.74rem', fontWeight: 700, pointerEvents: 'none', color: 'var(--text-main)' }}>
+                  {language === 'ar' ? '🇩🇿 عربي' : language === 'en' ? '🇬🇧 EN' : '🇫🇷 FR'}
+                </span>
+                <ChevronDown size={11} color="var(--text-muted)" style={{ pointerEvents: 'none', flexShrink: 0, marginLeft: 'auto' }} />
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  aria-label="Langue"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    opacity: 0,
+                    cursor: 'pointer',
+                    zIndex: 2
+                  }}
+                >
+                  <option value="fr">🇫🇷 FR</option>
+                  <option value="en">🇬🇧 EN</option>
+                  <option value="ar">🇩🇿 عربي</option>
+                </select>
+              </div>
+
+              {/* Mobile Currency Selector */}
+              <div style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'var(--surface-card)',
+                borderRadius: '8px',
+                padding: '6px 8px',
+                border: '1px solid var(--border-subtle)'
+              }}>
+                <Coins size={13} color="#FBBF24" style={{ pointerEvents: 'none', flexShrink: 0 }} />
+                <span style={{ fontSize: '0.74rem', fontWeight: 700, pointerEvents: 'none', color: 'var(--text-main)' }}>
+                  {currency === 'M' ? 'Millions' : currency}
+                </span>
+                <ChevronDown size={11} color="var(--text-muted)" style={{ pointerEvents: 'none', flexShrink: 0, marginLeft: 'auto' }} />
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  aria-label="Devise"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    opacity: 0,
+                    cursor: 'pointer',
+                    zIndex: 2
+                  }}
+                >
+                  <option value="M">Millions (M)</option>
+                  <option value="DZD">DZD</option>
+                  <option value="EUR">EUR (€)</option>
+                </select>
+              </div>
+
+              {/* Mobile Theme Mode Toggle Button */}
               <button
                 onClick={toggleTheme}
+                aria-label="Toggle Theme"
+                title={theme === 'dark' ? t('theme.switchLight') : t('theme.switchDark')}
                 style={{
-                  background: 'var(--primary)',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '5px 12px',
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  cursor: 'pointer'
+                  width: '34px',
+                  height: '34px',
+                  background: 'var(--surface-card)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: theme === 'dark' ? '#FBBF24' : '#FF4605'
                 }}
               >
-                {theme === 'dark' ? t('theme.switchLight') : t('theme.switchDark')}
+                {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
               </button>
             </div>
             <button 
@@ -942,15 +1040,15 @@ export default function Header({
           .mobile-toggle { display: flex !important; }
         }
         @media (max-width: 768px) {
-          .top-info-bar-left { display: none !important; }
-          .top-info-bar-wrap { justify-content: flex-end !important; }
+          .top-info-bar-container { display: none !important; }
+          .main-nav-container { padding: 8px 12px !important; }
         }
         @media (max-width: 640px) {
           .header-login-btn { display: none !important; }
           .header-add-btn { display: none !important; }
+          .header-compare-btn { display: none !important; }
           .top-bar-dealer { display: none !important; }
-          .top-info-bar-wrap { justify-content: space-between !important; width: 100% !important; }
-          .main-nav-container { padding: 8px 12px !important; }
+          .main-nav-container { padding: 6px 10px !important; }
           .header-actions-wrap { gap: 6px !important; }
           .header-action-btn { padding: 6px 8px !important; }
           .mobile-toggle {

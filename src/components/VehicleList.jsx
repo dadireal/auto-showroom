@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import CarCard from './CarCard';
-import { ArrowUpDown, Sparkles, AlertCircle } from 'lucide-react';
-import { BODY_TYPES } from '../data/mockData';
+import CatalogFilterBar from './CatalogFilterBar';
+import { Sparkles, AlertCircle, ChevronDown, Check } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 /* ── Skeleton placeholder card ────────────────────────────── */
@@ -33,7 +33,13 @@ export default function VehicleList({
   favorites = [],
   onToggleFavorite,
   onRequestProforma,
-  onOpenLightbox
+  onOpenLightbox,
+  searchFilters,
+  setSearchFilters,
+  brands = [],
+  allVehicles = [],
+  isFiltersOpen,
+  setIsFiltersOpen
 }) {
   const { t } = useLanguage();
   const [sortBy, setSortBy] = useState('featured');
@@ -41,11 +47,19 @@ export default function VehicleList({
   const [animKey, setAnimKey] = useState(0); // bump to re-trigger stagger
   const gridRef = useRef(null);
 
+  // Progressive vehicle loading (6 initially on mobile to keep page compact & fast)
+  const [visibleCount, setVisibleCount] = useState(6);
+
   // Show skeleton on first mount only
   useEffect(() => {
-    const t = setTimeout(() => setIsLoading(false), 650);
+    const t = setTimeout(() => setIsLoading(false), 550);
     return () => clearTimeout(t);
   }, []);
+
+  // Reset pagination when filters, categories, or sort changes
+  useEffect(() => {
+    setVisibleCount(6);
+  }, [vehicles.length, sortBy, activeCategory, searchFilters?.brand, searchFilters?.model, searchFilters?.condition, searchFilters?.maxPrice, searchFilters?.keyword]);
 
   // Re-trigger stagger animation whenever vehicles list changes
   useEffect(() => {
@@ -63,11 +77,24 @@ export default function VehicleList({
     return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
   });
 
+  const displayedVehicles = sortedVehicles.slice(0, visibleCount);
+  const hasMore = visibleCount < sortedVehicles.length;
+  const progressPercent = Math.min(100, Math.round((displayedVehicles.length / (sortedVehicles.length || 1)) * 100));
+
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 6);
+  };
+
+  const handleShowAll = () => {
+    setVisibleCount(sortedVehicles.length);
+  };
+
   return (
-    <section id="inventory" style={{ padding: 'clamp(48px, 8vw, 96px) 0', background: 'var(--bg-main)', transition: 'background-color 0.3s ease' }}>
+    <section id="inventory" className="inventory-section" style={{ padding: 'clamp(32px, 5vw, 64px) 0', background: 'var(--bg-main)', transition: 'background-color 0.3s ease' }}>
       <div className="container">
+        
         {/* Section Header */}
-        <div className="inventory-header">
+        <div className="inventory-header" style={{ marginBottom: '20px' }}>
           <div>
             <div style={{
               display: 'inline-flex',
@@ -78,78 +105,37 @@ export default function VehicleList({
               textTransform: 'uppercase',
               color: '#FF6B00',
               letterSpacing: '0.08em',
-              marginBottom: '8px'
+              marginBottom: '6px'
             }}>
               <Sparkles size={14} />
               {t('inventory.badge')}
             </div>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', color: 'var(--text-main)', fontWeight: 900, letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+            <h2 style={{ fontSize: 'clamp(1.65rem, 3.8vw, 2.4rem)', color: 'var(--text-main)', fontWeight: 900, letterSpacing: '-0.02em', lineHeight: 1.2 }}>
               {t('inventory.title')}
             </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', marginTop: '6px' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', marginTop: '4px' }}>
               {sortedVehicles.length} {t('inventory.subtitle')}
             </p>
           </div>
-
-          {/* Sort selector */}
-          <div className="inventory-sort-wrap" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
-              <ArrowUpDown size={14} color="#FF6B00" />
-              <span>{t('inventory.sortBy')}</span>
-            </span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              style={{
-                padding: '10px 18px',
-                borderRadius: '12px',
-                border: '1px solid var(--border-subtle)',
-                background: 'var(--surface-card)',
-                fontSize: '0.86rem',
-                color: 'var(--text-main)',
-                fontWeight: 600,
-                outline: 'none',
-                cursor: 'pointer',
-                boxShadow: 'var(--shadow-card)'
-              }}
-            >
-              <option value="featured" style={{ background: 'var(--surface-card)', color: 'var(--text-main)' }}>⭐ {t('inventory.featured')}</option>
-              <option value="price-asc" style={{ background: 'var(--surface-card)', color: 'var(--text-main)' }}>{t('inventory.priceAsc')}</option>
-              <option value="price-desc" style={{ background: 'var(--surface-card)', color: 'var(--text-main)' }}>{t('inventory.priceDesc')}</option>
-              <option value="year-desc" style={{ background: 'var(--surface-card)', color: 'var(--text-main)' }}>{t('inventory.yearDesc')}</option>
-              <option value="km-asc" style={{ background: 'var(--surface-card)', color: 'var(--text-main)' }}>{t('inventory.mileageAsc')}</option>
-            </select>
-          </div>
         </div>
 
-        {/* Category Filter Pills Bar */}
-        <div className="category-pills-row" style={{ marginTop: '16px', marginBottom: '36px' }}>
-          {BODY_TYPES.map(cat => {
-            const isActive = activeCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => onSelectCategory(cat.id)}
-                style={{
-                  padding: '10px 20px',
-                  minHeight: '44px',
-                  borderRadius: '9999px',
-                  fontSize: '0.84rem',
-                  fontWeight: 700,
-                  whiteSpace: 'nowrap',
-                  background: isActive ? 'linear-gradient(135deg, #FF4605 0%, #FF6B00 100%)' : 'var(--surface-card)',
-                  color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
-                  border: isActive ? 'none' : '1px solid var(--border-subtle)',
-                  boxShadow: isActive ? '0 4px 16px rgba(255, 70, 5, 0.4)' : 'var(--shadow-card)',
-                  transition: 'all 0.2s ease',
-                  cursor: 'pointer'
-                }}
-              >
-                {t(`categories.${cat.id}`, cat.label)}
-              </button>
-            );
-          })}
-        </div>
+        {/* Unified Mobile-First Search & Filter Console */}
+        {searchFilters && setSearchFilters && (
+          <CatalogFilterBar
+            searchFilters={searchFilters}
+            setSearchFilters={setSearchFilters}
+            activeCategory={activeCategory}
+            onSelectCategory={onSelectCategory}
+            onResetFilters={onResetFilters}
+            brands={brands}
+            allVehicles={allVehicles}
+            resultsCount={sortedVehicles.length}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            isFiltersOpen={isFiltersOpen}
+            setIsFiltersOpen={setIsFiltersOpen}
+          />
+        )}
 
         {/* Vehicle Grid — skeleton or real cards */}
         {isLoading ? (
@@ -159,53 +145,112 @@ export default function VehicleList({
             ))}
           </div>
         ) : sortedVehicles.length > 0 ? (
-          <div
-            key={animKey}
-            ref={gridRef}
-            className="car-card-grid"
-          >
-            {sortedVehicles.map((car, idx) => (
-              <div
-                key={car.id}
-                className="car-card-animate"
-              >
-                <CarCard
-                  car={car}
-                  currency={currency}
-                  isCompared={comparedCars.some(c => c.id === car.id)}
-                  onToggleCompare={onToggleCompare}
-                  onViewDetails={onViewDetails}
-                  isFavorite={favorites.some(f => f.id === car.id)}
-                  onToggleFavorite={onToggleFavorite}
-                  onRequestProforma={onRequestProforma}
-                  onOpenLightbox={onOpenLightbox}
-                />
+          <>
+            <div
+              key={animKey}
+              ref={gridRef}
+              className="car-card-grid"
+            >
+              {displayedVehicles.map((car) => (
+                <div
+                  key={car.id}
+                  className="car-card-animate"
+                >
+                  <CarCard
+                    car={car}
+                    currency={currency}
+                    isCompared={comparedCars.some(c => c.id === car.id)}
+                    onToggleCompare={onToggleCompare}
+                    onViewDetails={onViewDetails}
+                    isFavorite={favorites.some(f => f.id === car.id)}
+                    onToggleFavorite={onToggleFavorite}
+                    onRequestProforma={onRequestProforma}
+                    onOpenLightbox={onOpenLightbox}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Progressive Stock Load-More Bar */}
+            <div className="inventory-load-more-bar">
+              {/* Progress Count & Bar */}
+              <div className="inventory-progress-info">
+                <span className="inventory-progress-text">
+                  {t('inventory.showingProgress', `Affichage de ${displayedVehicles.length} sur ${sortedVehicles.length} véhicules`)
+                    .replace('{current}', displayedVehicles.length)
+                    .replace('{total}', sortedVehicles.length)}
+                </span>
+                <div className="inventory-progress-track">
+                  <div 
+                    className="inventory-progress-fill" 
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
               </div>
-            ))}
-          </div>
+
+              {/* Action Buttons */}
+              {hasMore ? (
+                <div className="inventory-load-buttons">
+                  <button
+                    onClick={handleLoadMore}
+                    className="btn-primary inventory-load-more-btn"
+                  >
+                    <ChevronDown size={18} />
+                    <span>{t('inventory.loadMore')}</span>
+                  </button>
+
+                  {sortedVehicles.length > visibleCount + 6 && (
+                    <button
+                      onClick={handleShowAll}
+                      className="btn-outline inventory-show-all-btn"
+                    >
+                      <span>{t('inventory.showAll')} ({sortedVehicles.length})</span>
+                    </button>
+                  )}
+                </div>
+              ) : (
+                sortedVehicles.length > 6 && (
+                  <div className="inventory-all-loaded-indicator">
+                    <Check size={14} color="#10B981" />
+                    <span>{t('inventory.allLoaded')}</span>
+                  </div>
+                )
+              )}
+            </div>
+          </>
         ) : (
           /* Empty State */
           <div style={{
             textAlign: 'center',
-            padding: '70px 24px',
-            background: 'rgba(15, 23, 42, 0.7)',
-            borderRadius: '16px',
-            border: '1px dashed rgba(255, 255, 255, 0.08)',
+            padding: '60px 20px',
+            background: 'var(--surface-card)',
+            borderRadius: '20px',
+            border: '1px dashed var(--border-subtle)',
             maxWidth: '540px',
-            margin: '0 auto',
-            backdropFilter: 'blur(12px)'
+            margin: '30px auto 0',
+            backdropFilter: 'blur(12px)',
+            boxShadow: 'var(--shadow-card)'
           }}>
-            <AlertCircle size={44} color="#64748B" style={{ marginBottom: '16px' }} />
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '8px', color: '#FFFFFF', fontWeight: 800 }}>
+            <AlertCircle size={44} color="#FF6B00" style={{ marginBottom: '16px' }} />
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '8px', color: 'var(--text-main)', fontWeight: 800 }}>
               {t('inventory.emptyTitle')}
             </h3>
-            <p style={{ color: '#94A3B8', fontSize: '0.9rem', marginBottom: '24px', lineHeight: 1.5 }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '24px', lineHeight: 1.5 }}>
               {t('inventory.emptySubtitle')}
             </p>
             <button
               onClick={onResetFilters}
               className="btn-primary"
-              style={{ fontSize: '0.88rem' }}
+              style={{
+                padding: '12px 24px',
+                borderRadius: '12px',
+                fontWeight: 700,
+                fontSize: '0.88rem',
+                cursor: 'pointer',
+                background: 'linear-gradient(135deg, #FF4605 0%, #FF6B00 100%)',
+                color: '#FFFFFF',
+                border: 'none'
+              }}
             >
               {t('inventory.resetAll')}
             </button>
@@ -215,4 +260,3 @@ export default function VehicleList({
     </section>
   );
 }
-

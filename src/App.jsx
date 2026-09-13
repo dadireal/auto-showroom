@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Header from './components/Header';
 import HeroSearch from './components/HeroSearch';
+import ShowroomQuickRail from './components/ShowroomQuickRail';
 import PopularBrands from './components/PopularBrands';
 import VehicleList from './components/VehicleList';
 import ShowroomsSection from './components/ShowroomsSection';
@@ -20,6 +21,7 @@ import FavoritesDrawer from './components/FavoritesDrawer';
 import ProformaModal from './components/ProformaModal';
 import ImageLightboxModal from './components/ImageLightboxModal';
 import SiteIntro from './components/SiteIntro';
+import ScrollToTopButton from './components/ScrollToTopButton';
 import Footer from './components/Footer';
 import { INITIAL_VEHICLES, POPULAR_BRANDS, INITIAL_ORDERS } from './data/mockData';
 
@@ -55,6 +57,9 @@ export default function App() {
 
   // Active Category pill in inventory
   const [activeCategory, setActiveCategory] = useState('all');
+
+  // Filter drawer expandable state in catalog
+  const [isInventoryFiltersOpen, setIsInventoryFiltersOpen] = useState(false);
 
   // Compared vehicles (max 3)
   const [comparedCars, setComparedCars] = useState([]);
@@ -165,6 +170,19 @@ export default function App() {
   // Filtered vehicles logic
   const filteredVehicles = useMemo(() => {
     return vehicles.filter(car => {
+      // Keyword search
+      if (searchFilters.keyword && searchFilters.keyword.trim() !== '') {
+        const kw = searchFilters.keyword.toLowerCase().trim();
+        const matchesKeyword = 
+          car.title.toLowerCase().includes(kw) ||
+          car.brand.toLowerCase().includes(kw) ||
+          car.model.toLowerCase().includes(kw) ||
+          (car.shortDesc && car.shortDesc.toLowerCase().includes(kw)) ||
+          (car.fuel && car.fuel.toLowerCase().includes(kw)) ||
+          (car.gearbox && car.gearbox.toLowerCase().includes(kw));
+        if (!matchesKeyword) return false;
+      }
+
       // Condition filter
       if (searchFilters.condition !== 'all' && car.condition !== searchFilters.condition) {
         return false;
@@ -183,7 +201,7 @@ export default function App() {
       }
 
       // Wilaya filter
-      if (searchFilters.wilaya !== 'all' && car.wilaya !== searchFilters.wilaya) {
+      if (searchFilters.wilaya !== 'all' && searchFilters.wilaya !== 'Toutes les Wilayas' && car.wilaya !== searchFilters.wilaya) {
         return false;
       }
 
@@ -404,15 +422,31 @@ export default function App() {
       />
 
       <main style={{ flexGrow: 1 }}>
-        {/* Hero & Search Engine */}
+        {/* Luxury Hero Showcase */}
         <HeroSearch
-          searchFilters={searchFilters}
-          setSearchFilters={setSearchFilters}
-          onSearch={() => scrollToSection('inventory')}
-          onResetFilters={handleResetFilters}
-          brands={POPULAR_BRANDS}
+          onExplore={() => scrollToSection('inventory')}
+          onOpenFilters={() => {
+            setIsInventoryFiltersOpen(true);
+            scrollToSection('inventory');
+          }}
           resultsCount={filteredVehicles.length}
-          allVehicles={vehicles}
+          totalVehicles={vehicles.length}
+        />
+
+        {/* Interactive Showroom Fast-Pass Rail & Live Telemetry (Replaces bulky stat cards) */}
+        <ShowroomQuickRail 
+          totalVehicles={vehicles.length}
+          onSelectCategory={(cat) => {
+            setActiveCategory(cat);
+            setSearchFilters(prev => ({ ...prev, bodyType: cat }));
+            scrollToSection('inventory');
+          }}
+          onSelectCondition={(cond) => {
+            setSearchFilters(prev => ({ ...prev, condition: cond, bodyType: 'all' }));
+            setActiveCategory('all');
+            scrollToSection('inventory');
+          }}
+          onExplore={() => scrollToSection('inventory')}
         />
 
         {/* Popular Brands — reveal on scroll */}
@@ -424,7 +458,7 @@ export default function App() {
           />
         </div>
 
-        {/* Vehicle Inventory Grid */}
+        {/* Vehicle Inventory & Filter Hub */}
         <VehicleList
           vehicles={filteredVehicles}
           currency={currency}
@@ -441,6 +475,12 @@ export default function App() {
           onToggleFavorite={handleToggleFavorite}
           onRequestProforma={(car) => setSelectedProformaCar(car)}
           onOpenLightbox={(car) => setSelectedLightboxCar(car)}
+          searchFilters={searchFilters}
+          setSearchFilters={setSearchFilters}
+          brands={POPULAR_BRANDS}
+          allVehicles={vehicles}
+          isFiltersOpen={isInventoryFiltersOpen}
+          setIsFiltersOpen={setIsInventoryFiltersOpen}
         />
 
         {/* Showrooms — reveal on scroll */}
@@ -554,6 +594,9 @@ export default function App() {
         isOpen={isAboutOpen}
         onClose={() => setIsAboutOpen(false)}
       />
+
+      {/* Floating Back to Top Button for Quick Mobile Return */}
+      <ScrollToTopButton />
 
       {/* Footer */}
       <Footer

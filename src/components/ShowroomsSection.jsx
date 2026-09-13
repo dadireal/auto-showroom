@@ -7,10 +7,10 @@ export default function ShowroomsSection({ vehicles = [], onSelectShowroom }) {
   const { t, isRTL, language } = useLanguage();
 
   return (
-    <section id="showrooms" style={{ padding: '96px 0', background: 'var(--bg-section-alt)', borderTop: '1px solid var(--border-subtle)' }}>
+    <section id="showrooms" style={{ padding: 'clamp(36px, 6vw, 80px) 0', background: 'var(--bg-section-alt)', borderTop: '1px solid var(--border-subtle)' }}>
       <div className="container">
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 56px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto clamp(20px, 4vw, 44px)' }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',

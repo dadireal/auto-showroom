@@ -18,10 +18,10 @@ export default function AutoProducts() {
   };
 
   return (
-    <section id="products" style={{ padding: '96px 0', background: 'var(--bg-base)', borderTop: '1px solid var(--border-subtle)' }}>
+    <section id="products" style={{ padding: 'clamp(36px, 6vw, 80px) 0', background: 'var(--bg-base)', borderTop: '1px solid var(--border-subtle)' }}>
       <div className="container">
         {/* Header */}
-        <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 56px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto clamp(20px, 4vw, 44px)' }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',

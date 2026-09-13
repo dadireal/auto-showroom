@@ -88,10 +88,10 @@ export default function WhyChooseUs({ totalVehicles = 24 }) {
   ];
 
   return (
-    <section id="why-us" style={{ padding: '96px 0', background: 'var(--bg-base)', color: 'var(--text-main)', borderTop: '1px solid var(--border-subtle)' }}>
+    <section id="why-us" style={{ padding: 'clamp(36px, 6vw, 80px) 0', background: 'var(--bg-base)', color: 'var(--text-main)', borderTop: '1px solid var(--border-subtle)' }}>
       <div className="container">
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 56px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto clamp(20px, 4vw, 44px)' }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
